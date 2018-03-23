@@ -4,7 +4,11 @@
   "license": "GPL-3.0",
   "repository": "https://github.com/remipassmoilesel/kube-frontend-server",
   "description": "Frontend server and deployment for Kubernetes",
+  "bin": {
+    "kube-server": "./build/main.js"
+  },
   "scripts": {
+    "install-cli": "sudo npm link",
     "dev": "npm run clean-compile && NODE_ENV=dev node ./build/main.js",
     "lint": "./node_modules/.bin/tslint --force --format verbose 'src/**/*.ts'",
     "lint-fix": "npm run lint -- --fix",
@@ -22,16 +26,11 @@
   },
   "dependencies": {
     "chalk": "^2.3.2",
-    "ejs": "^2.5.7",
-    "express": "~4.15.2",
-    "express-handlebars": "^3.0.0",
     "fs-extra": "^5.0.0",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
     "@types/chai": "^4.1.2",
-    "@types/ejs": "^2.3.33",
-    "@types/express": "^4.0.39",
     "@types/fs-extra": "^5.0.1",
     "@types/lodash": "^4.14.88",
     "@types/mocha": "^2.2.48",
