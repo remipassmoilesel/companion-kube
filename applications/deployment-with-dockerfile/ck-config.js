@@ -1,4 +1,4 @@
-module.export = {
+module.exports = {
     projectType: 'deployment',
     docker: {
         build: false,
