@@ -2,9 +2,9 @@ import * as chai from 'chai';
 import * as sinon from 'sinon';
 import {SinonStub} from 'sinon';
 import {execSync} from 'child_process';
-import {IPrerequisite} from '../commands/prerequisites';
-import {PrerequisiteChecker} from '../commands/PrerequisiteChecker';
-import {IMainConfig} from '../main-config/configTypes';
+import {IPrerequisite} from '../lib/commands/prerequisites';
+import {PrerequisiteChecker} from '../lib/commands/PrerequisiteChecker';
+import {IMainConfig} from '../lib/main-config/configTypes';
 
 const assert = chai.assert;
 

@@ -2,25 +2,23 @@
 
 import 'source-map-support/register';
 
-import {Logger} from './misc/Logger';
-import {CliHandlers} from './handlers/CliHandlers';
-import {SetupHandlers} from './handlers/SetupHandlers';
-import {mainConfig} from './main-config/config';
-import {exampleAppConfig} from './app-config/appConfigTypes';
-
+import {Api} from './lib/Api';
+import {Logger} from './lib/misc/Logger';
+import {CliHandlers} from './lib/CliHandlers';
+import {mainConfig} from './lib/main-config/config';
 
 const logger = new Logger();
-const setupHandlers = new SetupHandlers(mainConfig);
-const cliHandlers = new CliHandlers(mainConfig);
+const api = new Api(mainConfig);
+const cliHandlers = new CliHandlers(mainConfig, api);
 
 logger.info('Companion-Kube !');
 logger.info();
 
 class Main {
 
-    public run(){
-        setupHandlers.checkPrerequisites();
-        setupHandlers.loadAppConfigurations(process.cwd());
+    public run() {
+        api.checkPrerequisites();
+        cliHandlers.setupAndParse(process.argv);
     }
 
     public exit(returnCode: number) {

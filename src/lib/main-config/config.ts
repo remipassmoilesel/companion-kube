@@ -9,6 +9,7 @@ const projectRoot = path.resolve(__dirname, '..', '..');
 assert.ok(fs.existsSync(path.resolve(projectRoot, 'package.json')), 'Project root is invalid');
 
 export const mainConfig: IMainConfig = {
+    version: '0.1',
     prerequisites: PREREQUISITES,
     projectRoot,
     configSearchIgnore: [

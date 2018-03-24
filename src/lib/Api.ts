@@ -1,13 +1,14 @@
 import * as _ from 'lodash';
 
-import {IMainConfig} from '../main-config/configTypes';
-import {Logger} from '../misc/Logger';
-import {PrerequisiteChecker} from '../commands/PrerequisiteChecker';
-import {AppConfigurationManager} from '../app-config/AppConfigurationManager';
+import {IMainConfig} from './main-config/configTypes';
+import {Logger} from './misc/Logger';
+import {PrerequisiteChecker} from './commands/PrerequisiteChecker';
+import {AppConfigurationManager} from './app-config/AppConfigurationManager';
+import {IAppConfig} from './app-config/appConfigTypes';
 
 const logger = new Logger();
 
-export class SetupHandlers {
+export class Api {
     private mainConfig: IMainConfig;
     private prereqChecker: PrerequisiteChecker;
     private appConfigMan: AppConfigurationManager;
@@ -34,7 +35,7 @@ export class SetupHandlers {
         }
     }
 
-    public loadAppConfigurations(targetDirectory: string) {
+    public loadAppConfigurations(targetDirectory: string): IAppConfig[] {
         const appConfigs = this.appConfigMan.loadAppConfigurations(targetDirectory);
         if (appConfigs.invalid.length > 0) {
             _.forEach(appConfigs.invalid, (invalid) => {
@@ -50,8 +51,8 @@ export class SetupHandlers {
             logger.error();
 
             throw new Error('Invalid configuration');
-
         }
+        return appConfigs.valid;
     }
 
 }
