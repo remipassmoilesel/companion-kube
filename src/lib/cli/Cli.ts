@@ -39,7 +39,7 @@ export class Cli {
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
-            .argument('<apps...>', 'Applications to deploy')
+            .argument('<applications...>', 'Applications to deploy')
             .complete(() => {
                 return this.api.loadAppsConfiguration(process.cwd());
             })

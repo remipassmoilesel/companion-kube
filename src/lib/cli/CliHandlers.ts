@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
+import {IDeployArguments} from './cliTypes';
 
 const logger = new Logger();
 
@@ -22,12 +23,12 @@ export class CliHandlers {
 
         const appConfigs = this.api.loadAppsConfiguration(process.cwd());
         if (appConfigs.valid.length > 0) {
-            _.forEach(appConfigs.valid, (valid) => {
-                logger.info(valid.name);
+            _.forEach(appConfigs.valid, (valid, index) => {
+                logger.info(`  ${index} - ${valid.name}`);
             });
             logger.info();
         } else {
-            logger.warning('No configuration found !');
+            logger.warning('No valid configuration found !');
             logger.warning();
         }
 
@@ -41,18 +42,24 @@ export class CliHandlers {
             });
             logger.error(`You must fix this configurations before continue`);
             throw new Error('Invalid configuration');
+
         } else if (appConfigs.valid.length > 0) {
             logger.success('All configurations are valid !');
         }
     }
 
-    public deployApplications(args: any, options: any) {
+    public deployApplications(args: IDeployArguments, options: any) {
         this.showHeader();
         this.checkPrerequisites();
 
-        logger.info("Command 'deploy' called with:");
-        logger.info('arguments: %j', args);
-        logger.info('options: %j', options);
+        const appNames: string[] = [];
+        const appNumbers: number[] = [];
+
+        _.forEach(args.applications, (app: any) => {
+            isNaN(app) ? appNames.push(app) : appNumbers.push(app);
+        });
+
+        this.api.deployApplications(appNames, appNumbers);
     }
 
     private checkPrerequisites() {

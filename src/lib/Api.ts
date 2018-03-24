@@ -30,4 +30,9 @@ export class Api {
         const appConfigs = this.appConfigMan.loadAppConfigurations(targetDirectory);
         return _.map(appConfigs.valid, (conf) => conf.name as string);
     }
+
+    public deployApplications(appNames: string[], appNumbers: number[]) {
+        console.log(appNumbers)
+        console.log(appNames)
+    }
 }
