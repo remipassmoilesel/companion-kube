@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {execSync} from 'child_process';
 import {IConfig} from '../config/config-types';
 import {Logger} from '../misc/Logger';
-import {PREREQUISITES} from './prerequisites';
+import {IPrerequisite, PREREQUISITES} from './prerequisites';
 
 const logger = new Logger();
 
@@ -17,7 +17,8 @@ export class PrerequisiteChecker {
         const missingPrerequisites = this.getMissingPrerequisites();
         if (missingPrerequisites.length > 0) {
             _.forEach(missingPrerequisites, (missing) => {
-                logger.error(`Missing prerequisite: ${missing}`);
+                logger.error(`Missing prerequisite: ${missing.command}`);
+                logger.info(`See: ${missing.installScript}`);
             });
 
             logger.error();
@@ -29,13 +30,13 @@ export class PrerequisiteChecker {
         return true;
     }
 
-    public getMissingPrerequisites(): string[] {
-        const missing: string[] = [];
+    public getMissingPrerequisites(): IPrerequisite[] {
+        const missing: IPrerequisite[] = [];
         _.forEach(PREREQUISITES, (prereq) => {
             try {
                 execSync(`which ${prereq.command}`);
             } catch (e) {
-                missing.push(prereq.command);
+                missing.push(prereq);
             }
         });
         return missing;

@@ -1,16 +1,20 @@
 export interface IPrerequisite {
     command: string;
     description?: string;
+    installScript: string;
 }
 
 export const PREREQUISITES: IPrerequisite[] = [
     {
-        command: 'docker',
+        command: 'dockera',
+        installScript: 'scripts/prereq/install-docker.sh',
     },
     {
         command: 'kubectl',
+        installScript: 'scripts/prereq/install-kubectl.sh',
     },
     {
         command: 'helm',
+        installScript: 'scripts/prereq/install-helm.sh',
     },
 ];
