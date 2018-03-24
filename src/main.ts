@@ -11,23 +11,14 @@ const logger = new Logger();
 const api = new Api(mainConfig);
 const cli = new Cli(mainConfig, api);
 
-class Main {
-
-    public run() {
-        cli.setupAndParse(process.argv);
-    }
-
-    public exit(returnCode: number) {
-        process.exit(returnCode);
-    }
-}
+const debug = false;
 
 (async () => {
 
     try {
-        new Main().run();
+        cli.setupAndParse(process.argv);
     } catch (e) {
-        logger.error(`Fatal error: ${e.message}`, e.stack);
+        logger.error(`Fatal error: ${e.message}`, debug && e.stack);
         process.exit(1);
     }
 
