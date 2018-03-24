@@ -1,0 +1,3 @@
+module.export = {
+    projectType: 'deployment'
+};

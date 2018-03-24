@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-example-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-example-deployment
+    spec:
+      containers:
+      - name: nginx-example-deployment
+        image: nginx:1.13.9-alpine
+        ports:
+        - containerPort: 80

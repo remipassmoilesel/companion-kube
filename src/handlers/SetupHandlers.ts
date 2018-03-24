@@ -1,9 +1,9 @@
 import * as _ from 'lodash';
 
-import {IMainConfig} from '../config/config-types';
+import {IMainConfig} from '../main-config/config-types';
 import {Logger} from '../misc/Logger';
 import {PrerequisiteChecker} from '../commands/PrerequisiteChecker';
-import {AppConfigurationManager} from '../config/AppConfigurationManager';
+import {AppConfigurationManager} from '../app-config/AppConfigurationManager';
 
 const logger = new Logger();
 

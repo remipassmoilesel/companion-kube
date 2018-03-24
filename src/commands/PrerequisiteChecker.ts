@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {execSync} from 'child_process';
-import {IMainConfig} from '../config/config-types';
+import {IMainConfig} from '../main-config/config-types';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from './prerequisites';
 

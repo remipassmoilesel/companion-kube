@@ -5,7 +5,7 @@ import 'source-map-support/register';
 import {Logger} from './misc/Logger';
 import {CliHandlers} from './handlers/CliHandlers';
 import {SetupHandlers} from './handlers/SetupHandlers';
-import {mainConfig} from './config/config';
+import {mainConfig} from './main-config/config';
 
 
 const logger = new Logger();

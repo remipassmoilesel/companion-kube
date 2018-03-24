@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-example-deployment
+  labels:
+    app: nginx-example-deployment
+spec:
+  selector:
+    app: nginx-example-deployment
+  ports:
+  - port: 80
+    protocol: TCP
+    nodePort: 30060
+  type: LoadBalancer

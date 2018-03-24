@@ -11,4 +11,8 @@ assert.ok(fs.existsSync(path.resolve(projectRoot, 'package.json')), 'Project roo
 export const mainConfig: IMainConfig = {
     prerequisites: PREREQUISITES,
     projectRoot,
+    configSearchIgnore: [
+        'node_modules/**/*',
+        'build/**/*',
+    ],
 };
