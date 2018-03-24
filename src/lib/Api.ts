@@ -3,7 +3,7 @@ import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {IConfigValidationResult} from './app-config/appConfigTypes';
+import {IKubeApplication, IConfigValidationResult} from './app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -22,17 +22,30 @@ export class Api {
         return this.prereqChecker.getMissingPrerequisites();
     }
 
-    public loadAppsConfiguration(targetDirectory: string): IConfigValidationResult {
-        return this.appConfigMan.loadAppConfigurations(targetDirectory);
+    public loadAppsConfiguration(targetDir: string): IConfigValidationResult {
+        return this.appConfigMan.loadAppConfigurations(targetDir);
     }
 
-    public getValidAppConfigurationsAsString(targetDirectory: string): string[] {
-        const appConfigs = this.appConfigMan.loadAppConfigurations(targetDirectory);
+    public getValidAppConfigurationsAsString(targetDir: string): string[] {
+        const appConfigs = this.appConfigMan.loadAppConfigurations(targetDir);
         return _.map(appConfigs.valid, (conf) => conf.name as string);
     }
 
-    public deployApplications(appNames: string[], appNumbers: number[]) {
-        console.log(appNumbers)
-        console.log(appNames)
+    public deployApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
+        console.log(appNumbers);
+        console.log(appNames);
+        const configs = this.loadAppsConfiguration(targetDir);
+        _.forEach(configs.valid, (conf: IKubeApplication, index: number) => {
+            const nameIsEqual = appNames.indexOf(conf.name) !== -1;
+            const indexIsEqual = appNumbers.indexOf(index) !== -1;
+
+            if (nameIsEqual || indexIsEqual){
+                this.deployApplication(conf);
+            }
+        });
+    }
+
+    private deployApplication(conf: IKubeApplication) {
+
     }
 }

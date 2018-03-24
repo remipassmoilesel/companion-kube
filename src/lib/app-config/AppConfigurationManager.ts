@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as Ajv from 'ajv';
 import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
-import {IAppConfig, IConfigValidationResult, IInvalidConfig} from './appConfigTypes';
+import {IKubeApplication, IConfigValidationResult, IInvalidApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
@@ -28,10 +28,10 @@ export class AppConfigurationManager {
     }
 
     private loadAndValidateConfigurations(configPaths: string[]): IConfigValidationResult {
-        const valid: IAppConfig[] = [];
-        const invalid: IInvalidConfig[] = [];
+        const valid: IKubeApplication[] = [];
+        const invalid: IInvalidApplication[] = [];
         _.forEach(configPaths, (configPath) => {
-            const config: IAppConfig = require(configPath);
+            const config: IKubeApplication = require(configPath);
             const validRes: any = this.appConfigValidator(config);
             this.injectMetadataInConfig(config, configPath);
 
@@ -58,7 +58,7 @@ export class AppConfigurationManager {
         return glob.found;
     }
 
-    private injectMetadataInConfig(config: IAppConfig, configPath: string) {
+    private injectMetadataInConfig(config: IKubeApplication, configPath: string) {
         if (!config.name) {
             const configPathArr = configPath.split(path.sep);
             config.name = configPathArr[configPathArr.length - 2];

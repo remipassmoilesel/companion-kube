@@ -2,7 +2,7 @@ import * as Ajv from 'ajv';
 
 export type ProjectType = 'deployment' | 'chart';
 
-export interface IAppConfig {
+export interface IKubeApplication {
 
     // should not appear in configuration, will be injected later
     configPath: string;
@@ -10,26 +10,26 @@ export interface IAppConfig {
 
     name: string;
     projectType: ProjectType;
-    docker?: IDockerConfig;
+    docker?: IDockerOptions;
 }
 
-export interface IDockerConfig {
+export interface IDockerOptions {
     build: boolean;
     containerName: string;
     tag: string;
 }
 
-export interface IInvalidConfig {
-    config: IAppConfig;
+export interface IInvalidApplication {
+    config: IKubeApplication;
     errors: Ajv.ErrorObject[];
 }
 
 export interface IConfigValidationResult {
-    valid: IAppConfig[];
-    invalid: IInvalidConfig[];
+    valid: IKubeApplication[];
+    invalid: IInvalidApplication[];
 }
 
-export const exampleAppConfig: IAppConfig = {
+export const exampleAppConfig: IKubeApplication = {
     name: 'config',
     configPath: '/path/to/config',
     projectType: 'deployment',

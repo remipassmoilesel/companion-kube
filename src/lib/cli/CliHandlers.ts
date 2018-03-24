@@ -59,7 +59,7 @@ export class CliHandlers {
             isNaN(app) ? appNames.push(app) : appNumbers.push(app);
         });
 
-        this.api.deployApplications(appNames, appNumbers);
+        this.api.deployApplications(process.cwd(), appNames, appNumbers);
     }
 
     private checkPrerequisites() {
