@@ -1,5 +1,5 @@
 
-import {IPrerequisite} from '../commands/prerequisites';
+import {IPrerequisite} from '../prerequisites/prerequisites';
 
 export interface IMainConfig {
     version: string;

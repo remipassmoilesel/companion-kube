@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
-import {PrerequisiteChecker} from './commands/PrerequisiteChecker';
+import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
 import {IConfigValidationResult} from './app-config/appConfigTypes';
 
