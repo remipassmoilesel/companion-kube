@@ -2,26 +2,20 @@
 
 import {Logger, LogLevels} from './misc/Logger';
 import {CliActions} from './CliActions';
-import {mainConfig} from './config';
+import {mainConfig} from './config/config';
 
 import 'source-map-support/register';
 
-const logger = new Logger({namespace: 'main', logLevel: LogLevels.info});
+const logger = new Logger();
 const cliActions = new CliActions(mainConfig);
 
 logger.info('Companion-Kube !');
+logger.info();
 
 (async () => {
 
     try {
-
-        // companion-kube ?
-
-        // verifier la présence d'outils nécéssaires (helm, kubectl, ...)
-        // Proposer installation ?
-        // Proposer utilisation minikube ?
-        // Rechercher les applications disponibles
-        // Déployer ou stopper
+        cliActions.checkPrerequisites();
 
     } catch (e) {
         logger.error('Error: ', e);

@@ -23,7 +23,7 @@ export class LogLevels {
         value: 2,
     };
     public static error: ILogLevel = {
-        color: 'yellow',
+        color: 'red',
         mark: '[!]',
         value: 3,
     };
@@ -34,10 +34,12 @@ interface ILoggerOptions {
     logLevel: ILogLevel;
 }
 
+const defaultOptions: ILoggerOptions = {namespace: 'main', logLevel: LogLevels.info};
+
 export class Logger {
     private options: ILoggerOptions;
 
-    constructor(options: ILoggerOptions){
+    constructor(options: ILoggerOptions = defaultOptions) {
         this.options = options;
     }
 
@@ -48,12 +50,12 @@ export class Logger {
         this.printColor(level, line);
     }
 
-    public success(message?: string, data?: any) {
-        this.printColor(LogLevels.success, message, data);
-    }
-
     public info(message?: string, data?: any) {
         this.printColor(LogLevels.info, message, data);
+    }
+
+    public success(message?: string, data?: any) {
+        this.printColor(LogLevels.success, message, data);
     }
 
     public warning(message?: string, data?: any) {
@@ -66,11 +68,11 @@ export class Logger {
 
     public printColor(level: ILogLevel, message?: string, data?: any) {
 
-        if (level.value < this.options.logLevel.value){
+        if (level.value < this.options.logLevel.value) {
             return;
         }
 
-        if (!message){
+        if (!message) {
             console.log();
             return;
         }
