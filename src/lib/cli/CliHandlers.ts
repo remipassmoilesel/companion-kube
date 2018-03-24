@@ -2,7 +2,6 @@ import * as _ from 'lodash';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
-import {IAppConfig} from '../app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -15,16 +14,36 @@ export class CliHandlers {
         this.api = api;
     }
 
-    public listApplications(args: any, options: any, logger: any) {
+    public listApplications(args: any, options: any) {
         this.showHeader();
         this.checkPrerequisites();
 
-        logger.info("Command 'list' called with:");
-        logger.info('arguments: %j', args);
-        logger.info('options: %j', options);
+        logger.info('Available applications:');
+
+        const appConfigs = this.api.loadAppsConfiguration(process.cwd());
+        if (appConfigs.valid.length > 0) {
+            _.forEach(appConfigs.valid, (valid) => {
+                logger.info(valid.name);
+            });
+            logger.info();
+        }
+
+        if (appConfigs.invalid.length > 0) {
+            _.forEach(appConfigs.invalid, (invalid) => {
+                const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
+
+                logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
+                logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
+                logger.error();
+            });
+            logger.error(`You must fix this configurations before continue`);
+            throw new Error('Invalid configuration');
+        } else {
+            logger.success('All configurations are valid !');
+        }
     }
 
-    public deployApplications(args: any, options: any, logger: any) {
+    public deployApplications(args: any, options: any) {
         this.showHeader();
         this.checkPrerequisites();
 
@@ -32,27 +51,6 @@ export class CliHandlers {
         logger.info('arguments: %j', args);
         logger.info('options: %j', options);
     }
-
-    private loadAppConfigurations(targetDirectory: string): IAppConfig[] {
-        const appConfigs = this.api.loadAppsConfiguration(targetDirectory);
-        if (appConfigs.invalid.length > 0) {
-            _.forEach(appConfigs.invalid, (invalid) => {
-
-                const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
-
-                logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
-                logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
-                logger.error();
-            });
-
-            logger.error(`You must fix this configurations before continue`);
-            logger.error();
-
-            throw new Error('Invalid configuration');
-        }
-        return appConfigs.valid;
-    }
-
 
     private checkPrerequisites() {
         const missingPrerequisites = this.api.getMissingPrerequisites();

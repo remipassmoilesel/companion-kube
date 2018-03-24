@@ -58,9 +58,11 @@ export class AppConfigurationManager {
         return glob.found;
     }
 
-
     private injectMetadataInConfig(config: IAppConfig, configPath: string) {
-        if (!config.name) { config.name = path.basename(configPath); }
+        if (!config.name) {
+            const configPathArr = configPath.split(path.sep);
+            config.name = configPathArr[configPathArr.length - 2];
+        }
         config.configPath = configPath;
     }
 }
