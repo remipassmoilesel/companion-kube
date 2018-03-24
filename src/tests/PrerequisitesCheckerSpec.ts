@@ -1,0 +1,58 @@
+import * as chai from 'chai';
+import * as sinon from 'sinon';
+import {SinonStub} from 'sinon';
+import {execSync} from 'child_process';
+import {IPrerequisite} from '../commands/prerequisites';
+import {PrerequisiteChecker} from '../commands/PrerequisiteChecker';
+import {IConfig} from '../config/config-types';
+
+const assert = chai.assert;
+
+describe(' > PrerequisitesChecker', function() {
+    this.timeout(2000);
+
+    const fakePrereq: IPrerequisite[] = [
+        {
+            command: 'fancy-command',
+            installScript: 'scripts/prereq/fancy-command',
+        },
+    ];
+
+    const testConfig: IConfig = {
+        prerequisites: fakePrereq,
+    };
+
+    let prereqChecker: PrerequisiteChecker;
+    let execStub: SinonStub;
+
+    beforeEach(() => {
+        prereqChecker = new PrerequisiteChecker(testConfig);
+        execStub = sinon.stub(prereqChecker as any, 'execSync');
+    });
+
+    afterEach(() => {
+        execStub.resetBehavior();
+    });
+
+    it(' > getMissingPrerequisites should return empty array', () => {
+
+        const missing = prereqChecker.getMissingPrerequisites();
+
+        assert.lengthOf(execStub.getCalls(), 1);
+        assert.isEmpty(missing);
+
+        execStub.resetBehavior();
+    });
+
+    it(' > getMissingPrerequisites should return one element array', () => {
+
+        execStub.onFirstCall().throws(new Error());
+        const missing = prereqChecker.getMissingPrerequisites();
+
+        assert.lengthOf(execStub.getCalls(), 1);
+        assert.lengthOf(missing, 1);
+        assert.equal(missing[0].command, 'fancy-command');
+    });
+
+});
+

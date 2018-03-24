@@ -1,6 +1,7 @@
 
 import {IConfig} from './config-types';
+import {PREREQUISITES} from '../commands/prerequisites';
 
 export const mainConfig: IConfig = {
-    templateServerPort: 3080,
+    prerequisites: PREREQUISITES,
 };

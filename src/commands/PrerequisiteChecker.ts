@@ -2,15 +2,17 @@ import * as _ from 'lodash';
 import {execSync} from 'child_process';
 import {IConfig} from '../config/config-types';
 import {Logger} from '../misc/Logger';
-import {IPrerequisite, PREREQUISITES} from './prerequisites';
+import {IPrerequisite} from './prerequisites';
 
 const logger = new Logger();
 
 export class PrerequisiteChecker {
     private appConfig: IConfig;
+    private execSync: any;
 
     constructor(appConfig: IConfig) {
         this.appConfig = appConfig;
+        this.execSync = execSync;
     }
 
     public checkPrerequisites(): boolean {
@@ -32,9 +34,9 @@ export class PrerequisiteChecker {
 
     public getMissingPrerequisites(): IPrerequisite[] {
         const missing: IPrerequisite[] = [];
-        _.forEach(PREREQUISITES, (prereq) => {
+        _.forEach(this.appConfig.prerequisites, (prereq) => {
             try {
-                execSync(`which ${prereq.command}`);
+                this.execSync(`which ${prereq.command}`);
             } catch (e) {
                 missing.push(prereq);
             }
