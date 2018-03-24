@@ -8,7 +8,7 @@ export interface ILogLevel {
 export class LogLevels {
     public static info: ILogLevel = {
         color: 'cyan',
-        mark: '[ℹ]',
+        mark: '[~]',
         value: 0,
     };
     public static success: ILogLevel = {
