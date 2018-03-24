@@ -1,11 +1,11 @@
 {
-  "name": "kube-frontend-server",
+  "name": "companion-kube",
   "version": "0.0.1",
   "license": "GPL-3.0",
-  "repository": "https://github.com/remipassmoilesel/kube-frontend-server",
-  "description": "Frontend server and deployment for Kubernetes",
+  "repository": "https://github.com/remipassmoilesel/companion-kube",
+  "description": "Helper for Kubernetes deployments",
   "bin": {
-    "kube-server": "./build/main.js"
+    "companion-kube": "./build/main.js"
   },
   "scripts": {
     "install-cli": "sudo npm link",
