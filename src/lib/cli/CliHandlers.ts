@@ -48,7 +48,7 @@ export class CliHandlers {
         }
     }
 
-    public deployApplications(args: IDeployArguments, options: any) {
+    public async deployApplications(args: IDeployArguments, options: any) {
         this.showHeader();
         this.checkPrerequisites();
 
@@ -56,10 +56,10 @@ export class CliHandlers {
         const appNumbers: number[] = [];
 
         _.forEach(args.applications, (app: any) => {
-            isNaN(app) ? appNames.push(app) : appNumbers.push(app);
+            isNaN(app) ? appNames.push(app) : appNumbers.push(Number(app));
         });
 
-        this.api.deployApplications(process.cwd(), appNames, appNumbers);
+        await this.api.deployApplications(process.cwd(), appNames, appNumbers);
     }
 
     private checkPrerequisites() {

@@ -3,7 +3,8 @@ import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {IKubeApplication, IConfigValidationResult} from './app-config/appConfigTypes';
+import {IConfigValidationResult, IKubeApplication} from './app-config/appConfigTypes';
+import {ExecutorFinder} from './app-executor/ExecutorFinder';
 
 const logger = new Logger();
 
@@ -31,21 +32,46 @@ export class Api {
         return _.map(appConfigs.valid, (conf) => conf.name as string);
     }
 
-    public deployApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
-        console.log(appNumbers);
-        console.log(appNames);
-        const configs = this.loadAppsConfiguration(targetDir);
-        _.forEach(configs.valid, (conf: IKubeApplication, index: number) => {
-            const nameIsEqual = appNames.indexOf(conf.name) !== -1;
-            const indexIsEqual = appNumbers.indexOf(index) !== -1;
+    public async deployApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
+        const applications = this.loadAppsConfiguration(targetDir);
 
-            if (nameIsEqual || indexIsEqual){
-                this.deployApplication(conf);
+        const toDeploy: IKubeApplication[] = [];
+        for (const appName of appNames) {
+            const app = _.find(applications.valid, (ap) => ap.name === appName);
+            if (!app) {
+                throw new Error(`Not found: ${appName}`);
             }
-        });
+            toDeploy.push(app);
+        }
+
+        for (const appNumber of appNumbers) {
+            const app = _.find(applications.valid, (ap, index) => index === appNumber);
+            if (!app) {
+                throw new Error(`Not found: ${appNumber}`);
+            }
+            toDeploy.push(app);
+        }
+
+        const errors: Error[] = [];
+        for (const app of toDeploy) {
+            try {
+                await this.deployApplication(app);
+            } catch (e) {
+                errors.push(e);
+            }
+        }
+
+        if (errors.length > 0) {
+            const err: any = new Error('Error while launching ')
+            err.$origins = errors;
+            throw err;
+        }
+
     }
 
-    private deployApplication(conf: IKubeApplication) {
-
+    public async deployApplication(app: IKubeApplication) {
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        await executor.deploy(app);
     }
+
 }
