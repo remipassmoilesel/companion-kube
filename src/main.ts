@@ -1,24 +1,38 @@
 #!/usr/bin/env node
 
-import {Logger, LogLevels} from './misc/Logger';
-import {CliActions} from './CliActions';
-import {mainConfig} from './config/config';
-
 import 'source-map-support/register';
 
+import {Logger} from './misc/Logger';
+import {CliHandlers} from './handlers/CliHandlers';
+import {SetupHandlers} from './handlers/SetupHandlers';
+import {mainConfig} from './config/config';
+
+
 const logger = new Logger();
-const cliActions = new CliActions(mainConfig);
+const setupHandlers = new SetupHandlers(mainConfig);
+const cliHandlers = new CliHandlers(mainConfig);
 
 logger.info('Companion-Kube !');
 logger.info();
 
+class Main {
+
+    public run(){
+        setupHandlers.checkPrerequisites();
+        setupHandlers.getApplicationConfigurations(process.cwd());
+    }
+
+    public exit(returnCode: number) {
+        process.exit(returnCode);
+    }
+}
+
 (async () => {
 
     try {
-        cliActions.checkPrerequisites();
-
+        new Main().run();
     } catch (e) {
-        logger.error('Error: ', e);
+        logger.error(`Fatal error: ${e.message}`, e.stack);
         process.exit(1);
     }
 

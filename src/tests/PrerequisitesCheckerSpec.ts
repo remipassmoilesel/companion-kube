@@ -4,7 +4,7 @@ import {SinonStub} from 'sinon';
 import {execSync} from 'child_process';
 import {IPrerequisite} from '../commands/prerequisites';
 import {PrerequisiteChecker} from '../commands/PrerequisiteChecker';
-import {IConfig} from '../config/config-types';
+import {IMainConfig} from '../config/config-types';
 
 const assert = chai.assert;
 
@@ -18,9 +18,9 @@ describe(' > PrerequisitesChecker', function() {
         },
     ];
 
-    const testConfig: IConfig = {
+    const testConfig: IMainConfig = {
         prerequisites: fakePrereq,
-    };
+    } as any;
 
     let prereqChecker: PrerequisiteChecker;
     let execStub: SinonStub;
@@ -35,17 +35,13 @@ describe(' > PrerequisitesChecker', function() {
     });
 
     it(' > getMissingPrerequisites should return empty array', () => {
-
         const missing = prereqChecker.getMissingPrerequisites();
 
         assert.lengthOf(execStub.getCalls(), 1);
         assert.isEmpty(missing);
-
-        execStub.resetBehavior();
     });
 
     it(' > getMissingPrerequisites should return one element array', () => {
-
         execStub.onFirstCall().throws(new Error());
         const missing = prereqChecker.getMissingPrerequisites();
 
