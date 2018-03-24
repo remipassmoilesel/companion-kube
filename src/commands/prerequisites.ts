@@ -6,7 +6,7 @@ export interface IPrerequisite {
 
 export const PREREQUISITES: IPrerequisite[] = [
     {
-        command: 'dockera',
+        command: 'docker',
         installScript: 'scripts/prereq/install-docker.sh',
     },
     {
