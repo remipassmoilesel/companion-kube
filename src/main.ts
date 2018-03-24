@@ -4,18 +4,17 @@ import 'source-map-support/register';
 
 import {Api} from './lib/Api';
 import {Logger} from './lib/misc/Logger';
-import {CliHandlers} from './lib/cli/CliHandlers';
 import {mainConfig} from './lib/main-config/config';
+import {Cli} from './lib/cli/Cli';
 
 const logger = new Logger();
 const api = new Api(mainConfig);
-const cliHandlers = new CliHandlers(mainConfig, api);
+const cli = new Cli(mainConfig, api);
 
 class Main {
 
     public run() {
-        api.checkPrerequisites();
-        cliHandlers.setupAndParse(process.argv);
+        cli.setupAndParse(process.argv);
     }
 
     public exit(returnCode: number) {

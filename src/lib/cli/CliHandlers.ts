@@ -1,65 +1,77 @@
+import * as _ from 'lodash';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
-import {Help} from './Help';
+import {IAppConfig} from '../app-config/appConfigTypes';
 
 const logger = new Logger();
 
 export class CliHandlers {
     private mainConfig: IMainConfig;
     private api: Api;
-    private cliProg: any;
 
     constructor(mainConfig: IMainConfig, api: Api) {
         this.mainConfig = mainConfig;
         this.api = api;
-        this.cliProg = require('caporal');
     }
 
-    public setupAndParse(argv: string[]) {
-        this.setupCli();
-        this.parse(argv);
-    }
+    public listApplications(args: any, options: any, logger: any) {
+        this.showHeader();
+        this.checkPrerequisites();
 
-    private setupCli() {
-
-        this.cliProg
-            .version(this.mainConfig.version)
-            .help(Help.global);
-
-        this.cliProg
-            .command('list', 'List available applications')
-            .help(Help.list)
-            .action(this.listApplications.bind(this));
-
-        this.cliProg
-            .command('deploy', 'Deploy one or more applications')
-            .help(Help.deploy)
-            .argument('<apps...>', 'Applications to deploy')
-            .complete(() => {
-                return this.api.getApplicationList();
-            })
-            .action(this.deployApplications.bind(this));
-    }
-
-    private listApplications(args: any, options: any, logger: any) {
         logger.info("Command 'list' called with:");
         logger.info('arguments: %j', args);
         logger.info('options: %j', options);
     }
 
-    private deployApplications(args: any, options: any, logger: any) {
+    public deployApplications(args: any, options: any, logger: any) {
+        this.showHeader();
+        this.checkPrerequisites();
+
         logger.info("Command 'deploy' called with:");
         logger.info('arguments: %j', args);
         logger.info('options: %j', options);
     }
 
-    private showHeader(){
-        logger.info('Companion-Kube !');
-        logger.info();
+    private loadAppConfigurations(targetDirectory: string): IAppConfig[] {
+        const appConfigs = this.api.loadAppsConfiguration(targetDirectory);
+        if (appConfigs.invalid.length > 0) {
+            _.forEach(appConfigs.invalid, (invalid) => {
+
+                const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
+
+                logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
+                logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
+                logger.error();
+            });
+
+            logger.error(`You must fix this configurations before continue`);
+            logger.error();
+
+            throw new Error('Invalid configuration');
+        }
+        return appConfigs.valid;
     }
 
-    private parse(argv: string[]) {
-        this.cliProg.parse(argv);
+
+    private checkPrerequisites() {
+        const missingPrerequisites = this.api.getMissingPrerequisites();
+        if (missingPrerequisites.length > 0) {
+            _.forEach(missingPrerequisites, (missing) => {
+                logger.error(`Missing prerequisite: ${missing.command}`);
+                logger.info(`See: ${missing.installScript}`);
+                logger.error();
+            });
+
+            logger.error(`You must install these tools before continue`);
+            logger.error();
+
+            throw new Error('Missing prerequisites');
+        }
+    }
+
+    private showHeader() {
+        logger.info('Companion-Kube !');
+        logger.info();
     }
 }

@@ -1,10 +1,9 @@
 import * as _ from 'lodash';
-
 import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './commands/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {IAppConfig} from './app-config/appConfigTypes';
+import {IConfigValidationResult} from './app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -19,43 +18,16 @@ export class Api {
         this.appConfigMan = new AppConfigurationManager(mainConfig);
     }
 
-    public checkPrerequisites() {
-        const missingPrerequisites = this.prereqChecker.getMissingPrerequisites();
-        if (missingPrerequisites.length > 0) {
-            _.forEach(missingPrerequisites, (missing) => {
-                logger.error(`Missing prerequisite: ${missing.command}`);
-                logger.info(`See: ${missing.installScript}`);
-                logger.error();
-            });
-
-            logger.error(`You must install these tools before continue`);
-            logger.error();
-
-            throw new Error('Missing prerequisites');
-        }
+    public getMissingPrerequisites() {
+        return this.prereqChecker.getMissingPrerequisites();
     }
 
-    public loadAppConfigurations(targetDirectory: string): IAppConfig[] {
+    public loadAppsConfiguration(targetDirectory: string): IConfigValidationResult {
+        return this.appConfigMan.loadAppConfigurations(targetDirectory);
+    }
+
+    public getValidAppConfigurationsAsString(targetDirectory: string): string[] {
         const appConfigs = this.appConfigMan.loadAppConfigurations(targetDirectory);
-        if (appConfigs.invalid.length > 0) {
-            _.forEach(appConfigs.invalid, (invalid) => {
-
-                const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
-
-                logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
-                logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
-                logger.error();
-            });
-
-            logger.error(`You must fix this configurations before continue`);
-            logger.error();
-
-            throw new Error('Invalid configuration');
-        }
-        return appConfigs.valid;
-    }
-
-    public getApplicationList() {
-        return ['app1', 'app2'];
+        return _.map(appConfigs.valid, (conf) => conf.name as string);
     }
 }

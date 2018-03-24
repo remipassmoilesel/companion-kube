@@ -1,7 +1,14 @@
+import * as Ajv from 'ajv';
+
 export type ProjectType = 'deployment' | 'chart';
 
 export interface IAppConfig {
+
+    // should not appear in configuration, will be injected later
     configPath: string;
+    // end
+
+    name: string;
     projectType: ProjectType;
     docker?: IDockerConfig;
 }
@@ -12,8 +19,19 @@ export interface IDockerConfig {
     tag: string;
 }
 
+export interface IInvalidConfig {
+    config: IAppConfig;
+    errors: Ajv.ErrorObject[];
+}
+
+export interface IConfigValidationResult {
+    valid: IAppConfig[];
+    invalid: IInvalidConfig[];
+}
+
 export const exampleAppConfig: IAppConfig = {
-    configPath: '/path/to/config', // should not appear in configuration, will be injected later
+    name: 'config',
+    configPath: '/path/to/config',
     projectType: 'deployment',
     docker: {
         build: false,
@@ -21,3 +39,4 @@ export const exampleAppConfig: IAppConfig = {
         tag: '0.1',
     },
 };
+

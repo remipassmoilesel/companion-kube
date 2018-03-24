@@ -1,21 +1,14 @@
 import * as _ from 'lodash';
+import * as path from 'path';
 import * as Ajv from 'ajv';
 import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
-import {IAppConfig} from './appConfigTypes';
+import {IAppConfig, IConfigValidationResult, IInvalidConfig} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
-export interface IInvalidConfig {
-    config: IAppConfig;
-    errors: Ajv.ErrorObject[];
-}
-
-export interface IConfigValidationResult {
-    valid: IAppConfig[];
-    invalid: IInvalidConfig[];
-}
+// TODO: add cache per directory
 
 export class AppConfigurationManager {
     private mainConfig: IMainConfig;
@@ -40,7 +33,7 @@ export class AppConfigurationManager {
         _.forEach(configPaths, (configPath) => {
             const config: IAppConfig = require(configPath);
             const validRes: any = this.appConfigValidator(config);
-            config.configPath = configPath;
+            this.injectMetadataInConfig(config, configPath);
 
             if (validRes) {
                 valid.push(config);
@@ -66,4 +59,8 @@ export class AppConfigurationManager {
     }
 
 
+    private injectMetadataInConfig(config: IAppConfig, configPath: string) {
+        if (!config.name) { config.name = path.basename(configPath); }
+        config.configPath = configPath;
+    }
 }
