@@ -16,17 +16,11 @@
     "clean": "./node_modules/.bin/rimraf build",
     "compile": "tsc --pretty",
     "compile-watch": "tsc --pretty -w",
-    "clean-compile": "npm run clean && npm run compile",
-    "docker-build": "cd scripts && ./build-image.sh",
-    "docker-start": "npm run docker-build && cd scripts && ./launch-example.sh",
-    "minikube-path-host": "cd scripts && ./path-hosts.sh",
-    "minikube-docker-build": "cd scripts && ./build-image-minikube.sh",
-    "minikube-deploy": "cd scripts && ./minikube-deploy.sh",
-    "minikube-destroy": "cd scripts && ./minikube-destroy.sh",
-    "minikube-clean-deploy": "npm run minikube-destroy; npm run minikube-deploy"
+    "clean-compile": "npm run clean && npm run compile"
   },
   "dependencies": {
     "ajv": "^6.3.0",
+    "caporal": "^0.10.0",
     "chalk": "^2.3.2",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",

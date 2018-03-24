@@ -55,4 +55,7 @@ export class Api {
         return appConfigs.valid;
     }
 
+    public getApplicationList() {
+        return ['app1', 'app2'];
+    }
 }
