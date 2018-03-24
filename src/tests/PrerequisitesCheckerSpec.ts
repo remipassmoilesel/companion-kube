@@ -4,7 +4,7 @@ import {SinonStub} from 'sinon';
 import {execSync} from 'child_process';
 import {IPrerequisite} from '../commands/prerequisites';
 import {PrerequisiteChecker} from '../commands/PrerequisiteChecker';
-import {IMainConfig} from '../main-config/config-types';
+import {IMainConfig} from '../main-config/configTypes';
 
 const assert = chai.assert;
 

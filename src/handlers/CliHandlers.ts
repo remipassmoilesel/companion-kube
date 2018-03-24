@@ -1,4 +1,4 @@
-import {IMainConfig} from '../main-config/config-types';
+import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 
 const logger = new Logger();

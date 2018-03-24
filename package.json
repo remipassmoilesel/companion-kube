@@ -26,12 +26,14 @@
     "minikube-clean-deploy": "npm run minikube-destroy; npm run minikube-deploy"
   },
   "dependencies": {
+    "ajv": "^6.3.0",
     "chalk": "^2.3.2",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@types/ajv": "^1.0.0",
     "@types/glob": "^5.0.35",
     "@types/chai": "^4.1.2",
     "@types/fs-extra": "^5.0.1",

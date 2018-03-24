@@ -1,5 +1,5 @@
 
-import {IMainConfig} from './config-types';
+import {IMainConfig} from './configTypes';
 import {PREREQUISITES} from '../commands/prerequisites';
 import * as path from 'path';
 import * as fs from 'fs';

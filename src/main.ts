@@ -6,6 +6,7 @@ import {Logger} from './misc/Logger';
 import {CliHandlers} from './handlers/CliHandlers';
 import {SetupHandlers} from './handlers/SetupHandlers';
 import {mainConfig} from './main-config/config';
+import {exampleAppConfig} from './app-config/appConfigTypes';
 
 
 const logger = new Logger();
@@ -19,7 +20,7 @@ class Main {
 
     public run(){
         setupHandlers.checkPrerequisites();
-        setupHandlers.getApplicationConfigurations(process.cwd());
+        setupHandlers.loadAppConfigurations(process.cwd());
     }
 
     public exit(returnCode: number) {

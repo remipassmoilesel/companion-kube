@@ -23,7 +23,7 @@ export class LogLevels {
         value: 2,
     };
     public static error: ILogLevel = {
-        color: 'red',
+        color: 'redBright',
         mark: '[!]',
         value: 3,
     };
