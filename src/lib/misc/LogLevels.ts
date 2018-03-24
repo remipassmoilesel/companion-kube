@@ -13,12 +13,12 @@ export class LogLevels {
     };
     public static success: ILogLevel = {
         color: 'green',
-        mark: '[✓]',
+        mark: '[+]',
         value: 1,
     };
     public static warning: ILogLevel = {
         color: 'yellow',
-        mark: '[⚠]',
+        mark: '[!]',
         value: 2,
     };
     public static error: ILogLevel = {

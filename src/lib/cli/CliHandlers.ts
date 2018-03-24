@@ -26,6 +26,9 @@ export class CliHandlers {
                 logger.info(valid.name);
             });
             logger.info();
+        } else {
+            logger.warning('No configuration found !');
+            logger.warning();
         }
 
         if (appConfigs.invalid.length > 0) {
@@ -38,7 +41,7 @@ export class CliHandlers {
             });
             logger.error(`You must fix this configurations before continue`);
             throw new Error('Invalid configuration');
-        } else {
+        } else if (appConfigs.valid.length > 0) {
             logger.success('All configurations are valid !');
         }
     }
