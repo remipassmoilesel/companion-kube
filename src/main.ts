@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
-import {error, info} from './misc/utils';
+import {Logger, LogLevels} from './misc/Logger';
+import {CliActions} from './CliActions';
 import {mainConfig} from './config';
 
 import 'source-map-support/register';
 
-// TODO: remove
-info();
-info(`Initialized with configuration: ${JSON.stringify(mainConfig, null, 2)}`);
-info();
+const logger = new Logger({namespace: 'main', logLevel: LogLevels.info});
+const cliActions = new CliActions(mainConfig);
+
+logger.info('Companion-Kube !');
 
 (async () => {
 
@@ -23,7 +24,7 @@ info();
         // Déployer ou stopper
 
     } catch (e) {
-        error('Error while initializing Nginx configuration: ', e);
+        logger.error('Error: ', e);
         process.exit(1);
     }
 
