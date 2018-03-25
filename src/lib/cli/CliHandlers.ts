@@ -4,6 +4,7 @@ import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
+import {DirectoryInitHelper} from '../misc/DirectoryInitHelper';
 
 const logger = new Logger();
 
@@ -16,6 +17,12 @@ export class CliHandlers {
         this.mainConfig = mainConfig;
         this.api = api;
         this.display = new CliDisplay();
+    }
+
+    public initDirectory() {
+        this.display.showCliHeader();
+        DirectoryInitHelper.init();
+        logger.success('File ck-config.js created !');
     }
 
     public listApplications(args: any, options: any) {

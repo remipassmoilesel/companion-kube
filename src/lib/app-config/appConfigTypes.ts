@@ -48,6 +48,9 @@ export const exampleAppConfig: IKubeApplication = {
 
     name: 'config',
     projectType: 'deployment',
+    helm: {
+        releaseName: 'gitlab-dev',
+    },
     docker: {
         containerName: 'deployment-with-docker-file',
         tag: '0.1',
@@ -56,4 +59,5 @@ export const exampleAppConfig: IKubeApplication = {
         buildDirectory: './path/to/docker/build',
     },
 };
+
 

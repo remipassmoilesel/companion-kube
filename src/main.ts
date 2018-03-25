@@ -8,7 +8,6 @@ import {Cli} from './lib/cli/Cli';
 import {LogLevels} from './lib/misc/LogLevels';
 import {logFatalError} from './lib/misc/utils';
 
-
 export const IS_DEBUG = false;
 Logger.setDefaultLogLevel(IS_DEBUG ? LogLevels.debug : LogLevels.info);
 

@@ -14,7 +14,7 @@
     "lint": "./node_modules/.bin/tslint --force --format verbose 'src/**/*.ts'",
     "lint-fix": "npm run lint -- --fix",
     "clean": "./node_modules/.bin/rimraf build",
-    "compile": "tsc --pretty",
+    "compile": "tsc --pretty && chmod +x ./build/main.js",
     "compile-watch": "tsc --pretty -w",
     "clean-compile": "npm run clean && npm run compile"
   },

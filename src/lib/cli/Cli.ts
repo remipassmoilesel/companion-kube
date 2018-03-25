@@ -34,6 +34,11 @@ export class Cli {
             .help(Help.global);
 
         this.cliProg
+            .command('init', 'Create a full ck-config.js example')
+            .help(Help.list)
+            .action(this.bindHandler(this.handlers.initDirectory));
+
+        this.cliProg
             .command('list', 'List available applications')
             .help(Help.list)
             .action(this.bindHandler(this.handlers.listApplications));
