@@ -4,28 +4,31 @@ import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions} from './cliTypes';
 import {IConfigValidationResult} from '../app-config/appConfigTypes';
+import {CliDisplay} from './CliDisplay';
 
 const logger = new Logger();
 
 export class CliHandlers {
     private mainConfig: IMainConfig;
     private api: Api;
+    private display: CliDisplay;
 
     constructor(mainConfig: IMainConfig, api: Api) {
         this.mainConfig = mainConfig;
         this.api = api;
+        this.display = new CliDisplay();
     }
 
     public listApplications(args: any, options: any) {
-        this.showCliHeader();
+        this.display.showCliHeader();
         this.checkPrerequisites();
 
         const appConfigs = this.api.loadAppsConfiguration(process.cwd());
-        this.showValidApps(appConfigs);
-        this.showValidServiceComponents(appConfigs);
+        this.display.showValidApps(appConfigs);
+        this.display.showValidServiceComponents(appConfigs);
 
         if (appConfigs.invalid.length > 0) {
-            this.showInvalidConfigurations(appConfigs);
+            this.display.showInvalidConfigurations(appConfigs);
             throw new Error('Invalid configuration');
         }
         else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.service.length > 0) {
@@ -34,7 +37,7 @@ export class CliHandlers {
     }
 
     public async deployApplications(args: IDeployArguments, options: IDeployOptions) {
-        this.showCliHeader();
+        this.display.showCliHeader();
         this.checkPrerequisites();
 
         if (args.applications.indexOf('all') !== -1){
@@ -48,7 +51,7 @@ export class CliHandlers {
     }
 
     public async destroyApplications(args: IDeployArguments, options: IDeployOptions) {
-        this.showCliHeader();
+        this.display.showCliHeader();
         this.checkPrerequisites();
 
         if (args.applications.indexOf('all') !== -1){
@@ -64,22 +67,9 @@ export class CliHandlers {
     private checkPrerequisites() {
         const missingPrerequisites = this.api.getMissingPrerequisites();
         if (missingPrerequisites.length > 0) {
-            _.forEach(missingPrerequisites, (missing) => {
-                logger.error(`Missing prerequisite: ${missing.command}`);
-                logger.info(`See: ${missing.installScript}`);
-                logger.error();
-            });
-
-            logger.error(`You must install these tools before continue`);
-            logger.error();
-
+            this.display.showMissingPrerequisites(missingPrerequisites);
             throw new Error('Missing prerequisites');
         }
-    }
-
-    private showCliHeader() {
-        logger.info('Companion-Kube !');
-        logger.info();
     }
 
     private getAppNumbersAndNames(args: string[]){
@@ -93,48 +83,4 @@ export class CliHandlers {
         return {appNames, appNumbers};
     }
 
-    private showValidApps(appConfigs: IConfigValidationResult) {
-
-        if (appConfigs.valid.apps.length > 0) {
-
-            logger.info('Available applications:');
-            _.forEach(appConfigs.valid.apps, (valid, index) => {
-                logger.info(`  ${index} - ${valid.name}`);
-            });
-            logger.info();
-
-        } else {
-            logger.warning('No valid application found !');
-            logger.warning();
-        }
-
-    }
-
-    private showValidServiceComponents(appConfigs: IConfigValidationResult) {
-
-        if (appConfigs.valid.service.length > 0) {
-
-            logger.info('Service components:');
-            _.forEach(appConfigs.valid.service, (valid, index) => {
-                logger.info(`  ${index} - ${valid.name}`);
-            });
-            logger.info();
-
-        } else {
-            logger.warning('No valid service component found !');
-            logger.warning();
-        }
-
-    }
-
-    private showInvalidConfigurations(appConfigs: IConfigValidationResult) {
-        _.forEach(appConfigs.invalid, (invalid) => {
-            const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
-
-            logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
-            logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
-            logger.error();
-        });
-        logger.error(`You must fix this configurations before continue`);
-    }
 }
