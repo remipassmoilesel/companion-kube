@@ -36,6 +36,7 @@ export class Cli {
         this.cliProg
             .command('init', 'Create a full ck-config.js example')
             .help(Help.list)
+            .option('-f', 'Force if already exists')
             .action(this.bindHandler(this.handlers.initDirectory));
 
         this.cliProg

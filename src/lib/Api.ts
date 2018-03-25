@@ -5,6 +5,7 @@ import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
 import {IConfigValidationResult, IKubeApplication} from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
+import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
 
 const logger = new Logger();
 
@@ -12,11 +13,17 @@ export class Api {
     private mainConfig: IMainConfig;
     private prereqChecker: PrerequisiteChecker;
     private appConfigMan: AppConfigurationManager;
+    private directoryHelper: DirectoryInitHelper;
 
     constructor(mainConfig: IMainConfig) {
         this.mainConfig = mainConfig;
         this.prereqChecker = new PrerequisiteChecker(mainConfig);
         this.appConfigMan = new AppConfigurationManager(mainConfig);
+        this.directoryHelper = new DirectoryInitHelper(mainConfig);
+    }
+
+    public initDirectory(targetDir: any, force: boolean) {
+        this.directoryHelper.init(targetDir, force);
     }
 
     public getMissingPrerequisites() {
@@ -109,4 +116,5 @@ export class Api {
 
         return toDeploy;
     }
+
 }

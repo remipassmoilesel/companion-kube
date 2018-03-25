@@ -2,9 +2,8 @@ import * as _ from 'lodash';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
-import {IDeployArguments, IDeployOptions} from './cliTypes';
+import {IDeployArguments, IDeployOptions, IInitOptions} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
-import {DirectoryInitHelper} from '../misc/DirectoryInitHelper';
 
 const logger = new Logger();
 
@@ -19,9 +18,9 @@ export class CliHandlers {
         this.display = new CliDisplay();
     }
 
-    public initDirectory() {
+    public initDirectory(args: any, options: IInitOptions) {
         this.display.showCliHeader();
-        DirectoryInitHelper.init();
+        this.api.initDirectory(process.cwd(), options.f);
         logger.success('File ck-config.js created !');
     }
 

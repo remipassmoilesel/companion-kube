@@ -1,13 +1,20 @@
-import {exampleAppConfig} from '../app-config/appConfigTypes';
+import {exampleAppConfig} from './appConfigTypes';
 import * as fs from 'fs';
 import * as path from 'path';
 import _ = require('lodash');
+import {IMainConfig} from '../main-config/configTypes';
 
 export class DirectoryInitHelper {
 
-    public static init() {
+    private mainConfig: IMainConfig;
 
-        const configPath = path.join(process.cwd(), 'ck-config.js');
+    constructor(mainConfig: IMainConfig){
+        this.mainConfig = mainConfig;
+    }
+
+    public init(targetDir: string, force: boolean) {
+
+        const configPath = path.join(targetDir, 'ck-config.js');
 
         const template = `
 module.exports = %example-config
@@ -23,7 +30,7 @@ module.exports = %example-config
             JSON.stringify(lightConfig, null, 2),
         );
 
-        if (fs.existsSync(configPath)){
+        if (fs.existsSync(configPath) && !force){
             throw new Error('File already exist !');
         }
 
