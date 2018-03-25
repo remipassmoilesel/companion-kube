@@ -1,26 +1,63 @@
+
 export class AppConfigSchema {
+
+    // See https://jsonschema.net
+    // Root ID: https://github.com/remipassmoilesel/companion-kube/kc-config.json
+    // Object Assertions > ADD'L Properties false
+    // Object Assertions > REQD Properties true
+    // Optional properties:
+    // /properties/name
+    // /properties/docker
+    // /properties/helm
+
     public schema = {
-        $id: 'https://github.com/remipassmoilesel/companion-kube/app-config.json',
+        $id: 'https://github.com/remipassmoilesel/companion-kube/kc-config.json',
         type: 'object',
-        additionalProperties: false,
         definitions: {},
         $schema: 'http://json-schema.org/draft-06/schema#',
-        required: ['projectType'],
+        additionalProperties: false,
         properties: {
+            name: {
+                $id: '/properties/name',
+                type: 'string',
+                title: 'The Name Schema ',
+                default: '',
+                examples: [
+                    'config',
+                ],
+            },
             projectType: {
                 $id: '/properties/projectType',
                 type: 'string',
                 title: 'The Projecttype Schema ',
                 default: '',
                 examples: [
-                    'deployment', 'chart',
+                    'deployment',
+                ],
+            },
+            helm: {
+                $id: '/properties/helm',
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                    releaseName: {
+                        $id: '/properties/helm/properties/releaseName',
+                        type: 'string',
+                        title: 'The Releasename Schema ',
+                        default: '',
+                        examples: [
+                            'gitlab-dev',
+                        ],
+                    },
+                },
+                required: [
+                    'releaseName',
                 ],
             },
             docker: {
                 $id: '/properties/docker',
                 type: 'object',
                 additionalProperties: false,
-                required: ['build', 'containerName', 'tag'],
                 properties: {
                     containerName: {
                         $id: '/properties/docker/properties/containerName',
@@ -43,10 +80,10 @@ export class AppConfigSchema {
                     push: {
                         $id: '/properties/docker/properties/push',
                         type: 'boolean',
-                        title: 'The Build Schema ',
+                        title: 'The Push Schema ',
                         default: false,
                         examples: [
-                            true, false,
+                            true,
                         ],
                     },
                     build: {
@@ -55,21 +92,31 @@ export class AppConfigSchema {
                         title: 'The Build Schema ',
                         default: false,
                         examples: [
-                            true, false,
+                            true,
                         ],
                     },
                     buildDirectory: {
                         $id: '/properties/docker/properties/buildDirectory',
                         type: 'string',
-                        title: 'The BuildDirectory Schema ',
+                        title: 'The Builddirectory Schema ',
                         default: '',
                         examples: [
-                            './path/to/docker/dir',
+                            './path/to/docker/build',
                         ],
                     },
                 },
+                required: [
+                    'containerName',
+                    'tag',
+                    'push',
+                    'build',
+                    'buildDirectory',
+                ],
             },
         },
+        required: [
+            'projectType',
+        ],
     };
 }
 

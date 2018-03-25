@@ -7,7 +7,7 @@ export interface IKubeApplication {
     // should not appear in configuration, will be injected later
     configPath: string;
     rootPath: string;
-    systemComponent: boolean;
+    serviceComponent: boolean;
     // end
 
     name: string; // default value: configuration directory name
@@ -42,7 +42,7 @@ export interface IConfigValidationResult {
 }
 
 export const exampleAppConfig: IKubeApplication = {
-    systemComponent: false,
+    serviceComponent: false,
     configPath: '/path/to/config',
     rootPath: '/path/to/',
 

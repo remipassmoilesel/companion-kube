@@ -1,8 +1,5 @@
 
 module.exports = {
-  "systemComponent": false,
-  "configPath": "/path/to/config",
-  "rootPath": "/path/to/",
   "name": "config",
   "projectType": "deployment",
   "helm": {

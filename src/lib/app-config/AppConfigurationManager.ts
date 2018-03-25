@@ -69,13 +69,13 @@ export class AppConfigurationManager {
         app.rootPath = configPathArr.slice(0, configPathArr.length - 1).join(path.sep);
 
         if (configPath.indexOf(AppConfigurationManager.SYSTEM_COMP_DIRECTORY) !== -1) {
-            app.systemComponent = true;
+            app.serviceComponent = true;
         }
     }
 
     private filterSystemComponents(appConfigs: IKubeApplication[]) {
-        const service = _.filter(appConfigs, (app) => app.systemComponent);
-        const apps = _.filter(appConfigs, (app) => !app.systemComponent);
+        const service = _.filter(appConfigs, (app) => app.serviceComponent);
+        const apps = _.filter(appConfigs, (app) => !app.serviceComponent);
         return {
             service,
             apps,
