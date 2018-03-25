@@ -16,6 +16,8 @@ export class HelmExecutor extends AbstractExecutor {
     }
 
     public async deploy(app: IKubeApplication, envName?: string): Promise<any> {
+        this.logger.info(`Deploying Chart ${app.name}`);
+
         if (!app.helm){
             throw new Error();
         }
@@ -25,15 +27,21 @@ export class HelmExecutor extends AbstractExecutor {
 
         const install = `helm install ${app.rootPath} -n ${app.helm.releaseName}`;
         await this.execCommand(install);
+
+        this.logger.success(`Finished !`);
     }
 
-    public destroy(app: IKubeApplication, envName?: string): Promise<any> {
+    public async destroy(app: IKubeApplication, envName?: string): Promise<any> {
+        this.logger.info(`Destroying Chart ${app.name}`);
+
         if (!app.helm){
             throw new Error();
         }
 
         const command = `helm delete ${app.helm.releaseName}`;
-        return this.execCommand(command);
+        await this.execCommand(command);
+
+        this.logger.success(`Finished !`);
     }
 
 

@@ -1,7 +1,7 @@
 import {IMainConfig} from '../main-config/configTypes';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
-import {exec} from 'child_process';
+import {exec, execSync} from 'child_process';
 
 export abstract class AbstractExecutor {
 
@@ -24,6 +24,7 @@ export abstract class AbstractExecutor {
         return new Promise((resolve, reject) => {
             this.exec(command, options, (error: any, stdout, stderr) => {
                 if (error) {
+                    this.logger.warning('Error !');
                     error.stdout = stdout;
                     error.stderr = stderr;
                     return reject(error);

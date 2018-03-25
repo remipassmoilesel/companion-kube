@@ -6,6 +6,7 @@ import {AppConfigurationManager} from './app-config/AppConfigurationManager';
 import {IConfigValidationResult, IKubeApplication} from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
 import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
+import {IAppError, IContainsAppErrors} from './misc/IAppError';
 
 const logger = new Logger();
 
@@ -51,45 +52,48 @@ export class Api {
 
     public async deployAllApplications(targetDir: string, envName?: string) {
         const apps = this.loadAppsConfiguration(targetDir);
-        await this.walkApplications(apps.valid.apps, (app) => {
-            return this.deployApplication(app, envName);
+        await this.walkApplications(apps.valid.apps, async (app) => {
+            await this.deployApplication(app, envName);
         });
     }
 
     public async deployApplications(targetDir: string, appNames: string[], appNumbers: number[], envName?: string) {
         const apps = this.getAppConfigs(targetDir, appNames, appNumbers);
-        await this.walkApplications(apps, (app) => {
-            return this.deployApplication(app, envName);
+        await this.walkApplications(apps, async (app) => {
+            await this.deployApplication(app, envName);
         });
     }
 
     public async destroyAllApplications(targetDir: string, envName?: string) {
         const apps = this.loadAppsConfiguration(targetDir);
-        await this.walkApplications(apps.valid.apps, (app) => {
-            return this.destroyApplication(app, envName);
+        await this.walkApplications(apps.valid.apps, async (app) => {
+            await this.destroyApplication(app, envName);
         });
     }
 
     public async destroyApplications(targetDir: string, appNames: string[], appNumbers: number[], envName?: string) {
         const toDestroy = this.getAppConfigs(targetDir, appNames, appNumbers);
-        await this.walkApplications(toDestroy, (app) => {
-            return this.destroyApplication(app, envName);
+        await this.walkApplications(toDestroy, async (app) => {
+            await this.destroyApplication(app, envName);
         });
     }
 
     private async walkApplications(apps: IKubeApplication[], cb: (app: IKubeApplication) => Promise<any>) {
-        const errors: Error[] = [];
+        const errors: IAppError[] = [];
         for (const app of apps) {
             try {
                 await cb(app);
-            } catch (e) {
-                errors.push(e);
+            } catch (error) {
+                errors.push({
+                    app,
+                    error,
+                });
             }
         }
 
         if (errors.length > 0) {
-            const err: any = new Error('Error while launching ');
-            err.$origins = errors;
+            const err: IContainsAppErrors = new Error('The following errors occurred: ');
+            err.$appErrors = errors;
             throw err;
         }
     }
