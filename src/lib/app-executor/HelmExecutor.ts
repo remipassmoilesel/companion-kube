@@ -14,12 +14,12 @@ export class HelmExecutor extends AbstractExecutor {
         return app.projectType === 'chart';
     }
 
-    public deploy(app: IKubeApplication): Promise<any> {
+    public deploy(app: IKubeApplication, envName?: string): Promise<any> {
         console.log('HelmExecutor');
         return Promise.resolve();
     }
 
-    public destroy(app: IKubeApplication): Promise<any> {
+    public destroy(app: IKubeApplication, envName?: string): Promise<any> {
         console.log('HelmExecutor');
         return Promise.resolve();
     }

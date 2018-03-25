@@ -32,33 +32,49 @@ export class Api {
         return _.map(appConfigs.valid, (conf) => conf.name as string);
     }
 
-    public async deployApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
-        const toDeploy = this.getAppConfigs(targetDir, appNames, appNumbers);
-
-        const errors: Error[] = [];
-        for (const app of toDeploy) {
-            try {
-                await this.deployApplication(app);
-            } catch (e) {
-                errors.push(e);
-            }
-        }
-
-        if (errors.length > 0) {
-            const err: any = new Error('Error while launching ');
-            err.$origins = errors;
-            throw err;
-        }
-
+    public async deployApplication(app: IKubeApplication, envName?: string) {
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        await executor.deploy(app, envName);
     }
 
-    public async destroyApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
+    public async destroyApplication(app: IKubeApplication, envName?: string) {
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        await executor.destroy(app, envName);
+    }
+
+    public async deployAllApplications(targetDir: string, envName?: string) {
+        const apps = this.loadAppsConfiguration(targetDir);
+        await this.walkApplications(apps.valid, (app) => {
+            return this.deployApplication(app, envName);
+        });
+    }
+
+    public async deployApplications(targetDir: string, appNames: string[], appNumbers: number[], envName?: string) {
+        const apps = this.getAppConfigs(targetDir, appNames, appNumbers);
+        await this.walkApplications(apps, (app) => {
+            return this.deployApplication(app, envName);
+        });
+    }
+
+    public async destroyAllApplications(targetDir: string, envName?: string) {
+        const apps = this.loadAppsConfiguration(targetDir);
+        await this.walkApplications(apps.valid, (app) => {
+            return this.destroyApplication(app, envName);
+        });
+    }
+
+    public async destroyApplications(targetDir: string, appNames: string[], appNumbers: number[], envName?: string) {
         const toDestroy = this.getAppConfigs(targetDir, appNames, appNumbers);
+        await this.walkApplications(toDestroy, (app) => {
+            return this.destroyApplication(app, envName);
+        });
+    }
 
+    private async walkApplications(apps: IKubeApplication[], cb: (app: IKubeApplication) => Promise<any>) {
         const errors: Error[] = [];
-        for (const app of toDestroy) {
+        for (const app of apps) {
             try {
-                await this.destroyApplication(app);
+                await cb(app);
             } catch (e) {
                 errors.push(e);
             }
@@ -69,17 +85,6 @@ export class Api {
             err.$origins = errors;
             throw err;
         }
-
-    }
-
-    public async deployApplication(app: IKubeApplication) {
-        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        await executor.deploy(app);
-    }
-
-    public async destroyApplication(app: IKubeApplication) {
-        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        await executor.destroy(app);
     }
 
     private getAppConfigs(targetDir: string, appNames: string[], appNumbers: number[]): IKubeApplication[] {

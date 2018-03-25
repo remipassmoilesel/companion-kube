@@ -15,8 +15,8 @@ export abstract class AbstractExecutor {
 
     public abstract isSupported(app: IKubeApplication): boolean;
 
-    public abstract deploy(app: IKubeApplication): Promise<any>;
-    public abstract destroy(app: IKubeApplication): Promise<any>;
+    public abstract deploy(app: IKubeApplication, envName?: string): Promise<any>;
+    public abstract destroy(app: IKubeApplication, envName?: string): Promise<any>;
 
     protected execCommand(command: string): any {
         this.logger.debug(`Executing command: ${command}`);

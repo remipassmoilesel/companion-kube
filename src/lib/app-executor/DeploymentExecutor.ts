@@ -15,16 +15,26 @@ export class DeploymentExecutor extends AbstractExecutor {
         return app.projectType === 'deployment';
     }
 
-    public async deploy(app: IKubeApplication): Promise<any> {
-        this.logger.info('Deploying ' + app.name + ' as a Kubernetes deployment');
-        await this.execCommand(`kubectl create -f ${app.rootPath}`);
-        return Promise.resolve();
+    public async deploy(app: IKubeApplication, envName?: string): Promise<any> {
+        this.logger.info(`Deploying ${app.name} as a Kubernetes deployment`);
+
+        let command = `kubectl create %namespace -f ${app.rootPath}`;
+        command = this.replaceNamespace(command, envName);
+
+        return this.execCommand(command);
     }
 
-    public async destroy(app: IKubeApplication): Promise<any> {
-        this.logger.info('Deploying ' + app.name + ' as a Kubernetes deployment');
-        await this.execCommand(`kubectl delete -f ${app.rootPath}`);
-        return Promise.resolve();
+    public async destroy(app: IKubeApplication, envName?: string): Promise<any> {
+        this.logger.info(`Destroying ${app.name} as a Kubernetes deployment`);
+
+        let command = `kubectl delete %namespace -f ${app.rootPath}`;
+        command = this.replaceNamespace(command, envName);
+
+        return this.execCommand(command);
     }
 
+    private replaceNamespace(command: string, envName?: string): string {
+        const namespace = envName ? `--namespace ${envName}` : '';
+        return command.replace('%namespace', namespace);
+    }
 }

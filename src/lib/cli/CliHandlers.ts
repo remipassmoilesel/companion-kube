@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
-import {IDeployArguments} from './cliTypes';
+import {IDeployArguments, IDeployOptions} from './cliTypes';
 
 const logger = new Logger();
 
@@ -48,22 +48,32 @@ export class CliHandlers {
         }
     }
 
-    public async deployApplications(args: IDeployArguments, options: any) {
+    public async deployApplications(args: IDeployArguments, options: IDeployOptions) {
         this.showHeader();
         this.checkPrerequisites();
 
+        if (args.applications.indexOf('all') !== -1){
+            await this.api.deployAllApplications(process.cwd(), options.e);
+            return;
+        }
+
         const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
 
-        await this.api.deployApplications(process.cwd(), appNames, appNumbers);
+        await this.api.deployApplications(process.cwd(), appNames, appNumbers, options.e);
     }
 
-    public async destroyApplications(args: IDeployArguments, options: any) {
+    public async destroyApplications(args: IDeployArguments, options: IDeployOptions) {
         this.showHeader();
         this.checkPrerequisites();
 
+        if (args.applications.indexOf('all') !== -1){
+            await this.api.destroyAllApplications(process.cwd(), options.e);
+            return;
+        }
+
         const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
 
-        await this.api.destroyApplications(process.cwd(), appNames, appNumbers);
+        await this.api.destroyApplications(process.cwd(), appNames, appNumbers, options.e);
     }
 
     private checkPrerequisites() {
