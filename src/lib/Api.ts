@@ -29,7 +29,7 @@ export class Api {
 
     public getValidAppConfigurationsAsString(targetDir: string): string[] {
         const appConfigs = this.appConfigMan.loadAppConfigurations(targetDir);
-        return _.map(appConfigs.valid, (conf) => conf.name as string);
+        return _.map(appConfigs.valid.apps, (conf) => conf.name as string);
     }
 
     public async deployApplication(app: IKubeApplication, envName?: string) {
@@ -44,7 +44,7 @@ export class Api {
 
     public async deployAllApplications(targetDir: string, envName?: string) {
         const apps = this.loadAppsConfiguration(targetDir);
-        await this.walkApplications(apps.valid, (app) => {
+        await this.walkApplications(apps.valid.apps, (app) => {
             return this.deployApplication(app, envName);
         });
     }
@@ -58,7 +58,7 @@ export class Api {
 
     public async destroyAllApplications(targetDir: string, envName?: string) {
         const apps = this.loadAppsConfiguration(targetDir);
-        await this.walkApplications(apps.valid, (app) => {
+        await this.walkApplications(apps.valid.apps, (app) => {
             return this.destroyApplication(app, envName);
         });
     }
@@ -88,11 +88,11 @@ export class Api {
     }
 
     private getAppConfigs(targetDir: string, appNames: string[], appNumbers: number[]): IKubeApplication[] {
-        const applications = this.loadAppsConfiguration(targetDir);
+        const configurations = this.loadAppsConfiguration(targetDir);
 
         const toDeploy: IKubeApplication[] = [];
         for (const appName of appNames) {
-            const app = _.find(applications.valid, (ap) => ap.name === appName);
+            const app = _.find(configurations.valid.apps, (ap) => ap.name === appName);
             if (!app) {
                 throw new Error(`Not found: ${appName}`);
             }
@@ -100,7 +100,7 @@ export class Api {
         }
 
         for (const appNumber of appNumbers) {
-            const app = _.find(applications.valid, (ap, index) => index === appNumber);
+            const app = _.find(configurations.valid.apps, (ap, index) => index === appNumber);
             if (!app) {
                 throw new Error(`Not found: ${appNumber}`);
             }

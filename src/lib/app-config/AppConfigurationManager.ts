@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as Ajv from 'ajv';
 import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
-import {IKubeApplication, IConfigValidationResult, IInvalidApplication} from './appConfigTypes';
+import {IConfigValidationResult, IInvalidApplication, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
@@ -11,6 +11,8 @@ const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 // TODO: add cache per directory
 
 export class AppConfigurationManager {
+    public static SYSTEM_COMP_DIRECTORY = 'service-components';
+
     private mainConfig: IMainConfig;
     private ajv: Ajv.Ajv;
     private appConfigValidator: Ajv.ValidateFunction;
@@ -45,7 +47,7 @@ export class AppConfigurationManager {
             }
         });
         return {
-            valid,
+            valid: this.filterSystemComponents(valid),
             invalid,
         };
     }
@@ -64,6 +66,19 @@ export class AppConfigurationManager {
             app.name = configPathArr[configPathArr.length - 2];
         }
         app.configPath = configPath;
-        app.rootPath = configPathArr.splice(0, configPathArr.length - 1).join(path.sep);
+        app.rootPath = configPathArr.slice(0, configPathArr.length - 1).join(path.sep);
+
+        if (configPath.indexOf(AppConfigurationManager.SYSTEM_COMP_DIRECTORY) !== -1) {
+            app.systemComponent = true;
+        }
+    }
+
+    private filterSystemComponents(appConfigs: IKubeApplication[]) {
+        const service = _.filter(appConfigs, (app) => app.systemComponent);
+        const apps = _.filter(appConfigs, (app) => !app.systemComponent);
+        return {
+            service,
+            apps,
+        };
     }
 }

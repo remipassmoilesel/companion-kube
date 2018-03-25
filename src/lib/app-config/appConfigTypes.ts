@@ -7,17 +7,19 @@ export interface IKubeApplication {
     // should not appear in configuration, will be injected later
     configPath: string;
     rootPath: string;
+    systemComponent: boolean;
     // end
 
-    name: string;
+    name: string; // default value: configuration directory name
     projectType: ProjectType;
     docker?: IDockerOptions;
 }
 
 export interface IDockerOptions {
-    build: boolean;
     containerName: string;
     tag: string;
+    build: boolean;
+    push: boolean;
 }
 
 export interface IInvalidApplication {
@@ -26,19 +28,25 @@ export interface IInvalidApplication {
 }
 
 export interface IConfigValidationResult {
-    valid: IKubeApplication[];
+    valid: {
+        apps: IKubeApplication[],
+        service: IKubeApplication[],
+    };
     invalid: IInvalidApplication[];
 }
 
 export const exampleAppConfig: IKubeApplication = {
-    name: 'config',
+    systemComponent: false,
     configPath: '/path/to/config',
     rootPath: '/path/to/',
+
+    name: 'config',
     projectType: 'deployment',
     docker: {
-        build: false,
         containerName: 'deployment-with-docker-file',
         tag: '0.1',
+        build: false,
+        push: false,
     },
 };
 

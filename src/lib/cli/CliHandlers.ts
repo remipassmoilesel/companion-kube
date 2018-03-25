@@ -3,6 +3,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions} from './cliTypes';
+import {IConfigValidationResult} from '../app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -16,40 +17,24 @@ export class CliHandlers {
     }
 
     public listApplications(args: any, options: any) {
-        this.showHeader();
+        this.showCliHeader();
         this.checkPrerequisites();
 
-        logger.info('Available applications:');
-
         const appConfigs = this.api.loadAppsConfiguration(process.cwd());
-        if (appConfigs.valid.length > 0) {
-            _.forEach(appConfigs.valid, (valid, index) => {
-                logger.info(`  ${index} - ${valid.name}`);
-            });
-            logger.info();
-        } else {
-            logger.warning('No valid configuration found !');
-            logger.warning();
-        }
+        this.showValidApps(appConfigs);
+        this.showValidServiceComponents(appConfigs);
 
         if (appConfigs.invalid.length > 0) {
-            _.forEach(appConfigs.invalid, (invalid) => {
-                const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
-
-                logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
-                logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
-                logger.error();
-            });
-            logger.error(`You must fix this configurations before continue`);
+            this.showInvalidConfigurations(appConfigs);
             throw new Error('Invalid configuration');
-
-        } else if (appConfigs.valid.length > 0) {
+        }
+        else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.service.length > 0) {
             logger.success('All configurations are valid !');
         }
     }
 
     public async deployApplications(args: IDeployArguments, options: IDeployOptions) {
-        this.showHeader();
+        this.showCliHeader();
         this.checkPrerequisites();
 
         if (args.applications.indexOf('all') !== -1){
@@ -63,7 +48,7 @@ export class CliHandlers {
     }
 
     public async destroyApplications(args: IDeployArguments, options: IDeployOptions) {
-        this.showHeader();
+        this.showCliHeader();
         this.checkPrerequisites();
 
         if (args.applications.indexOf('all') !== -1){
@@ -92,7 +77,7 @@ export class CliHandlers {
         }
     }
 
-    private showHeader() {
+    private showCliHeader() {
         logger.info('Companion-Kube !');
         logger.info();
     }
@@ -106,5 +91,50 @@ export class CliHandlers {
         });
 
         return {appNames, appNumbers};
+    }
+
+    private showValidApps(appConfigs: IConfigValidationResult) {
+
+        if (appConfigs.valid.apps.length > 0) {
+
+            logger.info('Available applications:');
+            _.forEach(appConfigs.valid.apps, (valid, index) => {
+                logger.info(`  ${index} - ${valid.name}`);
+            });
+            logger.info();
+
+        } else {
+            logger.warning('No valid application found !');
+            logger.warning();
+        }
+
+    }
+
+    private showValidServiceComponents(appConfigs: IConfigValidationResult) {
+
+        if (appConfigs.valid.service.length > 0) {
+
+            logger.info('Service components:');
+            _.forEach(appConfigs.valid.service, (valid, index) => {
+                logger.info(`  ${index} - ${valid.name}`);
+            });
+            logger.info();
+
+        } else {
+            logger.warning('No valid service component found !');
+            logger.warning();
+        }
+
+    }
+
+    private showInvalidConfigurations(appConfigs: IConfigValidationResult) {
+        _.forEach(appConfigs.invalid, (invalid) => {
+            const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
+
+            logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
+            logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
+            logger.error();
+        });
+        logger.error(`You must fix this configurations before continue`);
     }
 }
