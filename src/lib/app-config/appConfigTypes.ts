@@ -13,13 +13,19 @@ export interface IKubeApplication {
     name: string; // default value: configuration directory name
     projectType: ProjectType;
     docker?: IDockerOptions;
+    helm?: IHelmOptions;
 }
 
 export interface IDockerOptions {
     containerName: string;
     tag: string;
-    build: boolean;
     push: boolean;
+    build: boolean;
+    buildDirectory: string;
+}
+
+export interface IHelmOptions {
+    releaseName: string;
 }
 
 export interface IInvalidApplication {
@@ -45,8 +51,9 @@ export const exampleAppConfig: IKubeApplication = {
     docker: {
         containerName: 'deployment-with-docker-file',
         tag: '0.1',
-        build: false,
-        push: false,
+        push: true,
+        build: true,
+        buildDirectory: './path/to/docker/build',
     },
 };
 

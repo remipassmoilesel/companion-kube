@@ -1,4 +1,6 @@
 module.exports = {
     projectType: 'chart',
-    releaseName: 'gitlab-ce'
+    helm: {
+        releaseName: 'gitlab-ce',
+    }
 };

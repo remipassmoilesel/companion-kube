@@ -1,8 +1,10 @@
 module.exports = {
     projectType: 'deployment',
     docker: {
-        build: false,
         containerName: 'deployment-with-docker-file',
-        tag: '0.1'
+        tag: '0.1',
+        push: true,
+        build: true,
+        buildDirectory: '.',
     }
 };
