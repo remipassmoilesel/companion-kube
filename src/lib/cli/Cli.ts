@@ -3,6 +3,8 @@ import {Api} from '../Api';
 import {CliHandlers} from './CliHandlers';
 import {Help} from './Help';
 import {Logger} from '../misc/Logger';
+import {logFatalError} from '../misc/utils';
+import {IS_DEBUG} from '../../main';
 
 const logger = new Logger();
 
@@ -34,16 +36,36 @@ export class Cli {
         this.cliProg
             .command('list', 'List available applications')
             .help(Help.list)
-            .action(this.handlers.listApplications.bind(this.handlers));
+            .action(this.bindHandler(this.handlers.listApplications));
 
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
             .argument('<applications...>', 'Applications to deploy')
             .complete(() => {
-                return this.api.loadAppsConfiguration(process.cwd());
+                return this.api.getValidAppConfigurationsAsString(process.cwd());
             })
-            .action(this.handlers.deployApplications.bind(this.handlers));
+            .action(this.bindHandler(this.handlers.deployApplications));
+
+        this.cliProg
+            .command('destroy', 'Clean one or more applications')
+            .help(Help.deploy)
+            .argument('<applications...>', 'Applications to clean')
+            .complete(() => {
+                return this.api.getValidAppConfigurationsAsString(process.cwd());
+            })
+            .action(this.bindHandler(this.handlers.destroyApplications));
+    }
+
+    private bindHandler(handler: (...args: any[]) => any) {
+        return async (...args: any[]) => {
+            try {
+                await handler.apply(this.handlers, args);
+            } catch (e) {
+                logFatalError(logger, e, IS_DEBUG);
+                process.exit(1);
+            }
+        };
     }
 
     private parse(argv: string[]) {

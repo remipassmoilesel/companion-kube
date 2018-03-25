@@ -33,6 +33,56 @@ export class Api {
     }
 
     public async deployApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
+        const toDeploy = this.getAppConfigs(targetDir, appNames, appNumbers);
+
+        const errors: Error[] = [];
+        for (const app of toDeploy) {
+            try {
+                await this.deployApplication(app);
+            } catch (e) {
+                errors.push(e);
+            }
+        }
+
+        if (errors.length > 0) {
+            const err: any = new Error('Error while launching ');
+            err.$origins = errors;
+            throw err;
+        }
+
+    }
+
+    public async destroyApplications(targetDir: string, appNames: string[], appNumbers: number[]) {
+        const toDestroy = this.getAppConfigs(targetDir, appNames, appNumbers);
+
+        const errors: Error[] = [];
+        for (const app of toDestroy) {
+            try {
+                await this.destroyApplication(app);
+            } catch (e) {
+                errors.push(e);
+            }
+        }
+
+        if (errors.length > 0) {
+            const err: any = new Error('Error while launching ');
+            err.$origins = errors;
+            throw err;
+        }
+
+    }
+
+    public async deployApplication(app: IKubeApplication) {
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        await executor.deploy(app);
+    }
+
+    public async destroyApplication(app: IKubeApplication) {
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        await executor.destroy(app);
+    }
+
+    private getAppConfigs(targetDir: string, appNames: string[], appNumbers: number[]): IKubeApplication[] {
         const applications = this.loadAppsConfiguration(targetDir);
 
         const toDeploy: IKubeApplication[] = [];
@@ -52,26 +102,6 @@ export class Api {
             toDeploy.push(app);
         }
 
-        const errors: Error[] = [];
-        for (const app of toDeploy) {
-            try {
-                await this.deployApplication(app);
-            } catch (e) {
-                errors.push(e);
-            }
-        }
-
-        if (errors.length > 0) {
-            const err: any = new Error('Error while launching ')
-            err.$origins = errors;
-            throw err;
-        }
-
+        return toDeploy;
     }
-
-    public async deployApplication(app: IKubeApplication) {
-        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        await executor.deploy(app);
-    }
-
 }

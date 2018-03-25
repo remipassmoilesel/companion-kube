@@ -6,6 +6,11 @@ export interface ILogLevel {
 }
 
 export class LogLevels {
+    public static debug: ILogLevel = {
+        color: 'white',
+        mark: '[.]',
+        value: -1,
+    };
     public static info: ILogLevel = {
         color: 'cyan',
         mark: '[~]',

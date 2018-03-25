@@ -8,18 +8,17 @@ const logger = new Logger();
 
 export class PrerequisiteChecker {
     private mainConfig: IMainConfig;
-    private execSync: any;
+    private execSync = execSync;
 
     constructor(mainConfig: IMainConfig) {
         this.mainConfig = mainConfig;
-        this.execSync = execSync;
     }
 
     public getMissingPrerequisites(): IPrerequisite[] {
         const missing: IPrerequisite[] = [];
         _.forEach(this.mainConfig.prerequisites, (prereq) => {
             try {
-                this.execSync(`which ${prereq.command}`);
+                this.execSync(`which ${prereq.command}`, {stdio: 'ignore'});
             } catch (e) {
                 missing.push(prereq);
             }

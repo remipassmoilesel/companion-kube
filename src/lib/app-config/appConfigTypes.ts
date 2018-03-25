@@ -6,6 +6,7 @@ export interface IKubeApplication {
 
     // should not appear in configuration, will be injected later
     configPath: string;
+    rootPath: string;
     // end
 
     name: string;
@@ -32,6 +33,7 @@ export interface IConfigValidationResult {
 export const exampleAppConfig: IKubeApplication = {
     name: 'config',
     configPath: '/path/to/config',
+    rootPath: '/path/to/',
     projectType: 'deployment',
     docker: {
         build: false,

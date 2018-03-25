@@ -52,14 +52,18 @@ export class CliHandlers {
         this.showHeader();
         this.checkPrerequisites();
 
-        const appNames: string[] = [];
-        const appNumbers: number[] = [];
-
-        _.forEach(args.applications, (app: any) => {
-            isNaN(app) ? appNames.push(app) : appNumbers.push(Number(app));
-        });
+        const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
 
         await this.api.deployApplications(process.cwd(), appNames, appNumbers);
+    }
+
+    public async destroyApplications(args: IDeployArguments, options: any) {
+        this.showHeader();
+        this.checkPrerequisites();
+
+        const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
+
+        await this.api.destroyApplications(process.cwd(), appNames, appNumbers);
     }
 
     private checkPrerequisites() {
@@ -81,5 +85,16 @@ export class CliHandlers {
     private showHeader() {
         logger.info('Companion-Kube !');
         logger.info();
+    }
+
+    private getAppNumbersAndNames(args: string[]){
+        const appNames: string[] = [];
+        const appNumbers: number[] = [];
+
+        _.forEach(args, (app: any) => {
+            isNaN(app) ? appNames.push(app) : appNumbers.push(Number(app));
+        });
+
+        return {appNames, appNumbers};
     }
 }

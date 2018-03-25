@@ -7,12 +7,20 @@ interface ILoggerOptions {
     logLevel: ILogLevel;
 }
 
-const defaultOptions: ILoggerOptions = {namespace: 'main', logLevel: LogLevels.info};
-
 export class Logger {
+    private static defaultLogLevel: ILogLevel = LogLevels.info;
+
+    public static setDefaultLogLevel(iLogLevel: ILogLevel) {
+        this.defaultLogLevel = iLogLevel;
+    }
+
+    public static getDefaultOptions(): ILoggerOptions {
+        return {namespace: 'main', logLevel: this.defaultLogLevel};
+    }
+
     private options: ILoggerOptions;
 
-    constructor(options: ILoggerOptions = defaultOptions) {
+    constructor(options: ILoggerOptions = Logger.getDefaultOptions()) {
         this.options = options;
     }
 
@@ -21,6 +29,10 @@ export class Logger {
         this.printColor(level, line);
         this.printColor(level, message);
         this.printColor(level, line);
+    }
+
+    public debug(message?: string, data?: any) {
+        this.printColor(LogLevels.debug, message, data);
     }
 
     public info(message?: string, data?: any) {

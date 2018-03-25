@@ -58,11 +58,12 @@ export class AppConfigurationManager {
         return glob.found;
     }
 
-    private injectMetadataInConfig(config: IKubeApplication, configPath: string) {
-        if (!config.name) {
-            const configPathArr = configPath.split(path.sep);
-            config.name = configPathArr[configPathArr.length - 2];
+    private injectMetadataInConfig(app: IKubeApplication, configPath: string) {
+        const configPathArr = configPath.split(path.sep);
+        if (!app.name) {
+            app.name = configPathArr[configPathArr.length - 2];
         }
-        config.configPath = configPath;
+        app.configPath = configPath;
+        app.rootPath = configPathArr.splice(0, configPathArr.length - 1).join(path.sep);
     }
 }
