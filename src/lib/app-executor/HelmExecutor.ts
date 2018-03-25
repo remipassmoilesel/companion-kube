@@ -2,6 +2,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {AbstractExecutor} from './AbstractExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
+import {logFatalError} from '../misc/utils';
 
 export class HelmExecutor extends AbstractExecutor {
     public logger: Logger = new Logger();
@@ -15,12 +16,12 @@ export class HelmExecutor extends AbstractExecutor {
     }
 
     public deploy(app: IKubeApplication, envName?: string): Promise<any> {
-        console.log('HelmExecutor');
+        this.logger.warning('Helm support is not yet ready !');
         return Promise.resolve();
     }
 
     public destroy(app: IKubeApplication, envName?: string): Promise<any> {
-        console.log('HelmExecutor');
+        this.logger.warning('Helm support is not yet ready !');
         return Promise.resolve();
     }
 

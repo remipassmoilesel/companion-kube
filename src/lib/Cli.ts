@@ -1,10 +1,10 @@
-import {IMainConfig} from '../main-config/configTypes';
-import {Api} from '../Api';
-import {CliHandlers} from './CliHandlers';
-import {Help} from './Help';
-import {Logger} from '../misc/Logger';
-import {logFatalError} from '../misc/utils';
-import {IS_DEBUG} from '../../main';
+import {IMainConfig} from './main-config/configTypes';
+import {Api} from './Api';
+import {CliHandlers} from './cli/CliHandlers';
+import {Help} from './cli/Help';
+import {Logger} from './misc/Logger';
+import {logFatalError} from './misc/utils';
+import {IS_DEBUG} from '../main';
 
 const logger = new Logger();
 
