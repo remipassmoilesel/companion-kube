@@ -38,7 +38,7 @@ export class HelmExecutor extends AbstractExecutor {
             throw new Error();
         }
 
-        const command = `helm delete ${app.helm.releaseName}`;
+        const command = `helm delete --purge ${app.helm.releaseName}`;
         await this.execCommand(command);
 
         this.logger.success(`Finished !`);
