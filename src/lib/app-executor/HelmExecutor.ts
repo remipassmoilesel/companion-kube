@@ -15,14 +15,25 @@ export class HelmExecutor extends AbstractExecutor {
         return app.projectType === 'chart';
     }
 
-    public deploy(app: IKubeApplication, envName?: string): Promise<any> {
-        this.logger.warning('Helm support is not yet ready !');
-        return Promise.resolve();
+    public async deploy(app: IKubeApplication, envName?: string): Promise<any> {
+        if (!app.helm){
+            throw new Error();
+        }
+
+        const dependencyBuild = `helm dependency build`;
+        await this.execCommand(dependencyBuild, {cwd: app.rootPath});
+
+        const install = `helm install ${app.rootPath} -n ${app.helm.releaseName}`;
+        await this.execCommand(install);
     }
 
     public destroy(app: IKubeApplication, envName?: string): Promise<any> {
-        this.logger.warning('Helm support is not yet ready !');
-        return Promise.resolve();
+        if (!app.helm){
+            throw new Error();
+        }
+
+        const command = `helm delete ${app.helm.releaseName}`;
+        return this.execCommand(command);
     }
 
 

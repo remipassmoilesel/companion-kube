@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import {HelmExecutor} from './HelmExecutor';
-import {DeploymentExecutor} from './DeploymentExecutor';
+import {KubectlExecutor} from './KubectlExecutor';
 import {IMainConfig} from '../main-config/configTypes';
 import {AbstractExecutor} from './AbstractExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
@@ -10,7 +10,7 @@ export class ExecutorFinder {
     public static getAll(config: IMainConfig): AbstractExecutor[] {
         return [
             new HelmExecutor(config),
-            new DeploymentExecutor(config),
+            new KubectlExecutor(config),
         ];
     }
 

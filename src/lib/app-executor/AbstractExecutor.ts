@@ -18,11 +18,11 @@ export abstract class AbstractExecutor {
     public abstract deploy(app: IKubeApplication, envName?: string): Promise<any>;
     public abstract destroy(app: IKubeApplication, envName?: string): Promise<any>;
 
-    protected execCommand(command: string): any {
+    protected execCommand(command: string, options?: any): any {
         this.logger.debug(`Executing command: ${command}`);
 
         return new Promise((resolve, reject) => {
-            this.exec(command, (error: any, stdout, stderr) => {
+            this.exec(command, options, (error: any, stdout, stderr) => {
                 if (error) {
                     error.stdout = stdout;
                     error.stderr = stderr;

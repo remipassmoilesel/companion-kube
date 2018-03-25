@@ -4,7 +4,7 @@ import {IKubeApplication} from '../app-config/appConfigTypes';
 import {execSync} from 'child_process';
 import {Logger} from '../misc/Logger';
 
-export class DeploymentExecutor extends AbstractExecutor {
+export class KubectlExecutor extends AbstractExecutor {
     public logger: Logger = new Logger();
 
     constructor(mainConfig: IMainConfig) {
