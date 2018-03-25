@@ -11,6 +11,8 @@ The applications to manage must be described using a `ck-config.js` file.
     $ cd companion-kube
     $ npm i
     $ npm run install-cli
+    
+Application is available as `companion-kube` or `ck`.
 
 ## Init an application
 
