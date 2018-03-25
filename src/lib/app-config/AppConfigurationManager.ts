@@ -11,7 +11,7 @@ const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 // TODO: add cache per directory
 
 export class AppConfigurationManager {
-    public static SYSTEM_COMP_DIRECTORY = 'service-components';
+    public static SYSTEM_COMP_DIRECTORY = '_service-components';
 
     private mainConfig: IMainConfig;
     private ajv: Ajv.Ajv;

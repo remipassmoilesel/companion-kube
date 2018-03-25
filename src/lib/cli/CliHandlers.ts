@@ -3,7 +3,6 @@ import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions} from './cliTypes';
-import {IConfigValidationResult} from '../app-config/appConfigTypes';
 import {CliDisplay} from './CliDisplay';
 
 const logger = new Logger();
@@ -40,7 +39,7 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        if (args.applications.indexOf('all') !== -1){
+        if (args.applications.indexOf('all') !== -1) {
             await this.api.deployAllApplications(process.cwd(), options.e);
             return;
         }
@@ -54,7 +53,7 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        if (args.applications.indexOf('all') !== -1){
+        if (args.applications.indexOf('all') !== -1) {
             await this.api.destroyAllApplications(process.cwd(), options.e);
             return;
         }
@@ -72,7 +71,7 @@ export class CliHandlers {
         }
     }
 
-    private getAppNumbersAndNames(args: string[]){
+    private getAppNumbersAndNames(args: string[]) {
         const appNames: string[] = [];
         const appNumbers: number[] = [];
 
