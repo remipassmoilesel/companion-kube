@@ -12,7 +12,7 @@ export class HelmExecutor extends AbstractExecutor {
     }
 
     public isSupported(app: IKubeApplication): boolean {
-        return app.projectType === 'chart';
+        return app.applicationStructure === 'chart';
     }
 
     public async deploy(app: IKubeApplication, envName?: string): Promise<any> {

@@ -6,7 +6,7 @@ import {log} from 'util';
 const logger = new Logger();
 
 export class CliDisplay {
-    private waitingTime: number = 600;
+    private waitingTime: number = 1500;
 
     public showCliHeader() {
         logger.info('Companion-Kube !');
@@ -32,10 +32,10 @@ export class CliDisplay {
 
     public showValidServiceComponents(appConfigs: IConfigValidationResult) {
 
-        if (appConfigs.valid.services.length > 0) {
+        if (appConfigs.valid.serviceApps.length > 0) {
 
             logger.info('Service components:');
-            _.forEach(appConfigs.valid.services, (valid, index) => {
+            _.forEach(appConfigs.valid.serviceApps, (valid, index) => {
                 logger.info(`  ${index} - ${valid.name}`);
             });
             logger.info();
@@ -72,10 +72,11 @@ export class CliDisplay {
     public showWarningOnApps(apps: IKubeApplication[], envName: string | undefined) {
         logger.warning(`On environment: ${envName}`);
         logger.warning('The following applications will be concerned: ');
-        _.forEach(apps, (app) => {
-            logger.warning(`\t - #${app.id} - ${app.name}: ${app.projectType}`);
+        _.forEach(apps, (app: IKubeApplication) => {
+            logger.warning(`\t - #${app.id} - ${app.name}: ${app.applicationStructure}`);
         });
         logger.warning(`Press CTRL C to cancel ...`);
+        logger.warning();
 
         return new Promise((resolve, reject) => {
             setTimeout(() => {

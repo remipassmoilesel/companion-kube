@@ -51,7 +51,7 @@ export class Cli {
             .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd());
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), false);
             })
             .action(this.bindHandler(this.handlers.deployApplications));
 
@@ -62,9 +62,31 @@ export class Cli {
             .option('-e <env>', 'Environment to execute action on')
             .option('-s', 'Deploy services')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd());
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), false);
             })
             .action(this.bindHandler(this.handlers.destroyApplications));
+
+        // this.cliProg
+        //     .command('services deploy', 'Deploy one or more applications')
+        //     .help(Help.deploy)
+        //     .argument('<applications...>', 'Applications to deploy')
+        //     .option('-s', 'Deploy services')
+        //     .option('-e <env>', 'Environment to execute action on')
+        //     .complete(() => {
+        //         return this.api.getValidAppConfigurationsAsString(process.cwd(), true);
+        //     })
+        //     .action(this.bindHandler(this.handlers.deployServiceApplications));
+        //
+        // this.cliProg
+        //     .command('services destroy', 'Clean one or more applications')
+        //     .help(Help.destroy)
+        //     .argument('<applications...>', 'Applications to clean')
+        //     .option('-e <env>', 'Environment to execute action on')
+        //     .option('-s', 'Deploy services')
+        //     .complete(() => {
+        //         return this.api.getValidAppConfigurationsAsString(process.cwd(), true);
+        //     })
+        //     .action(this.bindHandler(this.handlers.destroyServiceApplications));
     }
 
     private bindHandler(handler: (...args: any[]) => any) {

@@ -1,6 +1,11 @@
 import * as Ajv from 'ajv';
 
-export type ProjectType = 'deployment' | 'chart';
+export type AppStructure = 'deployment' | 'chart';
+
+export enum AppType {
+    SERVICE = 'service',
+    APPLICATION = 'application',
+}
 
 export interface IKubeApplication {
 
@@ -8,11 +13,11 @@ export interface IKubeApplication {
     id: number;
     configPath: string;
     rootPath: string;
-    serviceComponent: boolean;
+    type: AppType;
     // end
 
     name: string; // default value: configuration directory name
-    projectType: ProjectType;
+    applicationStructure: AppStructure;
     docker?: IDockerOptions;
     helm?: IHelmOptions;
 }
@@ -37,19 +42,19 @@ export interface IInvalidApplication {
 export interface IConfigValidationResult {
     valid: {
         apps: IKubeApplication[],
-        services: IKubeApplication[],
+        serviceApps: IKubeApplication[],
     };
     invalid: IInvalidApplication[];
 }
 
 export const exampleAppConfig: IKubeApplication = {
     id: 0,
-    serviceComponent: false,
+    type: AppType.APPLICATION,
     configPath: '/path/to/config',
     rootPath: '/path/to/',
 
     name: 'config',
-    projectType: 'deployment',
+    applicationStructure: 'deployment',
     helm: {
         releaseName: 'gitlab-dev',
     },

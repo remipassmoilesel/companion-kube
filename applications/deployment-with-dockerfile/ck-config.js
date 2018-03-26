@@ -1,5 +1,5 @@
 module.exports = {
-    projectType: 'deployment',
+    applicationStructure: 'deployment',
     docker: {
         containerName: 'static-example-deployment',
         tag: '0.1',

@@ -1,5 +1,5 @@
 module.exports = {
-    projectType: 'chart',
+    applicationStructure: 'chart',
     helm: {
         releaseName: 'chart-example',
     }

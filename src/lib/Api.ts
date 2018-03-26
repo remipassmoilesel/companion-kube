@@ -35,14 +35,15 @@ export class Api {
         return this.appConfigMan.loadAppConfigurations(targetDir);
     }
 
-    public getValidAppConfigurationsAsString(targetDir: string): string[] {
+    public getValidAppConfigurationsAsString(targetDir: string, serviceApps: boolean): string[] {
         const appConfigs = this.appConfigMan.loadAppConfigurations(targetDir);
-        return _.map(appConfigs.valid.apps, (conf) => conf.name as string);
+        const inspectedApps = serviceApps ? appConfigs.valid.serviceApps : appConfigs.valid.apps;
+        return _.map(inspectedApps, (conf) => conf.name as string);
     }
 
     public getAllAppsConfigs(targetDir: string): IKubeApplication[] {
         const configurations = this.loadAppsConfiguration(targetDir);
-        return configurations.valid.apps.concat(configurations.valid.services);
+        return configurations.valid.apps.concat(configurations.valid.serviceApps);
     }
 
     public getAppConfigs(targetDir: string, appNames: string[], appNumbers: number[]): IKubeApplication[] {

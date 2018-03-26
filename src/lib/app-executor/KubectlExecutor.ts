@@ -12,7 +12,7 @@ export class KubectlExecutor extends AbstractExecutor {
     }
 
     public isSupported(app: IKubeApplication): boolean {
-        return app.projectType === 'deployment';
+        return app.applicationStructure === 'deployment';
     }
 
     public async deploy(app: IKubeApplication, envName?: string): Promise<any> {

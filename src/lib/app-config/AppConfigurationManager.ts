@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as Ajv from 'ajv';
 import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
-import {IConfigValidationResult, IInvalidApplication, IKubeApplication} from './appConfigTypes';
+import {AppType, IConfigValidationResult, IInvalidApplication, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
@@ -71,15 +71,17 @@ export class AppConfigurationManager {
         app.rootPath = configPathArr.slice(0, configPathArr.length - 1).join(path.sep);
 
         if (configPath.indexOf(AppConfigurationManager.SYSTEM_COMP_DIRECTORY) !== -1) {
-            app.serviceComponent = true;
+            app.type = AppType.SERVICE;
+        } else {
+            app.type = AppType.APPLICATION;
         }
     }
 
     private filterSystemComponents(appConfigs: IKubeApplication[]) {
-        const services = _.filter(appConfigs, (app) => app.serviceComponent);
-        const apps = _.filter(appConfigs, (app) => !app.serviceComponent);
+        const serviceApps = _.filter(appConfigs, (app: IKubeApplication) => app.type === AppType.SERVICE);
+        const apps = _.filter(appConfigs, (app) => app.type === AppType.APPLICATION);
         return {
-            services,
+            serviceApps,
             apps,
         };
     }

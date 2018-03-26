@@ -1,3 +1,3 @@
 module.exports = {
-    projectType: 'deployment'
+    applicationStructure: 'deployment'
 };

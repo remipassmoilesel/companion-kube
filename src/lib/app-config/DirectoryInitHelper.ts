@@ -24,7 +24,7 @@ module.exports = %example-config
         delete lightConfig.id;
         delete lightConfig.rootPath;
         delete lightConfig.configPath;
-        delete lightConfig.serviceComponent;
+        delete lightConfig.type;
 
         const formattedConfig = template.replace(
             '%example-config',

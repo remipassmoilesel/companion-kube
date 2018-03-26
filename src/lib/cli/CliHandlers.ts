@@ -37,7 +37,7 @@ export class CliHandlers {
             this.display.showInvalidConfigurations(appConfigs);
             throw new Error('Invalid configuration');
         }
-        else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.services.length > 0) {
+        else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.serviceApps.length > 0) {
             logger.success('All configurations are valid !');
         }
     }
@@ -62,7 +62,7 @@ export class CliHandlers {
 
         // remove service apps if not needed
         if (!useServiceApps){
-            _.remove(apps, (app) => app.serviceComponent);
+            _.remove(apps, (app) => app.type);
         }
 
         await this.display.showWarningOnApps(apps, envName);
@@ -90,7 +90,7 @@ export class CliHandlers {
 
         // remove service apps if not needed
         if (!useServiceApps){
-            _.remove(apps, (app) => app.serviceComponent);
+            _.remove(apps, (app) => app.type);
         }
 
         await this.display.showWarningOnApps(apps, envName);

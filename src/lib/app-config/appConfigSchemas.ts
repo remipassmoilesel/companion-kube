@@ -26,8 +26,8 @@ export class AppConfigSchema {
                     'config',
                 ],
             },
-            projectType: {
-                $id: '/properties/projectType',
+            applicationStructure: {
+                $id: '/properties/applicationStructure',
                 type: 'string',
                 title: 'The Projecttype Schema ',
                 default: '',
@@ -115,7 +115,7 @@ export class AppConfigSchema {
             },
         },
         required: [
-            'projectType',
+            'applicationStructure',
         ],
     };
 }
