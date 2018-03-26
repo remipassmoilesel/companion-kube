@@ -25,6 +25,7 @@ export class AppConfigurationManager {
         this.appConfigValidator = this.ajv.compile(new AppConfigSchema().schema);
     }
 
+    // FIXME: throw if project name is duplicate
     public loadAppConfigurations(targetDirectory: string): IConfigValidationResult {
         const configPaths = this.searchConfigurations(targetDirectory);
         return this.loadAndValidateConfigurations(configPaths);

@@ -5,6 +5,7 @@ import {Help} from './cli/Help';
 import {Logger} from './misc/Logger';
 import {logFatalError} from './misc/utils';
 import {IS_DEBUG} from '../main';
+import {AppType} from './app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -45,15 +46,37 @@ export class Cli {
             .action(this.bindHandler(this.handlers.listApplications));
 
         this.cliProg
+            .command('services deploy', 'Deploy one or more applications')
+            .help(Help.deploy)
+            .argument('<applications...>', 'Applications to deploy')
+            .option('-s', 'Deploy services')
+            .option('-e <env>', 'Environment to execute action on')
+            .complete(() => {
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
+            })
+            .action(this.bindHandler(this.handlers.deployApplications, AppType.SERVICE));
+
+        this.cliProg
+            .command('services destroy', 'Clean one or more applications')
+            .help(Help.destroy)
+            .argument('<applications...>', 'Applications to clean')
+            .option('-e <env>', 'Environment to execute action on')
+            .option('-s', 'Deploy services')
+            .complete(() => {
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
+            })
+            .action(this.bindHandler(this.handlers.destroyApplications), AppType.SERVICE);
+
+        this.cliProg
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
             .argument('<applications...>', 'Applications to deploy')
             .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd(), false);
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(this.bindHandler(this.handlers.deployApplications));
+            .action(this.bindHandler(this.handlers.deployApplications, AppType.APPLICATION));
 
         this.cliProg
             .command('destroy', 'Clean one or more applications')
@@ -62,37 +85,16 @@ export class Cli {
             .option('-e <env>', 'Environment to execute action on')
             .option('-s', 'Deploy services')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd(), false);
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(this.bindHandler(this.handlers.destroyApplications));
+            .action(this.bindHandler(this.handlers.destroyApplications, AppType.APPLICATION));
 
-        // this.cliProg
-        //     .command('services deploy', 'Deploy one or more applications')
-        //     .help(Help.deploy)
-        //     .argument('<applications...>', 'Applications to deploy')
-        //     .option('-s', 'Deploy services')
-        //     .option('-e <env>', 'Environment to execute action on')
-        //     .complete(() => {
-        //         return this.api.getValidAppConfigurationsAsString(process.cwd(), true);
-        //     })
-        //     .action(this.bindHandler(this.handlers.deployServiceApplications));
-        //
-        // this.cliProg
-        //     .command('services destroy', 'Clean one or more applications')
-        //     .help(Help.destroy)
-        //     .argument('<applications...>', 'Applications to clean')
-        //     .option('-e <env>', 'Environment to execute action on')
-        //     .option('-s', 'Deploy services')
-        //     .complete(() => {
-        //         return this.api.getValidAppConfigurationsAsString(process.cwd(), true);
-        //     })
-        //     .action(this.bindHandler(this.handlers.destroyServiceApplications));
     }
 
-    private bindHandler(handler: (...args: any[]) => any) {
+    private bindHandler(handler: (...args: any[]) => any, ...preArgs: any[]) {
         return async (...args: any[]) => {
             try {
-                await handler.apply(this.handlers, args);
+                await handler.apply(this.handlers, preArgs.concat(args));
             } catch (e) {
                 logFatalError(logger, e, IS_DEBUG);
                 process.exit(1);

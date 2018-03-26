@@ -9,6 +9,5 @@ export interface IDeployArguments{
 
 export interface IDeployOptions{
     e?: string;
-    s?: boolean;
 }
 

@@ -4,7 +4,7 @@ import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions, IInitOptions} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
-import {IKubeApplication} from '../app-config/appConfigTypes';
+import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -42,27 +42,22 @@ export class CliHandlers {
         }
     }
 
-    public async deployApplications(args: IDeployArguments, options: IDeployOptions) {
+    public async deployApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const useServiceApps: boolean | undefined = options.s;
         const envName: string | undefined = options.e;
+        const getAllConfig = args.applications.indexOf('all') !== -1;
 
         const targetDir = process.cwd();
         const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
 
         let apps: IKubeApplication[];
 
-        if (args.applications.indexOf('all') !== -1) {
-            apps = this.api.getAllAppsConfigs(targetDir);
+        if (getAllConfig) {
+            apps = this.api.getAllAppsConfigs(targetDir, appType);
         } else {
-            apps = this.api.getAppConfigs(targetDir, appNames, appIds);
-        }
-
-        // remove service apps if not needed
-        if (!useServiceApps){
-            _.remove(apps, (app) => app.type);
+            apps = this.getAppConfigs(targetDir, appNames, appIds);
         }
 
         await this.display.showWarningOnApps(apps, envName);
@@ -70,27 +65,22 @@ export class CliHandlers {
         await this.api.deployApplications(apps, envName);
     }
 
-    public async destroyApplications(args: IDeployArguments, options: IDeployOptions) {
+    public async destroyApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const useServiceApps: boolean | undefined = options.s;
         const envName: string | undefined = options.e;
+        const getAllConfig = args.applications.indexOf('all') !== -1;
 
         const targetDir = process.cwd();
         const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
 
         let apps: IKubeApplication[];
 
-        if (args.applications.indexOf('all') !== -1) {
-            apps = this.api.getAllAppsConfigs(targetDir);
+        if (getAllConfig) {
+            apps = this.api.getAllAppsConfigs(targetDir, appType);
         } else {
-            apps = this.api.getAppConfigs(targetDir, appNames, appIds);
-        }
-
-        // remove service apps if not needed
-        if (!useServiceApps){
-            _.remove(apps, (app) => app.type);
+            apps = this.getAppConfigs(targetDir, appNames, appIds);
         }
 
         await this.display.showWarningOnApps(apps, envName);
@@ -117,4 +107,27 @@ export class CliHandlers {
         return {appNames, appIds};
     }
 
+
+    private getAppConfigs(targetDir: string, appNames: string[], appIds: number[]): IKubeApplication[] {
+        const configurations = this.api.loadAppsConfiguration(targetDir);
+
+        const toDeploy: IKubeApplication[] = [];
+        for (const appName of appNames) {
+            const app = _.find(configurations.valid.apps, (ap) => ap.name === appName);
+            if (!app) {
+                throw new Error(`Not found: ${appName}`);
+            }
+            toDeploy.push(app);
+        }
+
+        for (const appNumber of appIds) {
+            const app = _.find(configurations.valid.apps, (ap, index) => index === appNumber);
+            if (!app) {
+                throw new Error(`Not found: ${appNumber}`);
+            }
+            toDeploy.push(app);
+        }
+
+        return toDeploy;
+    }
 }
