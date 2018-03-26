@@ -5,6 +5,7 @@ export type ProjectType = 'deployment' | 'chart';
 export interface IKubeApplication {
 
     // should not appear in configuration, will be injected later
+    id: number;
     configPath: string;
     rootPath: string;
     serviceComponent: boolean;
@@ -36,12 +37,13 @@ export interface IInvalidApplication {
 export interface IConfigValidationResult {
     valid: {
         apps: IKubeApplication[],
-        service: IKubeApplication[],
+        services: IKubeApplication[],
     };
     invalid: IInvalidApplication[];
 }
 
 export const exampleAppConfig: IKubeApplication = {
+    id: 0,
     serviceComponent: false,
     configPath: '/path/to/config',
     rootPath: '/path/to/',

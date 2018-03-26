@@ -4,6 +4,7 @@ import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions, IInitOptions} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
+import {IKubeApplication} from '../app-config/appConfigTypes';
 
 const logger = new Logger();
 
@@ -36,7 +37,7 @@ export class CliHandlers {
             this.display.showInvalidConfigurations(appConfigs);
             throw new Error('Invalid configuration');
         }
-        else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.service.length > 0) {
+        else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.services.length > 0) {
             logger.success('All configurations are valid !');
         }
     }
@@ -45,28 +46,56 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
+        const useServiceApps: boolean | undefined = options.s;
+        const envName: string | undefined = options.e;
+
+        const targetDir = process.cwd();
+        const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
+
+        let apps: IKubeApplication[];
+
         if (args.applications.indexOf('all') !== -1) {
-            await this.api.deployAllApplications(process.cwd(), options.e);
-            return;
+            apps = this.api.getAllAppsConfigs(targetDir);
+        } else {
+            apps = this.api.getAppConfigs(targetDir, appNames, appIds);
         }
 
-        const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
+        // remove service apps if not needed
+        if (!useServiceApps){
+            _.remove(apps, (app) => app.serviceComponent);
+        }
 
-        await this.api.deployApplications(process.cwd(), appNames, appNumbers, options.e);
+        await this.display.showWarningOnApps(apps, envName);
+
+        await this.api.deployApplications(apps, envName);
     }
 
     public async destroyApplications(args: IDeployArguments, options: IDeployOptions) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
+        const useServiceApps: boolean | undefined = options.s;
+        const envName: string | undefined = options.e;
+
+        const targetDir = process.cwd();
+        const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
+
+        let apps: IKubeApplication[];
+
         if (args.applications.indexOf('all') !== -1) {
-            await this.api.destroyAllApplications(process.cwd(), options.e, options.s);
-            return;
+            apps = this.api.getAllAppsConfigs(targetDir);
+        } else {
+            apps = this.api.getAppConfigs(targetDir, appNames, appIds);
         }
 
-        const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
+        // remove service apps if not needed
+        if (!useServiceApps){
+            _.remove(apps, (app) => app.serviceComponent);
+        }
 
-        await this.api.destroyApplications(process.cwd(), appNames, appNumbers, options.e, options.s);
+        await this.display.showWarningOnApps(apps, envName);
+
+        await this.api.destroyApplications(apps, envName);
     }
 
     private checkPrerequisites() {
@@ -79,13 +108,13 @@ export class CliHandlers {
 
     private getAppNumbersAndNames(args: string[]) {
         const appNames: string[] = [];
-        const appNumbers: number[] = [];
+        const appIds: number[] = [];
 
         _.forEach(args, (app: any) => {
-            isNaN(app) ? appNames.push(app) : appNumbers.push(Number(app));
+            isNaN(app) ? appNames.push(app) : appIds.push(app.id);
         });
 
-        return {appNames, appNumbers};
+        return {appNames, appIds};
     }
 
 }

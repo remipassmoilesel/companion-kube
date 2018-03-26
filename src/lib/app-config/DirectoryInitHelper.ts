@@ -21,6 +21,7 @@ module.exports = %example-config
 `;
 
         const lightConfig = _.clone(exampleAppConfig);
+        delete lightConfig.id;
         delete lightConfig.rootPath;
         delete lightConfig.configPath;
         delete lightConfig.serviceComponent;

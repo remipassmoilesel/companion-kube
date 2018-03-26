@@ -1,10 +1,12 @@
 import * as _ from 'lodash';
-import {IConfigValidationResult} from '../app-config/appConfigTypes';
+import {IConfigValidationResult, IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
+import {log} from 'util';
 const logger = new Logger();
 
 export class CliDisplay {
+    private waitingTime: number = 600;
 
     public showCliHeader() {
         logger.info('Companion-Kube !');
@@ -16,8 +18,8 @@ export class CliDisplay {
         if (appConfigs.valid.apps.length > 0) {
 
             logger.info('Available applications:');
-            _.forEach(appConfigs.valid.apps, (valid, index) => {
-                logger.info(`  ${index} - ${valid.name}`);
+            _.forEach(appConfigs.valid.apps, (app) => {
+                logger.info(`  ${app.id} - ${app.name}`);
             });
             logger.info();
 
@@ -30,10 +32,10 @@ export class CliDisplay {
 
     public showValidServiceComponents(appConfigs: IConfigValidationResult) {
 
-        if (appConfigs.valid.service.length > 0) {
+        if (appConfigs.valid.services.length > 0) {
 
             logger.info('Service components:');
-            _.forEach(appConfigs.valid.service, (valid, index) => {
+            _.forEach(appConfigs.valid.services, (valid, index) => {
                 logger.info(`  ${index} - ${valid.name}`);
             });
             logger.info();
@@ -65,5 +67,20 @@ export class CliDisplay {
 
         logger.error(`You must install these tools before continue`);
         logger.error();
+    }
+
+    public showWarningOnApps(apps: IKubeApplication[], envName: string | undefined) {
+        logger.warning(`On environment: ${envName}`);
+        logger.warning('The following applications will be concerned: ');
+        _.forEach(apps, (app) => {
+            logger.warning(`\t - #${app.id} - ${app.name}: ${app.projectType}`);
+        });
+        logger.warning(`Press CTRL C to cancel ...`);
+
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, this.waitingTime);
+        });
     }
 }

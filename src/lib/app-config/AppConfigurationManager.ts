@@ -12,6 +12,7 @@ const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
 export class AppConfigurationManager {
     public static SYSTEM_COMP_DIRECTORY = '_service-components';
+    private static appCounter = 0;
 
     private mainConfig: IMainConfig;
     private ajv: Ajv.Ajv;
@@ -61,6 +62,7 @@ export class AppConfigurationManager {
     }
 
     private injectMetadataInConfig(app: IKubeApplication, configPath: string) {
+        app.id = AppConfigurationManager.appCounter++;
         const configPathArr = configPath.split(path.sep);
         if (!app.name) {
             app.name = configPathArr[configPathArr.length - 2];
@@ -74,10 +76,10 @@ export class AppConfigurationManager {
     }
 
     private filterSystemComponents(appConfigs: IKubeApplication[]) {
-        const service = _.filter(appConfigs, (app) => app.serviceComponent);
+        const services = _.filter(appConfigs, (app) => app.serviceComponent);
         const apps = _.filter(appConfigs, (app) => !app.serviceComponent);
         return {
-            service,
+            services,
             apps,
         };
     }
