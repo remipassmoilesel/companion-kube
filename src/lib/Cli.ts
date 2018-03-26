@@ -48,6 +48,7 @@ export class Cli {
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
             .argument('<applications...>', 'Applications to deploy')
+            .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd());
@@ -56,9 +57,10 @@ export class Cli {
 
         this.cliProg
             .command('destroy', 'Clean one or more applications')
-            .help(Help.deploy)
+            .help(Help.destroy)
             .argument('<applications...>', 'Applications to clean')
             .option('-e <env>', 'Environment to execute action on')
+            .option('-s', 'Deploy services')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd());
             })

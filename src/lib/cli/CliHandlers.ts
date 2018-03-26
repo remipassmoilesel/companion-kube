@@ -60,13 +60,13 @@ export class CliHandlers {
         this.checkPrerequisites();
 
         if (args.applications.indexOf('all') !== -1) {
-            await this.api.destroyAllApplications(process.cwd(), options.e);
+            await this.api.destroyAllApplications(process.cwd(), options.e, options.s);
             return;
         }
 
         const {appNames, appNumbers} = this.getAppNumbersAndNames(args.applications);
 
-        await this.api.destroyApplications(process.cwd(), appNames, appNumbers, options.e);
+        await this.api.destroyApplications(process.cwd(), appNames, appNumbers, options.e, options.s);
     }
 
     private checkPrerequisites() {
