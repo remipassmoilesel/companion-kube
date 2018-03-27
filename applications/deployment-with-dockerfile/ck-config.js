@@ -9,7 +9,6 @@ module.exports = {
     },
     scripts: {
         build: 'docker build . -t deployment-with-dockerfile',
-        launch: 'docker run -p 8080:80 deployment-with-dockerfile',
-        'build-launch': 'ck run build && ck run launch',
+        dev: 'ck run build && docker run -p 8080:80 deployment-with-dockerfile',
     }
 };
