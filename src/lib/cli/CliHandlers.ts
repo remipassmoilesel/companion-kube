@@ -70,13 +70,19 @@ export class CliHandlers {
 
         const targetDir = process.cwd();
 
-        const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
+        const {appNames, appIds} = this.getAppNamesAndIds(args.applications);
 
         let apps: IKubeApplication[];
 
         if (getAllConfig) {
             apps = this.api.getAllAppsConfigs(targetDir, appType);
-        } else {
+        }
+
+        else if (!appNames.length && !appIds.length) {
+            apps = [this.api.loadAppConfiguration(targetDir)];
+        }
+
+        else {
             apps = this.getAppConfigs(targetDir, appNames, appIds);
         }
 
@@ -93,13 +99,19 @@ export class CliHandlers {
         const getAllConfig = args.applications.indexOf('all') !== -1;
 
         const targetDir = process.cwd();
-        const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
+        const {appNames, appIds} = this.getAppNamesAndIds(args.applications);
 
         let apps: IKubeApplication[];
 
         if (getAllConfig) {
             apps = this.api.getAllAppsConfigs(targetDir, appType);
-        } else {
+        }
+
+        else if (!appNames.length && !appIds.length) {
+            apps = [this.api.loadAppConfiguration(targetDir)];
+        }
+
+        else {
             apps = this.getAppConfigs(targetDir, appNames, appIds);
         }
 
@@ -116,7 +128,7 @@ export class CliHandlers {
         }
     }
 
-    private getAppNumbersAndNames(args: string[]) {
+    private getAppNamesAndIds(args: string[]) {
         const appNames: string[] = [];
         const appIds: number[] = [];
 

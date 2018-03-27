@@ -56,7 +56,7 @@ export class Cli {
 
         this.cliProg
             .command('services deploy', 'Deploy one or more applications')
-            .help(Help.deploy)
+            .help(Help.deployServices)
             .argument('<applications...>', 'Applications to deploy')
             .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
@@ -72,7 +72,7 @@ export class Cli {
 
         this.cliProg
             .command('services destroy', 'Clean one or more applications')
-            .help(Help.destroy)
+            .help(Help.destroyServices)
             .argument('<applications...>', 'Applications to clean')
             .option('-e <env>', 'Environment to execute action on')
             .option('-s', 'Deploy services')
@@ -89,7 +89,7 @@ export class Cli {
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
-            .argument('<applications...>', 'Applications to deploy')
+            .argument('[applications...]', 'Applications to deploy')
             .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
@@ -104,7 +104,7 @@ export class Cli {
         this.cliProg
             .command('destroy', 'Clean one or more applications')
             .help(Help.destroy)
-            .argument('<applications...>', 'Applications to clean')
+            .argument('[applications...]', 'Applications to clean')
             .option('-e <env>', 'Environment to execute action on')
             .option('-s', 'Deploy services')
             .complete(() => {
