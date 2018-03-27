@@ -55,10 +55,9 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services deploy', 'Deploy one or more applications')
+            .command('services deploy', 'Deploy one or more service applications')
             .help(Help.deployServices)
-            .argument('<applications...>', 'Applications to deploy')
-            .option('-s', 'Deploy services')
+            .argument('<applications...>', 'Service applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
@@ -70,10 +69,9 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services redeploy', 'Deploy one or more applications')
+            .command('services redeploy', 'Clean then deploy one or more applications')
             .help(Help.redeployServices)
             .argument('<applications...>', 'Applications to deploy')
-            .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
@@ -86,7 +84,7 @@ export class Cli {
 
 
         this.cliProg
-            .command('services destroy', 'Clean one or more applications')
+            .command('services destroy', 'Clean one or more service applications')
             .help(Help.destroyServices)
             .argument('<applications...>', 'Applications to clean')
             .option('-e <env>', 'Environment to execute action on')
@@ -104,7 +102,6 @@ export class Cli {
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
             .argument('[applications...]', 'Applications to deploy')
-            .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
@@ -116,10 +113,9 @@ export class Cli {
             });
 
         this.cliProg
-            .command('redeploy', 'Deploy one or more applications')
+            .command('redeploy', 'Clean then deploy one or more applications')
             .help(Help.redeploy)
             .argument('[applications...]', 'Applications to deploy')
-            .option('-s', 'Deploy services')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
@@ -135,7 +131,6 @@ export class Cli {
             .help(Help.destroy)
             .argument('[applications...]', 'Applications to clean')
             .option('-e <env>', 'Environment to execute action on')
-            .option('-s', 'Deploy services')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
@@ -146,7 +141,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('run', 'Clean one or more applications')
+            .command('run', 'Run script from ck-config.js')
             .help(Help.script)
             .argument('<script>', 'Script to launch')
             .action(async (args: IRunArguments, options: IDeployOptions) => {
