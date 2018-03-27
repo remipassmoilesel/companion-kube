@@ -69,9 +69,6 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        console.log('args')
-        console.log(args)
-
         const envName: string | undefined = options.e;
         const getAllConfig = args.applications.indexOf('all') !== -1;
 

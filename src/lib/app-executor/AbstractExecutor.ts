@@ -1,7 +1,7 @@
 import {IMainConfig} from '../main-config/configTypes';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
-import {exec, execSync} from 'child_process';
+import {exec} from 'child_process';
 
 export abstract class AbstractExecutor {
 

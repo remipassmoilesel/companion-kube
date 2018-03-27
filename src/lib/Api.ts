@@ -56,13 +56,6 @@ export class Api {
         await executor.destroy(app, envName);
     }
 
-    public async deployAllApplications(targetDir: string, envName?: string) {
-        const apps = this.loadAppsConfiguration(targetDir);
-        await this.walkApplications(apps.valid.apps, async (app) => {
-            await this.deployApplication(app, envName);
-        });
-    }
-
     public async deployApplications(apps: IKubeApplication[], envName?: string) {
         await this.walkApplications(apps, async (app) => {
             await this.deployApplication(app, envName);

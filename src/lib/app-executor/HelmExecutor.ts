@@ -2,7 +2,6 @@ import {IMainConfig} from '../main-config/configTypes';
 import {AbstractExecutor} from './AbstractExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
-import {logFatalError} from '../misc/utils';
 
 export class HelmExecutor extends AbstractExecutor {
     public logger: Logger = new Logger();
