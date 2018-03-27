@@ -5,6 +5,8 @@ import {Help} from './cli/Help';
 import {Logger} from './misc/Logger';
 import {AppType} from './app-config/appConfigTypes';
 import {IDeployArguments, IDeployOptions} from './cli/cliTypes';
+import {logFatalError} from './misc/utils';
+import {IS_DEBUG} from '../main';
 
 const logger = new Logger();
 
@@ -45,7 +47,9 @@ export class Cli {
             .command('list', 'List available applications')
             .help(Help.list)
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
-                await this.handlers.listApplications(args, options);
+                await this.catchErrors(async () => {
+                    await this.handlers.listApplications(args, options);
+                });
             });
 
         this.cliProg
@@ -58,8 +62,11 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
-                await this.handlers.deployApplications(AppType.SERVICE, args, options);
+                await this.catchErrors(async () => {
+                    await this.handlers.deployApplications(AppType.SERVICE, args, options);
+                });
             });
+
 
         this.cliProg
             .command('services destroy', 'Clean one or more applications')
@@ -71,8 +78,11 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
-                await this.handlers.destroyApplications(AppType.SERVICE, args, options);
+                await this.catchErrors(async () => {
+                    await this.handlers.destroyApplications(AppType.SERVICE, args, options);
+                });
             });
+
 
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
@@ -84,7 +94,9 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
-                await this.handlers.deployApplications(AppType.APPLICATION, args, options);
+                await this.catchErrors(async () => {
+                    await this.handlers.deployApplications(AppType.APPLICATION, args, options);
+                });
             });
 
         this.cliProg
@@ -97,7 +109,9 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
-                await this.handlers.destroyApplications(AppType.APPLICATION, args, options);
+                await this.catchErrors(async () => {
+                    await this.handlers.destroyApplications(AppType.APPLICATION, args, options);
+                });
             });
 
     }
@@ -106,4 +120,11 @@ export class Cli {
         this.cliProg.parse(argv);
     }
 
+    private async catchErrors(cb: () => Promise<void>): Promise<void> {
+        try {
+            await cb();
+        } catch (e) {
+            logFatalError(logger, e, IS_DEBUG);
+        }
+    }
 }
