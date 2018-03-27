@@ -4,7 +4,7 @@ import {CliHandlers} from './cli/CliHandlers';
 import {Help} from './cli/Help';
 import {Logger} from './misc/Logger';
 import {AppType} from './app-config/appConfigTypes';
-import {IDeployArguments, IDeployOptions} from './cli/cliTypes';
+import {IDeployArguments, IDeployOptions, IRunArguments} from './cli/cliTypes';
 import {logFatalError} from './misc/utils';
 import {IS_DEBUG} from '../main';
 
@@ -38,20 +38,10 @@ export class Cli {
         this.cliProg
             .command('init', 'Create a full ck-config.js example')
             .help(Help.init)
-            .option('-f', 'Force if already exists')
+            .option('-f', 'Force if file already exists')
             .action(async (args: any, options: any) => {
                 await this.catchErrors(async () => {
                     await this.handlers.initDirectory(args, options);
-                });
-            });
-
-        // TODO: autocomplete
-        this.cliProg
-            .command('run <tasks...>', 'Run a ck-config.js script')
-            .help(Help.run)
-            .action(async (args: any, options: any) => {
-                await this.catchErrors(async () => {
-                    await this.handlers.runScript(args, options);
                 });
             });
 
@@ -123,6 +113,16 @@ export class Cli {
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
                 await this.catchErrors(async () => {
                     await this.handlers.destroyApplications(AppType.APPLICATION, args, options);
+                });
+            });
+
+        this.cliProg
+            .command('run', 'Clean one or more applications')
+            .help(Help.script)
+            .argument('<script>', 'Script to launch')
+            .action(async (args: IRunArguments, options: IDeployOptions) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.runScript(args, options);
                 });
             });
 

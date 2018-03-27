@@ -4,7 +4,7 @@ export interface IInitOptions {
 }
 
 export interface IRunArguments {
-    scriptArgs: string[];
+    script: string;
 }
 
 export interface IDeployArguments{

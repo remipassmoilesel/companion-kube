@@ -113,6 +113,14 @@ export class AppConfigSchema {
                     'buildDirectory',
                 ],
             },
+            scripts: {
+                $id: '/properties/scripts',
+                type: 'object',
+                additionalProperties: true,
+                properties: {
+
+                },
+            },
         },
         required: [
             'applicationStructure',

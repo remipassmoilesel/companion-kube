@@ -1,10 +1,12 @@
 import * as _ from 'lodash';
+import {execSync} from 'child_process';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions, IInitOptions, IRunArguments} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
 import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
+import {ScriptRunner} from '../misc/ScriptRunner';
 
 const logger = new Logger();
 
@@ -25,18 +27,21 @@ export class CliHandlers {
         logger.success('File ck-config.js created !');
     }
 
-    public runScript(args: IRunArguments, options: any) {
-
-        console.log('    this.display.showCliHeader();')
+    public async runScript(args: IRunArguments, options: any) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const appConfig: IKubeApplication = this.api.loadAppConfiguration(process.cwd());
-        _.forEach(args.scriptArgs, (scriptName: string) => {
-            const script = _.find(appConfig.scripts, (sName, scriptCommand) => scriptName === sName);
-            console.log(script);
-        });
+        const scriptName = args.script;
 
+        const scriptRunner = new ScriptRunner();
+        const appConfig: IKubeApplication = this.api.loadAppConfiguration(process.cwd());
+
+        const script = _.find(appConfig.scripts, (scriptCom, scriptNam) => scriptNam === scriptName);
+        if (!script) {
+            throw new Error(` '${scriptName}' not found !`);
+        }
+
+        await scriptRunner.run(script);
     }
 
     public listApplications(args: any, options: any) {
@@ -64,6 +69,7 @@ export class CliHandlers {
         const getAllConfig = args.applications.indexOf('all') !== -1;
 
         const targetDir = process.cwd();
+
         const {appNames, appIds} = this.getAppNumbersAndNames(args.applications);
 
         let apps: IKubeApplication[];

@@ -5,6 +5,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
 import {AppType, IInvalidApplication, IKubeApplication, IRecursiveLoadingResult} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
+import {IAppError, IContainsAppErrors} from '../misc/IAppError';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
@@ -33,7 +34,13 @@ export class AppConfigurationManager {
 
     public loadApplicationConfiguration(targetConfPath: string): IKubeApplication {
         const res = this.loadAndValidateConfigurations([targetConfPath]);
-        return res.valid.apps.concat(res.valid.serviceApps)[0];
+        const app = res.valid.apps.concat(res.valid.serviceApps)[0];
+        if (!app){
+            const err: IContainsAppErrors = new Error('Invalid configuration !');
+            // TODO: show invalidation error
+            throw err;
+        }
+        return app;
     }
 
     private loadAndValidateConfigurations(configPaths: string[]): IRecursiveLoadingResult {
