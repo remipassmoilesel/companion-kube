@@ -3,11 +3,12 @@ import {Api} from './Api';
 import {CliHandlers} from './cli/CliHandlers';
 import {Help} from './cli/Help';
 import {Logger} from './misc/Logger';
-import {logFatalError} from './misc/utils';
-import {IS_DEBUG} from '../main';
 import {AppType} from './app-config/appConfigTypes';
+import {IDeployArguments, IDeployOptions} from './cli/cliTypes';
 
 const logger = new Logger();
+
+type ICliHandler = (...args: any[]) => any;
 
 export class Cli {
 
@@ -36,14 +37,18 @@ export class Cli {
 
         this.cliProg
             .command('init', 'Create a full ck-config.js example')
-            .help(Help.list)
+            .help(Help.init)
             .option('-f', 'Force if already exists')
-            .action(this.bindHandler(this.handlers.initDirectory));
+            .action(async (args: any, options: any) => {
+                await this.handlers.initDirectory(args, options);
+            });
 
         this.cliProg
             .command('list', 'List available applications')
             .help(Help.list)
-            .action(this.bindHandler(this.handlers.listApplications));
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.handlers.listApplications(args, options);
+            });
 
         this.cliProg
             .command('services deploy', 'Deploy one or more applications')
@@ -54,7 +59,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
-            .action(this.bindHandler(this.handlers.deployApplications, AppType.SERVICE));
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.handlers.deployApplications(AppType.SERVICE, args, options);
+            });
 
         this.cliProg
             .command('services destroy', 'Clean one or more applications')
@@ -65,7 +72,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
-            .action(this.bindHandler(this.handlers.destroyApplications), AppType.SERVICE);
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.handlers.destroyApplications(AppType.SERVICE, args, options);
+            });
 
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
@@ -76,7 +85,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(this.bindHandler(this.handlers.deployApplications, AppType.APPLICATION));
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.handlers.deployApplications(AppType.APPLICATION, args, options);
+            });
 
         this.cliProg
             .command('destroy', 'Clean one or more applications')
@@ -87,19 +98,10 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(this.bindHandler(this.handlers.destroyApplications, AppType.APPLICATION));
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.handlers.destroyApplications(AppType.APPLICATION, args, options);
+            });
 
-    }
-
-    private bindHandler(handler: (...args: any[]) => any, ...preArgs: any[]) {
-        return async (...args: any[]) => {
-            try {
-                await handler.apply(this.handlers, preArgs.concat(args));
-            } catch (e) {
-                logFatalError(logger, e, IS_DEBUG);
-                process.exit(1);
-            }
-        };
     }
 
     private parse(argv: string[]) {
