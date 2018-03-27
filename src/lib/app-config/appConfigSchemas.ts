@@ -35,6 +35,15 @@ export class AppConfigSchema {
                     'deployment',
                 ],
             },
+            defaultEnvironment: {
+                $id: '/properties/defaultEnvironment',
+                type: 'string',
+                title: 'The Defaultenvironment Schema ',
+                default: '',
+                examples: [
+                    'dev',
+                ],
+            },
             helm: {
                 $id: '/properties/helm',
                 type: 'object',

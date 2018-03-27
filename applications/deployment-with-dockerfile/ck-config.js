@@ -1,5 +1,6 @@
 module.exports = {
     applicationStructure: 'deployment',
+    defaultEnvironment: 'dev',
     docker: {
         containerName: 'deployment-with-dockerfile',
         tag: '0.1',

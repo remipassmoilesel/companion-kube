@@ -54,12 +54,16 @@ export class Api {
 
     public async deployApplication(app: IKubeApplication, envName?: string) {
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        await executor.deploy(app, envName);
+        const envNameWithDef = envName || app.defaultEnvironment;
+        await executor.deploy(app, envNameWithDef);
+        logger.success(`Application deployed on environment ${envNameWithDef}`);
     }
 
     public async destroyApplication(app: IKubeApplication, envName?: string) {
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        await executor.destroy(app, envName);
+        const envNameWithDef = envName || app.defaultEnvironment;
+        await executor.destroy(app, envNameWithDef);
+        logger.success(`Application cleaned on environment ${envNameWithDef}`);
     }
 
     public async deployApplications(apps: IKubeApplication[], envName?: string) {

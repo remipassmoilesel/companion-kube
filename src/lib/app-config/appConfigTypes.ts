@@ -18,6 +18,7 @@ export interface IKubeApplication {
 
     name: string; // default value: configuration directory name
     applicationStructure: AppStructure;
+    defaultEnvironment?: string;
     docker?: IDockerOptions;
     helm?: IHelmOptions;
     scripts?: {[s: string]: string};
@@ -49,13 +50,16 @@ export interface IRecursiveLoadingResult {
 }
 
 export const exampleAppConfig: IKubeApplication = {
+    // these values will be deleted when persisted
     id: 0,
     type: AppType.APPLICATION,
     configPath: '/path/to/config',
-    rootPath: '/path/to/',
+    rootPath: '/path/to/app',
+    // end
 
     name: 'config',
     applicationStructure: 'deployment',
+    defaultEnvironment: 'dev',
     helm: {
         releaseName: 'gitlab-dev',
     },
