@@ -65,28 +65,22 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const envName: string | undefined = options.e;
-        const getAllConfig = args.applications.indexOf('all') !== -1;
+        const {apps, envName} = await this.selectAppAndShowWarning(appType, args, options);
 
-        const targetDir = process.cwd();
+        await this.api.deployApplications(apps, envName);
+    }
 
-        const {appNames, appIds} = this.getAppNamesAndIds(args.applications);
+    public async redeployApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
+        this.display.showCliHeader();
+        this.checkPrerequisites();
 
-        let apps: IKubeApplication[];
+        const {apps, envName} = await this.selectAppAndShowWarning(appType, args, options);
 
-        if (getAllConfig) {
-            apps = this.api.getAllAppsConfigs(targetDir, appType);
+        try {
+            await this.api.destroyApplications(apps, envName);
+        } catch (e) {
+            logger.error('Cleaning did not go well ...');
         }
-
-        else if (!appNames.length && !appIds.length) {
-            apps = [this.api.loadAppConfiguration(targetDir)];
-        }
-
-        else {
-            apps = this.getAppConfigs(targetDir, appNames, appIds);
-        }
-
-        await this.display.showWarningOnApps(apps, envName);
 
         await this.api.deployApplications(apps, envName);
     }
@@ -95,27 +89,7 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const envName: string | undefined = options.e;
-        const getAllConfig = args.applications.indexOf('all') !== -1;
-
-        const targetDir = process.cwd();
-        const {appNames, appIds} = this.getAppNamesAndIds(args.applications);
-
-        let apps: IKubeApplication[];
-
-        if (getAllConfig) {
-            apps = this.api.getAllAppsConfigs(targetDir, appType);
-        }
-
-        else if (!appNames.length && !appIds.length) {
-            apps = [this.api.loadAppConfiguration(targetDir)];
-        }
-
-        else {
-            apps = this.getAppConfigs(targetDir, appNames, appIds);
-        }
-
-        await this.display.showWarningOnApps(apps, envName);
+        const {apps, envName} = await this.selectAppAndShowWarning(appType, args, options);
 
         await this.api.destroyApplications(apps, envName);
     }
@@ -128,6 +102,33 @@ export class CliHandlers {
         }
     }
 
+    private async selectAppAndShowWarning(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
+        const envName: string | undefined = options.e;
+        const getAllConfig = args.applications.indexOf('all') !== -1;
+
+        const targetDir = process.cwd();
+
+        const {appNames, appIds} = this.getAppNamesAndIds(args.applications);
+
+        let apps: IKubeApplication[];
+
+        if (getAllConfig) {
+            apps = this.api.getAllAppsConfigs(targetDir, appType);
+        }
+
+        else if (!appNames.length && !appIds.length) {
+            apps = [this.api.loadAppConfiguration(targetDir)];
+        }
+
+        else {
+            apps = this.getAppConfigs(targetDir, appNames, appIds);
+        }
+
+        await this.display.showWarningOnApps(apps, envName);
+
+        return {apps, envName};
+    }
+
     private getAppNamesAndIds(args: string[]) {
         const appNames: string[] = [];
         const appIds: number[] = [];
@@ -138,7 +139,6 @@ export class CliHandlers {
 
         return {appNames, appIds};
     }
-
 
     private getAppConfigs(targetDir: string, appNames: string[], appIds: number[]): IKubeApplication[] {
         const configurations = this.api.loadAppsConfigurationRecursively(targetDir);

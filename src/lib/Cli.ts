@@ -69,6 +69,21 @@ export class Cli {
                 });
             });
 
+        this.cliProg
+            .command('services redeploy', 'Deploy one or more applications')
+            .help(Help.redeployServices)
+            .argument('<applications...>', 'Applications to deploy')
+            .option('-s', 'Deploy services')
+            .option('-e <env>', 'Environment to execute action on')
+            .complete(() => {
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
+            })
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.redeployApplications(AppType.SERVICE, args, options);
+                });
+            });
+
 
         this.cliProg
             .command('services destroy', 'Clean one or more applications')
@@ -97,6 +112,21 @@ export class Cli {
             .action(async (args: IDeployArguments, options: IDeployOptions) => {
                 await this.catchErrors(async () => {
                     await this.handlers.deployApplications(AppType.APPLICATION, args, options);
+                });
+            });
+
+        this.cliProg
+            .command('redeploy', 'Deploy one or more applications')
+            .help(Help.redeploy)
+            .argument('[applications...]', 'Applications to deploy')
+            .option('-s', 'Deploy services')
+            .option('-e <env>', 'Environment to execute action on')
+            .complete(() => {
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
+            })
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.redeployApplications(AppType.APPLICATION, args, options);
                 });
             });
 

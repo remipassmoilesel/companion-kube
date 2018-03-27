@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: static-example-deployment
+  name: deployment-with-dockerfile
   labels:
-    app: static-example-deployment
+    app: deployment-with-dockerfile
 spec:
   selector:
-    app: static-example-deployment
+    app: deployment-with-dockerfile
   ports:
   - port: 80
     protocol: TCP

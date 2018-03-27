@@ -12,8 +12,10 @@ Applications to manage must be described using a ck-config.js file.
     public static list = `List available applications which can be handled by Companion-Kube`
         + `in current directory.`;
     public static deploy = 'Deploy applications. Parameters can be application names or number.';
+    public static redeploy = 'Deploy applications. Parameters can be application names or number.';
     public static destroy = 'Deploy applications. Parameters can be application names or number.';
     public static destroyServices = 'Deploy applications. Parameters can be application names or number.';
     public static deployServices = 'Deploy applications. Parameters can be application names or number.';
+    public static redeployServices = 'Deploy applications. Parameters can be application names or number.';
 
 }
