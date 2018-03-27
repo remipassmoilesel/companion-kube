@@ -85,7 +85,6 @@ export class Cli {
                 });
             });
 
-
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
             .help(Help.deploy)
