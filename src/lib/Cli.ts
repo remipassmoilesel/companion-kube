@@ -8,8 +8,6 @@ import {IDeployArguments, IDeployOptions} from './cli/cliTypes';
 
 const logger = new Logger();
 
-type ICliHandler = (...args: any[]) => any;
-
 export class Cli {
 
     private mainConfig: IMainConfig;

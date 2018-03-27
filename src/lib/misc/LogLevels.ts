@@ -28,7 +28,7 @@ export class LogLevels {
     };
     public static error: ILogLevel = {
         color: 'redBright',
-        mark: '[!]',
+        mark: '[X]',
         value: 3,
     };
 }
