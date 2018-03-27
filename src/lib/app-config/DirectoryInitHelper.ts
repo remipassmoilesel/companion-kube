@@ -32,7 +32,7 @@ module.exports = %example-config
         );
 
         if (fs.existsSync(configPath) && !force){
-            throw new Error('File already exist !');
+            throw new Error(`File 'ck-config.js' already exist !`);
         }
 
         fs.writeFileSync(configPath, formattedConfig);

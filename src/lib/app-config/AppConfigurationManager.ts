@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as Ajv from 'ajv';
 import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
-import {AppType, IConfigValidationResult, IInvalidApplication, IKubeApplication} from './appConfigTypes';
+import {AppType, IInvalidApplication, IKubeApplication, IRecursiveLoadingResult} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
@@ -26,20 +26,25 @@ export class AppConfigurationManager {
     }
 
     // FIXME: throw if project name is duplicate
-    public loadAppConfigurations(targetDirectory: string): IConfigValidationResult {
+    public loadAppConfigurationsRecursively(targetDirectory: string): IRecursiveLoadingResult {
         const configPaths = this.searchConfigurations(targetDirectory);
         return this.loadAndValidateConfigurations(configPaths);
     }
 
-    private loadAndValidateConfigurations(configPaths: string[]): IConfigValidationResult {
+    public loadApplicationConfiguration(targetConfPath: string): IKubeApplication {
+        const res = this.loadAndValidateConfigurations([targetConfPath]);
+        return res.valid.apps.concat(res.valid.serviceApps)[0];
+    }
+
+    private loadAndValidateConfigurations(configPaths: string[]): IRecursiveLoadingResult {
         const valid: IKubeApplication[] = [];
         const invalid: IInvalidApplication[] = [];
         _.forEach(configPaths, (configPath) => {
             const config: IKubeApplication = require(configPath);
-            const validRes: any = this.appConfigValidator(config);
+            const validationResult: any = this.appConfigValidator(config);
             this.injectMetadataInConfig(config, configPath);
 
-            if (validRes) {
+            if (validationResult) {
                 valid.push(config);
             } else {
                 invalid.push({
@@ -86,4 +91,5 @@ export class AppConfigurationManager {
             apps,
         };
     }
+
 }

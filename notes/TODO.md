@@ -1,5 +1,6 @@
 # TODO
 
+- Hook predeploy dans le fichier de configuration js ?
 - Déployer les charts Helm
 - Instancier les services
 - Construire les images docker

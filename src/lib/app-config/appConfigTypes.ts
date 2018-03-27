@@ -20,6 +20,7 @@ export interface IKubeApplication {
     applicationStructure: AppStructure;
     docker?: IDockerOptions;
     helm?: IHelmOptions;
+    scripts?: {[s: string]: string};
 }
 
 export interface IDockerOptions {
@@ -39,7 +40,7 @@ export interface IInvalidApplication {
     errors: Ajv.ErrorObject[];
 }
 
-export interface IConfigValidationResult {
+export interface IRecursiveLoadingResult {
     valid: {
         apps: IKubeApplication[],
         serviceApps: IKubeApplication[],
@@ -64,6 +65,10 @@ export const exampleAppConfig: IKubeApplication = {
         push: true,
         build: true,
         buildDirectory: './path/to/docker/build',
+    },
+    scripts: {
+        build: './build --fancy application',
+        run: './run --without-bug application',
     },
 };
 

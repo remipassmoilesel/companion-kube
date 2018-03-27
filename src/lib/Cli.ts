@@ -40,7 +40,19 @@ export class Cli {
             .help(Help.init)
             .option('-f', 'Force if already exists')
             .action(async (args: any, options: any) => {
-                await this.handlers.initDirectory(args, options);
+                await this.catchErrors(async () => {
+                    await this.handlers.initDirectory(args, options);
+                });
+            });
+
+        // TODO: autocomplete
+        this.cliProg
+            .command('run <tasks...>', 'Run a ck-config.js script')
+            .help(Help.run)
+            .action(async (args: any, options: any) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.runScript(args, options);
+                });
             });
 
         this.cliProg

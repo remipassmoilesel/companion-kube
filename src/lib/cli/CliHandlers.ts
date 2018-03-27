@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
-import {IDeployArguments, IDeployOptions, IInitOptions} from './cliTypes';
+import {IDeployArguments, IDeployOptions, IInitOptions, IRunArguments} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
 import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
 
@@ -25,11 +25,25 @@ export class CliHandlers {
         logger.success('File ck-config.js created !');
     }
 
+    public runScript(args: IRunArguments, options: any) {
+
+        console.log('    this.display.showCliHeader();')
+        this.display.showCliHeader();
+        this.checkPrerequisites();
+
+        const appConfig: IKubeApplication = this.api.loadAppConfiguration(process.cwd());
+        _.forEach(args.scriptArgs, (scriptName: string) => {
+            const script = _.find(appConfig.scripts, (sName, scriptCommand) => scriptName === sName);
+            console.log(script);
+        });
+
+    }
+
     public listApplications(args: any, options: any) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const appConfigs = this.api.loadAppsConfiguration(process.cwd());
+        const appConfigs = this.api.loadAppsConfigurationRecursively(process.cwd());
         this.display.showValidApps(appConfigs);
         this.display.showValidServiceComponents(appConfigs);
 
@@ -109,7 +123,7 @@ export class CliHandlers {
 
 
     private getAppConfigs(targetDir: string, appNames: string[], appIds: number[]): IKubeApplication[] {
-        const configurations = this.api.loadAppsConfiguration(targetDir);
+        const configurations = this.api.loadAppsConfigurationRecursively(targetDir);
 
         const toDeploy: IKubeApplication[] = [];
         for (const appName of appNames) {
@@ -130,4 +144,5 @@ export class CliHandlers {
 
         return toDeploy;
     }
+
 }

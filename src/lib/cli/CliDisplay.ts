@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {IConfigValidationResult, IKubeApplication} from '../app-config/appConfigTypes';
+import {IRecursiveLoadingResult, IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
 import {log} from 'util';
@@ -13,7 +13,7 @@ export class CliDisplay {
         logger.info();
     }
 
-    public showValidApps(appConfigs: IConfigValidationResult) {
+    public showValidApps(appConfigs: IRecursiveLoadingResult) {
 
         if (appConfigs.valid.apps.length > 0) {
 
@@ -30,7 +30,7 @@ export class CliDisplay {
 
     }
 
-    public showValidServiceComponents(appConfigs: IConfigValidationResult) {
+    public showValidServiceComponents(appConfigs: IRecursiveLoadingResult) {
 
         if (appConfigs.valid.serviceApps.length > 0) {
 
@@ -47,7 +47,7 @@ export class CliDisplay {
 
     }
 
-    public showInvalidConfigurations(appConfigs: IConfigValidationResult) {
+    public showInvalidConfigurations(appConfigs: IRecursiveLoadingResult) {
         _.forEach(appConfigs.invalid, (invalid) => {
             const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
 

@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
+import * as path from 'path';
 import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {AppType, IConfigValidationResult, IKubeApplication} from './app-config/appConfigTypes';
+import {AppType, IRecursiveLoadingResult, IKubeApplication} from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
 import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
 import {IAppError, IContainsAppErrors} from './misc/IAppError';
@@ -31,18 +32,23 @@ export class Api {
         return this.prereqChecker.getMissingPrerequisites();
     }
 
-    public loadAppsConfiguration(targetDir: string): IConfigValidationResult {
-        return this.appConfigMan.loadAppConfigurations(targetDir);
+    public loadAppConfiguration(targetDir: string): IKubeApplication {
+        const configPath = path.join(targetDir, 'ck-config.js');
+        return this.appConfigMan.loadApplicationConfiguration(configPath);
+    }
+
+    public loadAppsConfigurationRecursively(targetDir: string): IRecursiveLoadingResult {
+        return this.appConfigMan.loadAppConfigurationsRecursively(targetDir);
     }
 
     public getValidAppConfigurationsAsString(targetDir: string, appType: AppType): string[] {
-        const appConfigs = this.appConfigMan.loadAppConfigurations(targetDir);
+        const appConfigs = this.appConfigMan.loadAppConfigurationsRecursively(targetDir);
         const inspectedApps = appType === AppType.SERVICE ? appConfigs.valid.serviceApps : appConfigs.valid.apps;
         return _.map(inspectedApps, (conf) => conf.name as string);
     }
 
     public getAllAppsConfigs(targetDir: string, appType: AppType): IKubeApplication[] {
-        const appConfigs = this.loadAppsConfiguration(targetDir);
+        const appConfigs = this.loadAppsConfigurationRecursively(targetDir);
         return appType === AppType.SERVICE ? appConfigs.valid.serviceApps : appConfigs.valid.apps;
     }
 
