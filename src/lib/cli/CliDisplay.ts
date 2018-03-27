@@ -70,7 +70,7 @@ export class CliDisplay {
     }
 
     public showWarningOnApps(apps: IKubeApplication[], envName: string | undefined) {
-        logger.warning(`On environment: ${envName}`);
+        logger.warning(`On environment: ${envName || 'not defined'}`);
         logger.warning('The following applications will be concerned: ');
         _.forEach(apps, (app: IKubeApplication) => {
             logger.warning(`\t - #${app.id} - ${app.name}: ${app.applicationStructure}`);
