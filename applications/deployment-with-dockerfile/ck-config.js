@@ -6,11 +6,11 @@ module.exports = {
         tag: '0.1',
         push: true,
         build: true,
-        buildDirectory: '.',
+        buildDirectory: '.'
     },
     scripts: {
-        build: 'docker build . -t deployment-with-dockerfile:0.1',
-        dev: 'ck run build && docker run -p 8080:80 deployment-with-dockerfile',
-        minikubeBuild: 'eval $(minikube docker-env); ck run build',
-    },
+        buildDev: 'docker build . -t deployment-with-dockerfile:0.1',
+        dev: 'ck run buildDev && docker run -p 8080:80 deployment-with-dockerfile',
+        buildMinikube: 'eval $(minikube docker-env) && ck run buildDev'
+    }
 };
