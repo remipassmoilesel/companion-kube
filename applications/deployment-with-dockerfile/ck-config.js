@@ -4,7 +4,7 @@ module.exports = {
     docker: {
         imageName: 'deployment-with-dockerfile',
         tag: '0.1',
-        push: true,
+        push: false,
         buildDirectory: '.'
     },
     scripts: {

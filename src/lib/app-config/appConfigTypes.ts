@@ -3,6 +3,7 @@ import * as Ajv from 'ajv';
 export type AppStructure = 'deployment' | 'chart';
 
 export enum AppType {
+    ALL = 'all',
     SERVICE = 'service',
     APPLICATION = 'application',
 }

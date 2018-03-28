@@ -1,10 +1,10 @@
 import {Logger} from '../misc/Logger';
 import {IMainConfig} from '../main-config/configTypes';
 import {exec} from 'child_process';
-import {IKubeApplication} from '../app-config/appConfigTypes';
+import {IKubeApplication} from './appConfigTypes';
 import * as path from 'path';
 
-export class DockerExecutor {
+export class DockerBuilder {
 
     private exec = exec;
     protected logger: Logger = new Logger();

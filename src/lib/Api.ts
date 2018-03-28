@@ -4,10 +4,11 @@ import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {AppType, IRecursiveLoadingResult, IKubeApplication} from './app-config/appConfigTypes';
+import {AppType, IKubeApplication, IRecursiveLoadingResult} from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
 import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
 import {IAppError, IContainsAppErrors} from './misc/IAppError';
+import {DockerBuilder} from './app-config/DockerBuilder';
 
 const logger = new Logger();
 
@@ -16,20 +17,36 @@ export class Api {
     private prereqChecker: PrerequisiteChecker;
     private appConfigMan: AppConfigurationManager;
     private directoryHelper: DirectoryInitHelper;
+    private dockerBuilder: DockerBuilder;
 
     constructor(mainConfig: IMainConfig) {
         this.mainConfig = mainConfig;
         this.prereqChecker = new PrerequisiteChecker(mainConfig);
         this.appConfigMan = new AppConfigurationManager(mainConfig);
         this.directoryHelper = new DirectoryInitHelper(mainConfig);
-    }
-
-    public initDirectory(targetDir: any, force: boolean) {
-        this.directoryHelper.init(targetDir, force);
+        this.dockerBuilder = new DockerBuilder(mainConfig);
     }
 
     public getMissingPrerequisites() {
         return this.prereqChecker.getMissingPrerequisites();
+    }
+
+    public initDirectory(targetDir: string, force: boolean) {
+        this.directoryHelper.init(targetDir, force);
+    }
+
+    public async buildApplication(app: IKubeApplication) {
+        if (app.docker) {
+            logger.info('Building application ...');
+            await this.dockerBuilder.build(app);
+            logger.success('Done !');
+        }
+    }
+
+    public async buildApplications(apps: IKubeApplication[]) {
+        for (const app of apps) {
+            await this.buildApplication(app);
+        }
     }
 
     public loadAppConfiguration(targetDir: string): IKubeApplication {
@@ -49,7 +66,12 @@ export class Api {
 
     public getAllAppsConfigs(targetDir: string, appType: AppType): IKubeApplication[] {
         const appConfigs = this.loadAppsConfigurationRecursively(targetDir);
-        return appType === AppType.SERVICE ? appConfigs.valid.serviceApps : appConfigs.valid.apps;
+        if (appType === AppType.ALL) {
+            return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
+        } else if (AppType.SERVICE) {
+            return appConfigs.valid.serviceApps;
+        }
+        return appConfigs.valid.apps;
     }
 
     public async deployApplication(app: IKubeApplication, envName?: string) {

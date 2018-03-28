@@ -55,6 +55,16 @@ export class Cli {
             });
 
         this.cliProg
+            .command('build', 'Build one or more service applications')
+            .help(Help.build)
+            .argument('[applications...]', 'Applications to build')
+            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.buildApplications(args, options);
+                });
+            });
+
+        this.cliProg
             .command('services deploy', 'Deploy one or more service applications')
             .help(Help.deployServices)
             .argument('<applications...>', 'Service applications to deploy')
@@ -82,13 +92,11 @@ export class Cli {
                 });
             });
 
-
         this.cliProg
             .command('services destroy', 'Clean one or more service applications')
             .help(Help.destroyServices)
             .argument('<applications...>', 'Applications to clean')
             .option('-e <env>', 'Environment to execute action on')
-            .option('-s', 'Deploy services')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })

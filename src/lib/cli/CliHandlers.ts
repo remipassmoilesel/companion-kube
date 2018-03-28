@@ -61,11 +61,23 @@ export class CliHandlers {
         }
     }
 
+    public async buildApplications(args: IDeployArguments, options: IDeployOptions) {
+        this.display.showCliHeader();
+        this.checkPrerequisites();
+
+        const {apps} = await this.selectAppAndShowWarning(AppType.ALL, args, options);
+
+        await this.api.buildApplications(apps);
+
+    }
+
     public async deployApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
         const {apps, envName} = await this.selectAppAndShowWarning(appType, args, options);
+
+        await this.api.buildApplications(apps);
 
         await this.api.deployApplications(apps, envName);
     }
@@ -81,6 +93,8 @@ export class CliHandlers {
         } catch (e) {
             logger.error('Cleaning did not go well ...');
         }
+
+        await this.api.buildApplications(apps);
 
         await this.api.deployApplications(apps, envName);
     }
@@ -102,8 +116,8 @@ export class CliHandlers {
         }
     }
 
-    private async selectAppAndShowWarning(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
-        const envName: string | undefined = options.e;
+    private async selectAppAndShowWarning(appType: AppType, args: IDeployArguments, options?: IDeployOptions) {
+        const envName: string | undefined = options && options.e;
         const getAllConfig = args.applications.indexOf('all') !== -1;
 
         const targetDir = process.cwd();
