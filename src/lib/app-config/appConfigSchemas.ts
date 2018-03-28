@@ -68,8 +68,8 @@ export class AppConfigSchema {
                 type: 'object',
                 additionalProperties: false,
                 properties: {
-                    containerName: {
-                        $id: '/properties/docker/properties/containerName',
+                    imageName: {
+                        $id: '/properties/docker/properties/imageName',
                         type: 'string',
                         title: 'The Containername Schema ',
                         default: '',
@@ -95,15 +95,6 @@ export class AppConfigSchema {
                             true,
                         ],
                     },
-                    build: {
-                        $id: '/properties/docker/properties/build',
-                        type: 'boolean',
-                        title: 'The Build Schema ',
-                        default: false,
-                        examples: [
-                            true,
-                        ],
-                    },
                     buildDirectory: {
                         $id: '/properties/docker/properties/buildDirectory',
                         type: 'string',
@@ -115,10 +106,9 @@ export class AppConfigSchema {
                     },
                 },
                 required: [
-                    'containerName',
+                    'imageName',
                     'tag',
                     'push',
-                    'build',
                     'buildDirectory',
                 ],
             },

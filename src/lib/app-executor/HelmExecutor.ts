@@ -1,9 +1,9 @@
 import {IMainConfig} from '../main-config/configTypes';
-import {AbstractExecutor} from './AbstractExecutor';
+import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 
-export class HelmExecutor extends AbstractExecutor {
+export class HelmExecutor extends AbstractAppExecutor {
     public logger: Logger = new Logger();
 
     constructor(mainConfig: IMainConfig) {

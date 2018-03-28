@@ -1,10 +1,10 @@
 import {IMainConfig} from '../main-config/configTypes';
-import {AbstractExecutor} from './AbstractExecutor';
+import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {execSync} from 'child_process';
 import {Logger} from '../misc/Logger';
 
-export class KubectlExecutor extends AbstractExecutor {
+export class KubectlExecutor extends AbstractAppExecutor {
     public logger: Logger = new Logger();
 
     constructor(mainConfig: IMainConfig) {

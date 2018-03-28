@@ -25,10 +25,9 @@ export interface IKubeApplication {
 }
 
 export interface IDockerOptions {
-    containerName: string;
+    imageName: string;
     tag: string;
     push: boolean;
-    build: boolean;
     buildDirectory: string;
 }
 
@@ -64,15 +63,14 @@ export const exampleAppConfig: IKubeApplication = {
         releaseName: 'gitlab-dev',
     },
     docker: {
-        containerName: 'deployment-with-docker-file',
+        imageName: 'deployment-with-docker-file',
         tag: '0.1',
         push: true,
-        build: true,
         buildDirectory: './path/to/docker/build',
     },
     scripts: {
-        build: './build --fancy application',
-        run: './run --without-bug application',
+        buildDev: './build --fancy application',
+        runDev: './run --without-bug application',
     },
 };
 

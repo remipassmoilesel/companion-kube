@@ -3,7 +3,7 @@ import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {exec} from 'child_process';
 
-export abstract class AbstractExecutor {
+export abstract class AbstractAppExecutor {
 
     private exec = exec;
     protected abstract logger: Logger;
@@ -18,7 +18,7 @@ export abstract class AbstractExecutor {
     public abstract deploy(app: IKubeApplication, envName?: string): Promise<any>;
     public abstract destroy(app: IKubeApplication, envName?: string): Promise<any>;
 
-    protected execCommand(command: string, options?: any): any {
+    protected execCommand(command: string, options?: any): Promise<any> {
         this.logger.debug(`Executing command: ${command}`);
 
         return new Promise((resolve, reject) => {
