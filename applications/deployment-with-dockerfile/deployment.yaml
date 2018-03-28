@@ -11,6 +11,6 @@ spec:
     spec:
       containers:
       - name: deployment-with-dockerfile
-        image: deployment-with-dockerfile
+        image: deployment-with-dockerfile:0.1
         ports:
         - containerPort: 80
