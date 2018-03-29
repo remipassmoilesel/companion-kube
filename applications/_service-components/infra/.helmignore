@@ -19,3 +19,6 @@
 .project
 .idea/
 *.tmproj
+
+templates/traefik-deployment.disabled
+templates/traefik-rbac.yaml.disabled

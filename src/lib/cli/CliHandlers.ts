@@ -96,6 +96,8 @@ export class CliHandlers {
             logger.error('Cleaning did not go well ...');
         }
 
+        await this.wait(1.5);
+
         await this._buildApplications(apps);
 
         await this._deployApplications(apps, envName);
@@ -196,7 +198,7 @@ export class CliHandlers {
         await this.api.walkApplications(apps, async (app) => {
             const envNameWithDef = envName || app.defaultEnvironment;
 
-            logger.info(`Deploying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
+            logger.info(`Destroying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
             await this.api.destroyApplication(app, envName);
             logger.success(`Application destroyed !\n`);
 
@@ -211,5 +213,9 @@ export class CliHandlers {
                 logger.success('Done !');
             }
         }
+    }
+
+    private wait(time: number) {
+        return new Promise((r, j) => setTimeout(r, time));
     }
 }

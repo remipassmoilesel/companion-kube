@@ -61,7 +61,7 @@ export class HelmExecutor extends AbstractAppExecutor {
 
         if (envName && fs.existsSync(envValuesPath)) {
             values.push(`-f ${envValuesPath}`);
-        } else {
+        } else if (envName) {
             this.logger.warning(`No values-${envName}.yaml file found`);
         }
 

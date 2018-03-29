@@ -90,7 +90,7 @@ export class CliDisplay {
 
         log();
 
-        return this.waitForEnter('Press any key to confirm, or CTRL-C to cancel');
+        return this.waitForEnter('Press ENTER to confirm, or CTRL-C to cancel');
     }
 
     private waitForEnter(message: string) {
