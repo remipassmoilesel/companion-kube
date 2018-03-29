@@ -1,3 +1,4 @@
 module.exports = {
-    applicationStructure: 'deployment'
+    applicationStructure: 'deployment',
+    defaultEnvironment: 'dev'
 };

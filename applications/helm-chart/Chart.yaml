@@ -1,19 +1,11 @@
-name: gitlab-ce
-deprecated: true
-version: 0.2.1
-description: GitLab Community Edition
+name: helm-chart
+version: 0.1
+description: Test helm chart for Companion Kube !
 keywords:
-- git
-- ci
-- deploy
-- issue tracker
-- code review
-- wiki
-home: https://about.gitlab.com
+- k8s
+home: https://github.com/remipassmoilesel/companion-kube
 sources:
-- https://hub.docker.com/r/gitlab/gitlab-ce/
-- https://docs.gitlab.com/omnibus/
-icon: https://gitlab.com/uploads/group/avatar/6543/gitlab-logo-square.png
+- https://github.com/remipassmoilesel/companion-kube
 maintainers:
-- name: Greg Taylor
-  email: gtaylor@gc-taylor.com
+- name: Rémi Passmoilesel
+  email: remi.passmoilesel@gmail.com

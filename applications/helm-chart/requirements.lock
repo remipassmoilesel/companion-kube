@@ -2,8 +2,5 @@ dependencies:
 - name: redis
   repository: https://kubernetes-charts.storage.googleapis.com/
   version: 0.9.0
-- name: postgresql
-  repository: https://kubernetes-charts.storage.googleapis.com/
-  version: 0.8.1
-digest: sha256:94bbb4af5c8b8e6114938d06650c9e82b0a80613e0b60a6cdbb5031fb7771ae2
-generated: 2018-03-25T18:49:30.438059482+02:00
+digest: sha256:1d1df4bf0dd2427afcc10aa28bb1a8117572b16702f8a4f6fed6130e3e15be7e
+generated: 2018-03-29T13:06:57.364106702+02:00

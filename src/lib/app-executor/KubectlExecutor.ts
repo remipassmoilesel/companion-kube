@@ -16,27 +16,17 @@ export class KubectlExecutor extends AbstractAppExecutor {
     }
 
     public async deploy(app: IKubeApplication, envName?: string): Promise<any> {
-        this.logger.info(`Deploying ${app.name}`);
-
-        let command = `kubectl create %namespace -f ${app.rootPath}`;
-        command = this.replaceNamespace(command, envName);
+        const namespaceOption = envName ? `--namespace ${envName}` : '';
+        const command = `kubectl create ${namespaceOption} -f ${app.rootPath}`;
 
         await this.execCommand(command);
-        this.logger.success(`Finished !`);
     }
 
     public async destroy(app: IKubeApplication, envName?: string): Promise<any> {
-        this.logger.info(`Destroying ${app.name}`);
-
-        let command = `kubectl delete %namespace -f ${app.rootPath}`;
-        command = this.replaceNamespace(command, envName);
+        const namespaceOption = envName ? `--namespace ${envName}` : '';
+        const command = `kubectl delete ${namespaceOption} -f ${app.rootPath}`;
 
         await this.execCommand(command);
-        this.logger.success(`Finished !`);
     }
 
-    private replaceNamespace(command: string, envName?: string): string {
-        const namespace = envName ? `--namespace ${envName}` : '';
-        return command.replace('%namespace', namespace);
-    }
 }

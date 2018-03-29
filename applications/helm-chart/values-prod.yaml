@@ -1,7 +1,7 @@
-name: helm-chart-default
+name: helm-chart-prod
 imageName: deployment-with-dockerfile:0.1
 
 ingress:
   enabled: true
-  host: helm-chart.domain.net
+  host: helm-chart.prod.domain.net
 

@@ -1,3 +1,5 @@
+import * as path from 'path';
+import * as fs from 'fs';
 import {IMainConfig} from '../main-config/configTypes';
 import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
@@ -15,33 +17,56 @@ export class HelmExecutor extends AbstractAppExecutor {
     }
 
     public async deploy(app: IKubeApplication, envName?: string): Promise<any> {
-        this.logger.info(`Deploying Chart ${app.name}`);
-
-        if (!app.helm){
-            throw new Error();
-        }
-
-        const dependencyBuild = `helm dependency build`;
-        await this.execCommand(dependencyBuild, {cwd: app.rootPath});
-
-        const install = `helm install ${app.rootPath} -n ${app.helm.releaseName}`;
-        await this.execCommand(install);
-
-        this.logger.success(`Finished !`);
+        await this.buildDependencies(app);
+        await this.deployChart(app, envName);
     }
 
     public async destroy(app: IKubeApplication, envName?: string): Promise<any> {
-        this.logger.info(`Destroying Chart ${app.name}`);
-
-        if (!app.helm){
+        if (!app.helm) {
             throw new Error();
         }
 
         const command = `helm delete --purge ${app.helm.releaseName}`;
         await this.execCommand(command);
-
-        this.logger.success(`Finished !`);
     }
 
+
+    private async deployChart(app: IKubeApplication, envName: string | undefined) {
+
+        if (!app.helm) {
+            throw new Error();
+        }
+
+        const valuesFilesOptions = this.getValues(app, envName);
+        const namespaceOption = envName ? ' --namespace ' + envName : '';
+
+        const install = `helm install ${namespaceOption} ${valuesFilesOptions} `
+            + `${app.rootPath} -n ${app.helm.releaseName}`;
+
+        await this.execCommand(install);
+
+    }
+
+    private getValues(app: IKubeApplication, envName?: string): string {
+
+        const values: string[] = [];
+        const defaultValuesPath = path.join(app.rootPath, 'values.yaml');
+        const envValuesPath = path.join(app.rootPath, `values-${envName}.yaml`);
+
+        if (fs.existsSync(defaultValuesPath)) {
+            values.push(`-f ${defaultValuesPath}`);
+        }
+
+        if (envName && fs.existsSync(envValuesPath)) {
+            values.push(`-f ${envValuesPath}`);
+        }
+
+        return values.join(' ');
+    }
+
+    private async buildDependencies(app: IKubeApplication) {
+        const dependencyBuild = `helm dependency build`;
+        await this.execCommand(dependencyBuild, {cwd: app.rootPath});
+    }
 
 }
