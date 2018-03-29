@@ -9,7 +9,6 @@ import {ICliOperation} from './cliTypes';
 const logger = new Logger();
 
 export class CliDisplay {
-    private waitingTime: number = 1500;
 
     public showCliHeader() {
         logger.info('Companion-Kube !');
@@ -80,7 +79,8 @@ export class CliDisplay {
         };
 
         log(`Operation: ${operation.name}`);
-        log(`On environment: ${envName || 'not defined'}`);
+        log(`On environment: ${envName || 'unknown'}`);
+        log();
         log(`The following applications will be concerned: `);
         _.forEach(apps, (app: IKubeApplication) => {
             log(`\t - #${app.id} - ${app.name}: ${app.applicationStructure}`);

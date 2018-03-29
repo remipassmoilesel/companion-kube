@@ -76,35 +76,15 @@ export class Api {
 
     public async deployApplication(app: IKubeApplication, envName?: string) {
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        const envNameWithDef = envName || app.defaultEnvironment || 'unknown';
-
-        logger.info(`Deploying ${app.name} on environment ${envNameWithDef}`);
-        await executor.deploy(app, envNameWithDef);
-        logger.success(`Application deployed !\n`);
+        await executor.deploy(app, envName);
     }
 
     public async destroyApplication(app: IKubeApplication, envName?: string) {
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
-        const envNameWithDef = envName || app.defaultEnvironment;
-
-        logger.info(`Destroying ${app.name} on environment ${envNameWithDef}`);
-        await executor.destroy(app, envNameWithDef);
-        logger.success(`Application destroyed !\n`);
+        await executor.destroy(app, envName);
     }
 
-    public async deployApplications(apps: IKubeApplication[], envName?: string) {
-        await this.walkApplications(apps, async (app) => {
-            await this.deployApplication(app, envName);
-        });
-    }
-
-    public async destroyApplications(apps: IKubeApplication[], envName?: string) {
-        await this.walkApplications(apps, async (app) => {
-            await this.destroyApplication(app, envName);
-        });
-    }
-
-    private async walkApplications(apps: IKubeApplication[], cb: (app: IKubeApplication) => Promise<any>) {
+    public async walkApplications(apps: IKubeApplication[], cb: (app: IKubeApplication) => Promise<any>) {
         const errors: IAppError[] = [];
         for (const app of apps) {
             try {

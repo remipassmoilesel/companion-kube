@@ -81,7 +81,7 @@ export class CliHandlers {
 
         await this.api.buildApplications(apps);
 
-        await this.api.deployApplications(apps, envName);
+        await this._deployApplications(apps, envName);
     }
 
     public async redeployApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
@@ -91,14 +91,14 @@ export class CliHandlers {
         const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.REDEPLOY, appType, args, options);
 
         try {
-            await this.api.destroyApplications(apps, envName);
+            await this._destroyApplications(apps, envName);
         } catch (e) {
             logger.error('Cleaning did not go well ...');
         }
 
         await this.api.buildApplications(apps);
 
-        await this.api.deployApplications(apps, envName);
+        await this._deployApplications(apps, envName);
     }
 
     public async destroyApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
@@ -107,7 +107,7 @@ export class CliHandlers {
 
         const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.DESTROY, appType, args, options);
 
-        await this.api.destroyApplications(apps, envName);
+        await this._destroyApplications(apps, envName);
     }
 
     private checkPrerequisites() {
@@ -180,4 +180,26 @@ export class CliHandlers {
         return toDeploy;
     }
 
+
+    private async _deployApplications(apps: IKubeApplication[], envName?: string) {
+        await this.api.walkApplications(apps, async (app) => {
+            const envNameWithDef = envName || app.defaultEnvironment;
+
+            logger.info(`Deploying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
+            await this.api.deployApplication(app, envName);
+            logger.success(`Application deployed !\n`);
+
+        });
+    }
+
+    private async _destroyApplications(apps: IKubeApplication[], envName?: string) {
+        await this.api.walkApplications(apps, async (app) => {
+            const envNameWithDef = envName || app.defaultEnvironment;
+
+            logger.info(`Deploying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
+            await this.api.destroyApplication(app, envName);
+            logger.success(`Application destroyed !\n`);
+
+        });
+    }
 }
