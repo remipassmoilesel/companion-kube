@@ -9,7 +9,7 @@
     "companion-kube": "./build/main.js"
   },
   "scripts": {
-    "install-cli": "npm install && npm run clean-compile && npm link",
+    "install-cli": "./scripts/install.sh",
     "test": "npm run clean-compile && node_modules/.bin/mocha --recursive 'build/tests/**/*Spec.js'",
     "dev": "npm run clean-compile && NODE_ENV=dev node ./build/main.js",
     "lint": "./node_modules/.bin/tslint --force --format verbose 'src/**/*.ts'",
