@@ -158,6 +158,9 @@ export class CliHandlers {
     private getAppConfigs(targetDir: string, appNames: string[], appIds: number[]): IKubeApplication[] {
         const configurations = this.api.loadAppsConfigurationRecursively(targetDir);
 
+        console.log('configurations')
+        console.log(configurations)
+
         const toDeploy: IKubeApplication[] = [];
         for (const appName of appNames) {
             const app = _.find(configurations.valid.apps, (ap) => ap.name === appName);

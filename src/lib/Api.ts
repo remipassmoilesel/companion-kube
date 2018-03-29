@@ -66,12 +66,15 @@ export class Api {
 
     public getAllAppsConfigs(targetDir: string, appType: AppType): IKubeApplication[] {
         const appConfigs = this.loadAppsConfigurationRecursively(targetDir);
-        if (appType === AppType.BOTH) {
-            return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
-        } else if (AppType.SERVICE) {
-            return appConfigs.valid.serviceApps;
+
+        switch (appType){
+            case AppType.BOTH:
+                return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
+            case AppType.SERVICE:
+                return appConfigs.valid.serviceApps;
+            default:
+                return appConfigs.valid.apps;
         }
-        return appConfigs.valid.apps;
     }
 
     public async deployApplication(app: IKubeApplication, envName?: string) {

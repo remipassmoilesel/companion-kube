@@ -82,6 +82,7 @@ export class CliDisplay {
         log(`On environment: ${envName || 'unknown'}`);
         log();
         log(`The following applications will be concerned: `);
+        log();
         _.forEach(apps, (app: IKubeApplication) => {
             log(`\t - #${app.id} - ${app.name}: ${app.applicationStructure}`);
         });
