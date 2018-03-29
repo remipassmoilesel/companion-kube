@@ -138,7 +138,7 @@ export class CliHandlers {
         }
 
         else {
-            apps = this.getAppConfigs(targetDir, appNames, appIds);
+            apps = this.getAppConfigs(targetDir, appType, appNames, appIds);
         }
 
         return {apps, envName};
@@ -155,22 +155,25 @@ export class CliHandlers {
         return {appNames, appIds};
     }
 
-    private getAppConfigs(targetDir: string, appNames: string[], appIds: number[]): IKubeApplication[] {
+    private getAppConfigs(targetDir: string, appType: AppType, appNames: string[],
+                          appIds: number[]): IKubeApplication[] {
         const configurations = this.api.loadAppsConfigurationRecursively(targetDir);
+
+        const allApps = configurations.valid.apps.concat(configurations.valid.serviceApps);
 
         const toDeploy: IKubeApplication[] = [];
         for (const appName of appNames) {
-            const app = _.find(configurations.valid.apps, (ap) => ap.name === appName);
+            const app = _.find(allApps, (ap) => ap.name === appName && ap.type === appType);
             if (!app) {
                 throw new Error(`Not found: ${appName}`);
             }
             toDeploy.push(app);
         }
 
-        for (const appNumber of appIds) {
-            const app = _.find(configurations.valid.apps, (ap, index) => index === appNumber);
+        for (const appId of appIds) {
+            const app = _.find(allApps, (ap) => ap.id === appId && ap.type === appType);
             if (!app) {
-                throw new Error(`Not found: ${appNumber}`);
+                throw new Error(`Not found: ${appId}`);
             }
             toDeploy.push(app);
         }
