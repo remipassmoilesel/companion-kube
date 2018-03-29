@@ -3,9 +3,7 @@ import {execSync} from 'child_process';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {Api} from '../Api';
-import {
-    CliOperations, ICliOperation, IDeployArguments, IDeployOptions, IInitOptions, IRunArguments,
-} from './cliTypes';
+import {CliOperations, IDeployArguments, IDeployOptions, IInitOptions, IRunArguments} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
 import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
 import {ScriptRunner} from '../app-config/ScriptRunner';
@@ -67,17 +65,18 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps} = await this.selectAppAndShowWarning(CliOperations.BUILD, AppType.ALL, args, options);
+        const {envName, apps} = await this.selectApps(AppType.BOTH, args, options);
+        await this.display.showWarningOnApps(CliOperations.BUILD, apps, envName);
 
         await this.api.buildApplications(apps);
-
     }
 
     public async deployApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.DEPLOY, appType, args, options);
+        const {apps, envName} = await this.selectApps(appType, args, options);
+        await this.display.showWarningOnApps(CliOperations.DEPLOY, apps, envName);
 
         await this.api.buildApplications(apps);
 
@@ -88,7 +87,8 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.REDEPLOY, appType, args, options);
+        const {apps, envName} = await this.selectApps(appType, args, options);
+        await this.display.showWarningOnApps(CliOperations.REDEPLOY, apps, envName);
 
         try {
             await this._destroyApplications(apps, envName);
@@ -105,7 +105,8 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.DESTROY, appType, args, options);
+        const {apps, envName} = await this.selectApps(appType, args, options);
+        await this.display.showWarningOnApps(CliOperations.DESTROY, apps, envName);
 
         await this._destroyApplications(apps, envName);
     }
@@ -118,8 +119,7 @@ export class CliHandlers {
         }
     }
 
-    private async selectAppAndShowWarning(operation: ICliOperation, appType: AppType,
-                                          args: IDeployArguments, options?: IDeployOptions) {
+    private async selectApps(appType: AppType, args: IDeployArguments, options?: IDeployOptions) {
         const envName: string | undefined = options && options.e;
         const getAllConfig = args.applications.indexOf('all') !== -1;
 
@@ -140,8 +140,6 @@ export class CliHandlers {
         else {
             apps = this.getAppConfigs(targetDir, appNames, appIds);
         }
-
-        await this.display.showWarningOnApps(operation, apps, envName);
 
         return {apps, envName};
     }
@@ -179,7 +177,6 @@ export class CliHandlers {
 
         return toDeploy;
     }
-
 
     private async _deployApplications(apps: IKubeApplication[], envName?: string) {
         await this.api.walkApplications(apps, async (app) => {

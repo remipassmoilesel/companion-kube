@@ -66,7 +66,7 @@ export class Api {
 
     public getAllAppsConfigs(targetDir: string, appType: AppType): IKubeApplication[] {
         const appConfigs = this.loadAppsConfigurationRecursively(targetDir);
-        if (appType === AppType.ALL) {
+        if (appType === AppType.BOTH) {
             return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
         } else if (AppType.SERVICE) {
             return appConfigs.valid.serviceApps;
