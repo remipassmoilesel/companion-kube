@@ -20,3 +20,4 @@ export function logFatalError(logger: Logger, e: IContainsAppErrors, debug: bool
         });
     }
 }
+

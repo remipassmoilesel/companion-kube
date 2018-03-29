@@ -1,6 +1,6 @@
 import {Logger} from '../misc/Logger';
 import {IMainConfig} from '../main-config/configTypes';
-import {exec} from 'child_process';
+import {exec, spawn} from 'child_process';
 import {IKubeApplication} from './appConfigTypes';
 import * as path from 'path';
 
@@ -34,16 +34,31 @@ export class DockerBuilder {
     protected execCommand(command: string, options?: any): Promise<any> {
         this.logger.debug(`Executing command: ${command}`);
 
+
         return new Promise((resolve, reject) => {
-            this.exec(command, options, (error: any, stdout, stderr) => {
-                if (error) {
-                    this.logger.warning('Error !');
-                    error.stdout = stdout;
-                    error.stderr = stderr;
-                    return reject(error);
+            const commandExec = spawn(command, [], {shell: true});
+
+            commandExec.stdout.on('data', (data: any) => {
+                process.stdout.write(data.toString());
+            });
+
+            commandExec.stderr.on('data', (data: any) => {
+                process.stdout.write(data.toString());
+            });
+
+            commandExec.on('close', (code: number) => {
+                if (code !== 0) {
+                    reject(new Error(`Bad code: ${code}`));
+                    return;
                 }
-                return resolve({stdout, stderr});
+                this.logger.info(`Script exited with code ${code}`);
+                resolve(code);
+            });
+
+            commandExec.on('error', (err: Error) => {
+                return reject(err);
             });
         });
+
     }
 }
