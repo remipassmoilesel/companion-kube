@@ -215,7 +215,7 @@ export class CliHandlers {
         }
     }
 
-    private wait(time: number) {
-        return new Promise((r, j) => setTimeout(r, time));
+    private wait(timeSec: number): Promise<any> {
+        return new Promise((r, j) => setTimeout(r, timeSec * 1000));
     }
 }
