@@ -31,4 +31,9 @@ export class LogLevels {
         mark: '[X]',
         value: 3,
     };
+    public static question: ILogLevel = {
+        color: 'cyan',
+        mark: '[?]',
+        value: 4,
+    };
 }

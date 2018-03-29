@@ -51,6 +51,10 @@ export class Logger {
         this.printColor(LogLevels.error, message, data);
     }
 
+    public question(message?: string, data?: any) {
+        this.printColor(LogLevels.question, message, data);
+    }
+
     public printColor(level: ILogLevel, message?: string, data?: any) {
 
         if (level.value < this.options.logLevel.value) {
