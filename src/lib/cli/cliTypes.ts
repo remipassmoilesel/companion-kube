@@ -38,8 +38,8 @@ export class CliOperations {
         level: LogLevels.warning,
     };
 
-    public static CLEAN: ICliOperation = {
-        name: 'CLEAN',
+    public static DESTROY: ICliOperation = {
+        name: 'DESTROY',
         level: LogLevels.error,
     };
 }

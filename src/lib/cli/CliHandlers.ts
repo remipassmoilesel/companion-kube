@@ -105,7 +105,7 @@ export class CliHandlers {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.CLEAN, appType, args, options);
+        const {apps, envName} = await this.selectAppAndShowWarning(CliOperations.DESTROY, appType, args, options);
 
         await this.api.destroyApplications(apps, envName);
     }

@@ -79,7 +79,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services redeploy', 'Clean then deploy one or more applications')
+            .command('services redeploy', 'Destroy then deploy one or more applications')
             .help(Help.redeployServices)
             .argument('<applications...>', 'Applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
@@ -93,9 +93,9 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services destroy', 'Clean one or more service applications')
+            .command('services destroy', 'Destroy one or more service applications')
             .help(Help.destroyServices)
-            .argument('<applications...>', 'Applications to clean')
+            .argument('<applications...>', 'Applications to destroy')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
@@ -121,7 +121,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('redeploy', 'Clean then deploy one or more applications')
+            .command('redeploy', 'Destroy then deploy one or more applications')
             .help(Help.redeploy)
             .argument('[applications...]', 'Applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
@@ -135,9 +135,9 @@ export class Cli {
             });
 
         this.cliProg
-            .command('destroy', 'Clean one or more applications')
+            .command('destroy', 'Destroy one or more applications')
             .help(Help.destroy)
-            .argument('[applications...]', 'Applications to clean')
+            .argument('[applications...]', 'Applications to destroy')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);

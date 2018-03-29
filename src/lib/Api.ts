@@ -87,9 +87,9 @@ export class Api {
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
         const envNameWithDef = envName || app.defaultEnvironment;
 
-        logger.info(`Cleaning ${app.name} on environment ${envNameWithDef}`);
+        logger.info(`Destroying ${app.name} on environment ${envNameWithDef}`);
         await executor.destroy(app, envNameWithDef);
-        logger.success(`Application cleaned !\n`);
+        logger.success(`Application destroyed !\n`);
     }
 
     public async deployApplications(apps: IKubeApplication[], envName?: string) {
