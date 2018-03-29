@@ -1,0 +1,11 @@
+name: infra
+version: 0.1
+description: A set of tools for a Kubernetes cluster
+keywords:
+- heapster
+home: https://github.com/remipassmoilesel/companion-kube
+sources:
+- https://github.com/remipassmoilesel/companion-kube
+maintainers:
+- name: Rémi Passmoilesel
+  email: remi.passmoilesel@gmail.com

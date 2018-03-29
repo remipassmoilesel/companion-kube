@@ -1,5 +1,9 @@
 # TODO
 
+- playbook ansible/kubeadm
+- chart infra: heapster, traefik, ...
+
+
 - Création de la command build pour les images docker
 - Lancement de build docker au déploiement
 
