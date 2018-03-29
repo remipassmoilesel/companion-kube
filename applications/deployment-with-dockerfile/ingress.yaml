@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: deployment-with-dockerfile
+spec:
+  rules:
+  - host: deployment-with-dockerfile.domain.net
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: deployment-with-dockerfile
+          servicePort: http
