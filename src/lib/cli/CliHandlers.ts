@@ -6,7 +6,7 @@ import {Api} from '../Api';
 import {IDeployArguments, IDeployOptions, IInitOptions, IRunArguments} from './cliTypes';
 import {CliDisplay} from './CliDisplay';
 import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
-import {ScriptRunner} from '../misc/ScriptRunner';
+import {ScriptRunner} from '../app-config/ScriptRunner';
 
 const logger = new Logger();
 

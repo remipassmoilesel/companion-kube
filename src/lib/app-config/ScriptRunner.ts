@@ -1,5 +1,5 @@
 import {spawn} from 'child_process';
-import {Logger} from './Logger';
+import {Logger} from '../misc/Logger';
 
 export class ScriptRunner {
     private logger = new Logger();
