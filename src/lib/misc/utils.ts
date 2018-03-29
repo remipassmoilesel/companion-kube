@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as readline from 'readline';
 import {Logger} from './Logger';
 import {IAppError, IContainsAppErrors} from './IAppError';
 
@@ -20,26 +19,4 @@ export function logFatalError(logger: Logger, e: IContainsAppErrors, debug: bool
 
         });
     }
-}
-
-export function promptUserInput(logger: Logger, question: string, choices: string[]){
-
-    return new Promise((resolve, reject) => {
-
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout,
-        });
-
-        logger.question(question);
-
-        rl.question('[' + choices.join(', ') + ']', (answer) => {
-            // TODO: Log the answer in a database
-            console.log(`Thank you for your valuable feedback: ${answer}`);
-
-            rl.close();
-        });
-
-    });
-
 }
