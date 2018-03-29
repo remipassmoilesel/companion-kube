@@ -65,7 +65,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services deploy', 'Deploy one or more service applications')
+            .command('svc deploy', 'Deploy one or more service applications')
             .help(Help.deployServices)
             .argument('<applications...>', 'Service applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
@@ -79,7 +79,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services redeploy', 'Destroy then deploy one or more applications')
+            .command('svc redeploy', 'Destroy then deploy one or more applications')
             .help(Help.redeployServices)
             .argument('<applications...>', 'Applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
@@ -93,7 +93,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('services destroy', 'Destroy one or more service applications')
+            .command('svc destroy', 'Destroy one or more service applications')
             .help(Help.destroyServices)
             .argument('<applications...>', 'Applications to destroy')
             .option('-e <env>', 'Environment to execute action on')

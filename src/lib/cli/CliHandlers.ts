@@ -68,7 +68,7 @@ export class CliHandlers {
         const {envName, apps} = await this.selectApps(AppType.BOTH, args, options);
         await this.display.showWarningOnApps(CliOperations.BUILD, apps, envName);
 
-        await this.api.buildApplications(apps);
+        await this._buildApplications(apps);
     }
 
     public async deployApplications(appType: AppType, args: IDeployArguments, options: IDeployOptions) {
@@ -78,7 +78,7 @@ export class CliHandlers {
         const {apps, envName} = await this.selectApps(appType, args, options);
         await this.display.showWarningOnApps(CliOperations.DEPLOY, apps, envName);
 
-        await this.api.buildApplications(apps);
+        await this._buildApplications(apps);
 
         await this._deployApplications(apps, envName);
     }
@@ -96,7 +96,7 @@ export class CliHandlers {
             logger.error('Cleaning did not go well ...');
         }
 
-        await this.api.buildApplications(apps);
+        await this._buildApplications(apps);
 
         await this._deployApplications(apps, envName);
     }
@@ -158,9 +158,6 @@ export class CliHandlers {
     private getAppConfigs(targetDir: string, appNames: string[], appIds: number[]): IKubeApplication[] {
         const configurations = this.api.loadAppsConfigurationRecursively(targetDir);
 
-        console.log('configurations')
-        console.log(configurations)
-
         const toDeploy: IKubeApplication[] = [];
         for (const appName of appNames) {
             const app = _.find(configurations.valid.apps, (ap) => ap.name === appName);
@@ -201,5 +198,15 @@ export class CliHandlers {
             logger.success(`Application destroyed !\n`);
 
         });
+    }
+
+    private async _buildApplications(apps: IKubeApplication[]) {
+        for (const app of apps) {
+            if (app.docker) {
+                logger.info('Building application ...');
+                await this.api.buildApplication(app);
+                logger.success('Done !');
+            }
+        }
     }
 }

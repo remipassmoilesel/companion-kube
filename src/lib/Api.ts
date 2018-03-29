@@ -36,17 +36,7 @@ export class Api {
     }
 
     public async buildApplication(app: IKubeApplication) {
-        if (app.docker) {
-            logger.info('Building application ...');
-            await this.dockerBuilder.build(app);
-            logger.success('Done !');
-        }
-    }
-
-    public async buildApplications(apps: IKubeApplication[]) {
-        for (const app of apps) {
-            await this.buildApplication(app);
-        }
+        await this.dockerBuilder.build(app);
     }
 
     public loadAppConfiguration(targetDir: string): IKubeApplication {

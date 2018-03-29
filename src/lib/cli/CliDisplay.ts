@@ -83,9 +83,11 @@ export class CliDisplay {
         log();
         log(`The following applications will be concerned: `);
         log();
+
         _.forEach(apps, (app: IKubeApplication) => {
             log(`\t - #${app.id} - ${app.name}: ${app.applicationStructure}`);
         });
+
         log();
 
         return this.waitForEnter('Press ENTER to confirm, or CTRL-C to cancel');

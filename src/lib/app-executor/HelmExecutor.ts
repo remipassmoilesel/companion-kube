@@ -55,10 +55,14 @@ export class HelmExecutor extends AbstractAppExecutor {
 
         if (fs.existsSync(defaultValuesPath)) {
             values.push(`-f ${defaultValuesPath}`);
+        } else {
+            this.logger.warning('No values.yaml file found');
         }
 
         if (envName && fs.existsSync(envValuesPath)) {
             values.push(`-f ${envValuesPath}`);
+        } else {
+            this.logger.warning(`No values-${envName}.yaml file found`);
         }
 
         return values.join(' ');
