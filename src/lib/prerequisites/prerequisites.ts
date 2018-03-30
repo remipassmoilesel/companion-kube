@@ -17,4 +17,8 @@ export const PREREQUISITES: IPrerequisite[] = [
         command: 'helm',
         installScript: 'scripts/prereq/install-helm.sh',
     },
+    {
+        command: 'ansible',
+        installScript: 'scripts/prereq/install-ansible.sh',
+    },
 ];
