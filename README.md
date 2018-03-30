@@ -48,10 +48,3 @@ Application is available as `companion-kube` or `ck`.
     [~] Destroying simple-deployment                    
     [+] Finished !                                      
                                                         
-## TODO
-
-     $ companion-kube deploy services
-     $ companion-kube destroy services
-     $ companion-kube restart
-     $ companion-kube rolling-update
-     $ companion-kube clear
