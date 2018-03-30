@@ -1,10 +1,10 @@
 import {IMainConfig} from './main-config/configTypes';
 import {Api} from './Api';
-import {CliHandlers} from './cli/CliHandlers';
+import {CliHandlers} from './cli-handlers/CliHandlers';
 import {Help} from './cli/Help';
 import {Logger} from './misc/Logger';
 import {AppType} from './app-config/appConfigTypes';
-import {IDeployArguments, IDeployOptions, IRunArguments} from './cli/cliTypes';
+import {IApplicationArguments, IEnvironmentArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
 import {logFatalError} from './misc/utils';
 import {IS_DEBUG} from '../main';
 
@@ -35,22 +35,30 @@ export class Cli {
             .version(this.mainConfig.version)
             .help(Help.global);
 
+        this.registerMiscCommands();
+        this.registerClusterCommands();
+        this.registerServiceCommands();
+        this.registerAppCommands();
+    }
+
+    public registerMiscCommands(){
+
         this.cliProg
             .command('init', 'Create a full ck-config.js example')
             .help(Help.init)
             .option('-f', 'Force if file already exists')
             .action(async (args: any, options: any) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.initDirectory(args, options);
+                    await this.handlers.miscHandlers.initDirectory(args, options);
                 });
             });
 
         this.cliProg
             .command('list', 'List available applications')
             .help(Help.list)
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.listApplications(args, options);
+                    await this.handlers.miscHandlers.listApplications(args, options);
                 });
             });
 
@@ -58,11 +66,48 @@ export class Cli {
             .command('build', 'Build one or more service applications')
             .help(Help.build)
             .argument('[applications...]', 'Applications to build')
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.buildApplications(args, options);
+                    await this.handlers.miscHandlers.buildApplications(args, options);
                 });
             });
+
+        this.cliProg
+            .command('run', 'Run script from ck-config.js')
+            .help(Help.script)
+            .argument('<script>', 'Script to launch')
+            .action(async (args: IRunArguments, options: IEnvironmentOptions) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.miscHandlers.runScript(args, options);
+                });
+            });
+    }
+
+    public registerClusterCommands(){
+
+        this.cliProg
+            .command('cluster deploy', 'Deploy Kubernetes on a cluster')
+            .help(Help.deployCluster)
+            .argument('<env>', 'Environment to execute action on')
+            .action(async (args: IEnvironmentArguments, options: any) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.clusterHandlers.deployCluster(options);
+                });
+            });
+
+        this.cliProg
+            .command('cluster destroy', 'Remove Kubernetes from a cluster')
+            .help(Help.destroyCluster)
+            .argument('<env>', 'Environment to execute action on')
+            .action(async (args: IEnvironmentArguments, options: any) => {
+                await this.catchErrors(async () => {
+                    await this.handlers.clusterHandlers.destroyCluster(args);
+                });
+            });
+
+    }
+
+    public registerServiceCommands(){
 
         this.cliProg
             .command('svc deploy', 'Deploy one or more service applications')
@@ -72,9 +117,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.deployApplications(AppType.SERVICE, args, options);
+                    await this.handlers.appHandlers.deployApplications(AppType.SERVICE, args, options);
                 });
             });
 
@@ -86,9 +131,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.redeployApplications(AppType.SERVICE, args, options);
+                    await this.handlers.appHandlers.redeployApplications(AppType.SERVICE, args, options);
                 });
             });
 
@@ -100,11 +145,15 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.destroyApplications(AppType.SERVICE, args, options);
+                    await this.handlers.appHandlers.destroyApplications(AppType.SERVICE, args, options);
                 });
             });
+
+    }
+
+    public registerAppCommands(){
 
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
@@ -114,9 +163,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.deployApplications(AppType.APPLICATION, args, options);
+                    await this.handlers.appHandlers.deployApplications(AppType.APPLICATION, args, options);
                 });
             });
 
@@ -128,9 +177,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.redeployApplications(AppType.APPLICATION, args, options);
+                    await this.handlers.appHandlers.redeployApplications(AppType.APPLICATION, args, options);
                 });
             });
 
@@ -142,19 +191,9 @@ export class Cli {
             .complete(() => {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
-            .action(async (args: IDeployArguments, options: IDeployOptions) => {
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchErrors(async () => {
-                    await this.handlers.destroyApplications(AppType.APPLICATION, args, options);
-                });
-            });
-
-        this.cliProg
-            .command('run', 'Run script from ck-config.js')
-            .help(Help.script)
-            .argument('<script>', 'Script to launch')
-            .action(async (args: IRunArguments, options: IDeployOptions) => {
-                await this.catchErrors(async () => {
-                    await this.handlers.runScript(args, options);
+                    await this.handlers.appHandlers.destroyApplications(AppType.APPLICATION, args, options);
                 });
             });
 

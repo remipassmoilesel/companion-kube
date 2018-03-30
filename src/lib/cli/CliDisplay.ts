@@ -3,8 +3,7 @@ import * as readline from 'readline';
 import {IKubeApplication, IRecursiveLoadingResult} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
-import {log} from 'util';
-import {ICliOperation} from './cliTypes';
+import {ICliOperation} from './CliOperations';
 
 const logger = new Logger();
 

@@ -18,4 +18,8 @@ Applications to manage must be described using a ck-config.js file.
     public static destroyServices = 'Deploy applications. Parameters can be application names or number.';
     public static deployServices = 'Deploy applications. Parameters can be application names or number.';
     public static redeployServices = 'Deploy applications. Parameters can be application names or number.';
+
+    public static deployCluster = 'Deploy applications. Parameters can be application names or number.';
+    public static destroyCluster = 'Deploy applications. Parameters can be application names or number.';
+
 }
