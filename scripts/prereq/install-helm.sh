@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 cd /tmp
 
 wget https://storage.googleapis.com/kubernetes-helm/helm-v2.8.2-linux-amd64.tar.gz -O helm.tar.gz
