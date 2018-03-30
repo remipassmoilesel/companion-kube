@@ -94,6 +94,7 @@ export class CliHandlers {
             await this._destroyApplications(apps, envName);
         } catch (e) {
             logger.error('Cleaning did not go well ...');
+            logger.error();
         }
 
         await this.wait(1.5);
