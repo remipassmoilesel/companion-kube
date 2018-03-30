@@ -7,19 +7,26 @@ Mass deployment tool for Kubernetes deployments and charts.
 Applications to manage must be described using a ck-config.js file.
 
 `;
-    public static init = 'TODO';
-    public static script = 'TODO';
-    public static list = `List available applications which can be handled by Companion-Kube`
-        + `in current directory.`;
-    public static build = 'TODO';
-    public static deploy = 'Deploy applications. Parameters can be application names or number.';
-    public static redeploy = 'Deploy applications. Parameters can be application names or number.';
-    public static destroy = 'Deploy applications. Parameters can be application names or number.';
-    public static destroyServices = 'Deploy applications. Parameters can be application names or number.';
-    public static deployServices = 'Deploy applications. Parameters can be application names or number.';
-    public static redeployServices = 'Deploy applications. Parameters can be application names or number.';
 
-    public static deployCluster = 'Deploy applications. Parameters can be application names or number.';
-    public static destroyCluster = 'Deploy applications. Parameters can be application names or number.';
+    public static init = 'Create a full ck-config.js example. Ck-config file allow to describe a Kubernetes project. ' +
+        'In this file you can define scripts, describe Docker build, use deployment options ...';
+    public static list = 'List available applications which can be handled by Companion-Kube in current directory. ' +
+        'Applications can be service applications or normal applications.';
+    public static build = 'Build Docker images of applications.';
+    public static script = 'Run script from ck-config.js';
+
+    public static deploy = 'Deploy specified applications. You can name applications by id or by name. ' +
+        'If no parameters are specified, current directory is deployed.';
+    public static redeploy = 'Destroy then deploy specified applications. You can name applications by id or ' +
+        'by name. If no parameters are specified, current directory is redeployed.';
+    public static destroy = 'Destroy specified applications. You can name applications by id or ' +
+        'by name. If no parameters are specified, current directory is destroyed.';
+
+    public static deployServices = 'Same as deploy but for service applications.';
+    public static redeployServices = 'Same as redeploy but for service applications.';
+    public static destroyServices = 'Same as destroy but for service applications.';
+
+    public static deployCluster = 'Deploy a Kubernetes cluster with Ansible.';
+    public static destroyCluster = 'Remove all Kubernetes software components from a cluster with Ansible.';
 
 }

@@ -63,7 +63,7 @@ export class Cli {
             });
 
         this.cliProg
-            .command('build', 'Build one or more service applications')
+            .command('build', 'Build one or more images of applications')
             .help(Help.build)
             .argument('[applications...]', 'Applications to build')
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
