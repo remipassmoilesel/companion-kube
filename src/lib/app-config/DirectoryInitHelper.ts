@@ -1,8 +1,9 @@
-import {exampleAppConfig} from './appConfigTypes';
+
 import * as fs from 'fs';
 import * as path from 'path';
 import _ = require('lodash');
 import {IMainConfig} from '../main-config/configTypes';
+import {exampleCkConfig} from './exampleCkConfig';
 
 export class DirectoryInitHelper {
 
@@ -20,7 +21,7 @@ export class DirectoryInitHelper {
 module.exports = %example-config
 `;
 
-        const lightConfig = _.clone(exampleAppConfig);
+        const lightConfig = _.clone(exampleCkConfig);
         delete lightConfig.id;
         delete lightConfig.rootPath;
         delete lightConfig.configPath;
