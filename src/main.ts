@@ -15,7 +15,6 @@ const logger = new Logger();
 const api = new Api(mainConfig);
 const cli = new Cli(mainConfig, api);
 
-
 (async () => {
 
     try {
