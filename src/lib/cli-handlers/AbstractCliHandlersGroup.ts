@@ -5,6 +5,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {Api} from '../Api';
 import {CliDisplay} from '../cli/CliDisplay';
 import {Logger} from '../misc/Logger';
+import {walkApplications} from '../misc/utils';
 
 export class AbstractCliHandlersGroup {
 
@@ -90,7 +91,7 @@ export class AbstractCliHandlersGroup {
     }
 
     protected async _deployApplications(apps: IKubeApplication[], envName?: string) {
-        await this.api.walkApplications(apps, async (app) => {
+        await walkApplications(apps, async (app) => {
             const envNameWithDef = envName || app.defaultEnvironment;
 
             this.logger.info(`Deploying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
@@ -101,7 +102,7 @@ export class AbstractCliHandlersGroup {
     }
 
     protected async _destroyApplications(apps: IKubeApplication[], envName?: string) {
-        await this.api.walkApplications(apps, async (app) => {
+        await walkApplications(apps, async (app) => {
             const envNameWithDef = envName || app.defaultEnvironment;
 
             this.logger.info(`Destroying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
