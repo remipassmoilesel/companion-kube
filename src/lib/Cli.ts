@@ -48,7 +48,7 @@ export class Cli {
             .help(Help.init)
             .option('-f', 'Force if file already exists')
             .action(async (args: any, options: any) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.initDirectory(args, options);
                 });
             });
@@ -57,7 +57,7 @@ export class Cli {
             .command('list', 'List available applications')
             .help(Help.list)
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.listApplications(args, options);
                 });
             });
@@ -67,7 +67,7 @@ export class Cli {
             .help(Help.build)
             .argument('[applications...]', 'Applications to build')
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.buildApplications(args, options);
                 });
             });
@@ -77,7 +77,7 @@ export class Cli {
             .help(Help.script)
             .argument('<script>', 'Script to launch')
             .action(async (args: IRunArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.runScript(args, options);
                 });
             });
@@ -90,7 +90,7 @@ export class Cli {
             .help(Help.deployCluster)
             .argument('<env>', 'Environment to execute action on')
             .action(async (args: IEnvironmentArguments, options: any) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.clusterHandlers.deployCluster(options);
                 });
             });
@@ -100,7 +100,7 @@ export class Cli {
             .help(Help.destroyCluster)
             .argument('<env>', 'Environment to execute action on')
             .action(async (args: IEnvironmentArguments, options: any) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.clusterHandlers.destroyCluster(args);
                 });
             });
@@ -118,7 +118,7 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.appHandlers.deployApplications(AppType.SERVICE, args, options);
                 });
             });
@@ -132,7 +132,7 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.appHandlers.redeployApplications(AppType.SERVICE, args, options);
                 });
             });
@@ -146,7 +146,7 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.SERVICE);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.appHandlers.destroyApplications(AppType.SERVICE, args, options);
                 });
             });
@@ -164,7 +164,7 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.appHandlers.deployApplications(AppType.APPLICATION, args, options);
                 });
             });
@@ -178,7 +178,7 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.appHandlers.redeployApplications(AppType.APPLICATION, args, options);
                 });
             });
@@ -192,7 +192,7 @@ export class Cli {
                 return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
-                await this.catchErrors(async () => {
+                await this.catchHandlersErrors(async () => {
                     await this.handlers.appHandlers.destroyApplications(AppType.APPLICATION, args, options);
                 });
             });
@@ -203,7 +203,7 @@ export class Cli {
         this.cliProg.parse(argv);
     }
 
-    private async catchErrors(cb: () => Promise<void>): Promise<void> {
+    private async catchHandlersErrors(cb: () => Promise<void>): Promise<void> {
         try {
             await cb();
         } catch (e) {
