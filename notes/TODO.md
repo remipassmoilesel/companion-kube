@@ -1,5 +1,6 @@
 # TODO
 
+- Déplacer inventaire cluster dans applications ? Dans le but de versionner un inventaire hors du projet ?
 - configuration: Helm > repo: string[] -> helm repo add
 - Hook predeploy dans le fichier de configuration js ?
 

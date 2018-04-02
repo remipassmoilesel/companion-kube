@@ -14,5 +14,8 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 
 echo ""
 echo ""
-echo "Visit: "
-echo "https://MASTER_IP:6443/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/login"
+echo "Start command: "
+echo " $ kubectl proxy"
+
+echo "Then visit: "
+echo "http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
