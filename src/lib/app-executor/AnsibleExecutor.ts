@@ -36,13 +36,17 @@ export class AnsibleExecutor extends AbstractAppExecutor {
         await this.execCommand(command);
     }
 
-    private getPlaybookPath(playbookName: string, ansibleOptions: IAnsibleOptions) {
+    private getPlaybookPath(playbookName: string, ansibleOptions: IAnsibleOptions): string {
         const playbook = _.filter(ansibleOptions.playbooks, (value: IAnsiblePlaybook, name: string) => {
             return playbookName === name;
         })[0];
         if (!playbook) {
             throw new Error('A playbook with name ' + playbookName + ' must exists. Please define ' +
                 'it in ck-config.js.');
+        }
+        if (playbook.path.startsWith('#/')) {
+            const withoutPrefix = playbook.path.substring(2);
+            return path.join(this.mainConfig.projectRoot, withoutPrefix);
         }
         return playbook.path;
     }
