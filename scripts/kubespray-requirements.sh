@@ -1,5 +1,3 @@
 #!/usr/bin/env bash
 
-cd cluster/kubespray
-
-sudo pip install -r requirements.txt
+sudo pip install -r script/kubespray/requirements.txt
