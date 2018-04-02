@@ -4,6 +4,7 @@ import {KubectlExecutor} from './KubectlExecutor';
 import {IMainConfig} from '../main-config/configTypes';
 import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
+import {AnsibleExecutor} from './AnsibleExecutor';
 
 export class ExecutorFinder {
 
@@ -11,6 +12,7 @@ export class ExecutorFinder {
         return [
             new HelmExecutor(config),
             new KubectlExecutor(config),
+            new AnsibleExecutor(config),
         ];
     }
 

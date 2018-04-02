@@ -120,6 +120,18 @@ export class AppConfigSchema {
 
                 },
             },
+            ansible: {
+                $id: '/properties/ansible',
+                type: 'object',
+                properties: {
+                    playbooks: {
+                        $id: '/properties/ansible/properties/playbooks',
+                        type: 'object',
+                        additionalProperties: true,
+                        properties: {},
+                    },
+                },
+            },
         },
         required: [
             'applicationStructure',

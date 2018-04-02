@@ -7,7 +7,6 @@ import {AppConfigurationManager} from './app-config/AppConfigurationManager';
 import {AppType, IKubeApplication, IRecursiveLoadingResult} from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
 import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
-import {IAppError, IContainsAppErrors} from './misc/IAppError';
 import {DockerBuilder} from './app-config/DockerBuilder';
 
 const logger = new Logger();
@@ -57,7 +56,7 @@ export class Api {
     public getAllAppsConfigs(targetDir: string, appType: AppType): IKubeApplication[] {
         const appConfigs = this.loadAppsConfigurationRecursively(targetDir);
 
-        switch (appType){
+        switch (appType) {
             case AppType.BOTH:
                 return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
             case AppType.SERVICE:

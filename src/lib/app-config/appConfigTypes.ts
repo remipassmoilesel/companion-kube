@@ -1,6 +1,6 @@
 import * as Ajv from 'ajv';
 
-export type AppStructure = 'deployment' | 'chart';
+export type AppStructure = 'deployment' | 'chart' | 'ansible';
 
 export enum AppType {
     SERVICE = 'service',
@@ -22,7 +22,16 @@ export interface IKubeApplication {
     defaultEnvironment?: string;
     docker?: IDockerOptions;
     helm?: IHelmOptions;
-    scripts?: {[s: string]: string};
+    ansible?: IAnsibleOptions;
+    scripts?: { [s: string]: string };
+}
+
+export interface IAnsiblePlaybook {
+    path: string;
+}
+
+export interface IAnsibleOptions {
+    playbooks: { [s: string]: IAnsiblePlaybook };
 }
 
 export interface IDockerOptions {
