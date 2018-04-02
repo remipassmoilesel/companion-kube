@@ -95,7 +95,7 @@ export class AbstractCliHandlersGroup {
             const envNameWithDef = envName || app.defaultEnvironment;
 
             this.logger.info(`Deploying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
-            await this.api.deployApplication(app, envName);
+            await this.api.deployApplication(app, envNameWithDef);
             this.logger.success(`Application deployed !\n`);
 
         });
@@ -106,7 +106,7 @@ export class AbstractCliHandlersGroup {
             const envNameWithDef = envName || app.defaultEnvironment;
 
             this.logger.info(`Destroying ${app.name} on environment ${envNameWithDef || 'unknown'}`);
-            await this.api.destroyApplication(app, envName);
+            await this.api.destroyApplication(app, envNameWithDef);
             this.logger.success(`Application destroyed !\n`);
 
         });
