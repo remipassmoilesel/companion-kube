@@ -4,13 +4,13 @@ module.exports = {
     ansible: {
         playbooks: {
             deploy: {
-                path: '#/scripts/kubespray/cluster.yml -vv',
+                path: '#/scripts/kubespray/cluster.yml',
             },
             destroy: {
-                path: '#/scripts/kubespray/reset.yml  --extra-vars "reset_confirmation=yes" -vv',
+                path: '#/scripts/kubespray/reset.yml --extra-vars "reset_confirmation=yes"',
             },
             scale: {
-                path: '#/scripts/kubespray/scale.yml -vv',
+                path: '#/scripts/kubespray/scale.yml',
             },
         }
     },

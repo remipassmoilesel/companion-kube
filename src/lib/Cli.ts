@@ -36,7 +36,6 @@ export class Cli {
             .help(Help.global);
 
         this.registerMiscCommands();
-        this.registerClusterCommands();
         this.registerServiceCommands();
         this.registerAppCommands();
     }
@@ -81,30 +80,6 @@ export class Cli {
                     await this.handlers.miscHandlers.runScript(args, options);
                 });
             });
-    }
-
-    public registerClusterCommands(){
-
-        this.cliProg
-            .command('cluster deploy', 'Deploy Kubernetes on a cluster')
-            .help(Help.deployCluster)
-            .argument('<env>', 'Environment to execute action on')
-            .action(async (args: IEnvironmentArguments, options: any) => {
-                await this.catchHandlersErrors(async () => {
-                    await this.handlers.clusterHandlers.deployCluster(options);
-                });
-            });
-
-        this.cliProg
-            .command('cluster destroy', 'Remove Kubernetes from a cluster')
-            .help(Help.destroyCluster)
-            .argument('<env>', 'Environment to execute action on')
-            .action(async (args: IEnvironmentArguments, options: any) => {
-                await this.catchHandlersErrors(async () => {
-                    await this.handlers.clusterHandlers.destroyCluster(args);
-                });
-            });
-
     }
 
     public registerServiceCommands(){
