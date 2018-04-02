@@ -9,6 +9,7 @@ export const exampleCkConfig: IKubeApplication = {
     // end
 
     name: 'config',
+    displayOutput: false,
     applicationStructure: 'deployment',
     defaultEnvironment: 'dev',
     helm: {

@@ -19,14 +19,14 @@ export class KubectlExecutor extends AbstractAppExecutor {
         const namespaceOption = envName ? `--namespace ${envName}` : '';
         const command = `kubectl create ${namespaceOption} -f ${app.rootPath}`;
 
-        await this.execCommand(command);
+        await this.execCommand(command, app.displayOutput);
     }
 
     public async destroy(app: IKubeApplication, envName?: string): Promise<any> {
         const namespaceOption = envName ? `--namespace ${envName}` : '';
         const command = `kubectl delete ${namespaceOption} -f ${app.rootPath}`;
 
-        await this.execCommand(command);
+        await this.execCommand(command, app.displayOutput);
     }
 
 }

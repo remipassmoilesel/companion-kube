@@ -33,7 +33,7 @@ export class AnsibleExecutor extends AbstractAppExecutor {
     private async executePlaybook(playbookPath: any, app: IKubeApplication, envName?: string) {
         const inventoryPath = this.getInventoryPath(app, envName);
         const command = `ansible-playbook -i ${inventoryPath} ${playbookPath}`;
-        await this.execCommand(command);
+        await this.execCommand(command, true);
     }
 
     private getPlaybookPath(playbookName: string, ansibleOptions: IAnsibleOptions): string {

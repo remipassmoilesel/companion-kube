@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import _ = require('lodash');
 import {IMainConfig} from '../main-config/configTypes';
-import {exampleCkConfig} from './exampleCkConfig';
+import {exampleCkConfig} from './appConfigExample';
 
 export class DirectoryInitHelper {
 

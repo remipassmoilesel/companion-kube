@@ -19,6 +19,7 @@ export interface IKubeApplication {
 
     name: string; // default value: configuration directory name
     applicationStructure: AppStructure;
+    displayOutput?: boolean;
     defaultEnvironment?: string;
     docker?: IDockerOptions;
     helm?: IHelmOptions;

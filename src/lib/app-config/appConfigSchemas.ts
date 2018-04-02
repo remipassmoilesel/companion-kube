@@ -44,6 +44,15 @@ export class AppConfigSchema {
                     'dev',
                 ],
             },
+            displayOutput: {
+                $id: '/properties/displayOutput',
+                type: 'boolean',
+                title: 'The Displayoutput Schema ',
+                default: false,
+                examples: [
+                    false,
+                ],
+            },
             helm: {
                 $id: '/properties/helm',
                 type: 'object',
