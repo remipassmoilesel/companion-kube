@@ -1,5 +1,7 @@
 # TODO
 
+- Ecarter le dossier _cluster de all dans ck svc deploy all
+- Renommer _service-components ?
 - Renommer defaultEnvironment par defaultNamespace ?
 - Déplacer inventaire cluster dans applications ? Dans le but de versionner un inventaire hors du projet ?
 - configuration: Helm > repo: string[] -> helm repo add
