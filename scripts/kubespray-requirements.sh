@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-sudo pip install -r script/kubespray/requirements.txt
+sudo pip install -r scripts/kubespray/requirements.txt
