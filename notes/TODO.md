@@ -1,5 +1,6 @@
 # TODO
 
+- Fonctionnalité de templating (helm chart, déploiement, etc ...)
 - Ecarter le dossier _cluster de all dans ck svc deploy all
 - Renommer _service-components ?
 - Renommer defaultEnvironment par defaultNamespace ?
