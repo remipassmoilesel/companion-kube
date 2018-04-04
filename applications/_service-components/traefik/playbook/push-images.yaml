@@ -1,0 +1,47 @@
+- hosts: kube-node
+
+  vars:
+
+    - image_name: remipassmoilesel-traefik
+    - tag: v1.6-alpine
+    - user: remipassmoilesel
+    - local_archive_path: "{{ playbook_dir }}/{{ image_name }}:{{ tag }}.tar"
+    - remote_archive_path: "/tmp/{{ image_name }}:{{ tag }}.tar"
+
+  tasks:
+
+  - name: Build image
+    docker_image:
+      name: "{{ image_name }}"
+      tag: "{{ tag }}"
+      path: ../docker
+    delegate_to: localhost
+    run_once: yes
+
+  - name: Delete local temp file
+    file:
+      path: "{{ local_archive_path }}"
+      state: absent
+
+  - name: Export image
+    shell: "docker save {{ image_name }}:{{ tag }} > {{ local_archive_path }}"
+    delegate_to: localhost
+    run_once: yes
+
+  - name: Upload image
+    copy:
+      src: "{{ local_archive_path }}"
+      dest: "{{ remote_archive_path }}"
+
+  - name: Upload image
+    shell: " docker load --input {{ remote_archive_path }}"
+
+  - name: Delete remote temp file
+    file:
+      path: "{{ remote_archive_path }}"
+      state: absent
+
+  - name: Delete local temp file
+    file:
+      path: "{{ local_archive_path }}"
+      state: absent
