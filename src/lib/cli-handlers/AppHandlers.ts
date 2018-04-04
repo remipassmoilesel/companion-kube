@@ -31,10 +31,12 @@ export class AppHandlers extends AbstractCliHandlersGroup {
             this.logger.error();
         }
 
-        await this.wait(1.5);
+        this.logger.info('Waiting 5 seconds ...');
+        this.logger.info();
+
+        await this.wait(5);
 
         await this._buildApplications(apps);
-
         await this._deployApplications(apps, envName);
     }
 
