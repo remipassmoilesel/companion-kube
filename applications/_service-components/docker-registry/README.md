@@ -1,5 +1,7 @@
 # Docker Registry Helm Chart
 
+From: https://github.com/kubernetes/charts/tree/master/stable
+
 This directory contains a Kubernetes chart to deploy a private Docker Registry.
 
 ## Prerequisites Details
