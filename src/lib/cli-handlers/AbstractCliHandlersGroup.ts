@@ -123,6 +123,11 @@ export class AbstractCliHandlersGroup {
     }
 
     protected wait(timeSec: number): Promise<any> {
-        return new Promise((r, j) => setTimeout(r, timeSec * 1000));
+        const timeMs = timeSec * 1000;
+
+        this.logger.info(`Waiting ${timeSec} seconds ...`);
+        this.logger.info();
+
+        return new Promise((r, j) => setTimeout(r, timeMs));
     }
 }
