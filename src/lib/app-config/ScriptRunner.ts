@@ -7,11 +7,11 @@ export class ScriptRunner {
     private execOptions = {};
     private spawn = spawn;
 
-    public run(script: string) {
+    public run(script: string, scriptArgs: string[]) {
         return new Promise((resolve, reject) => {
 
             this.logger.warning('Running script: ' + script);
-            const scriptCmd = spawn(script, [], {shell: true});
+            const scriptCmd = spawn(script, scriptArgs, {shell: true});
 
             scriptCmd.stdout.on('data', (data: any) => {
                 process.stdout.write(data.toString());

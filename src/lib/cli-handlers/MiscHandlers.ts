@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {IApplicationArguments, IEnvironmentOptions, IInitOptions, IRunArguments,} from '../cli/cliTypes';
+import {IApplicationArguments, IEnvironmentOptions, IInitOptions, IRunArguments} from '../cli/cliTypes';
 import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
 import {ScriptRunner} from '../app-config/ScriptRunner';
 import {CliOperations} from '../cli/CliOperations';
@@ -17,7 +17,8 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const scriptName = args.script;
+        const scriptArgs: string[] = args.script;
+        const scriptName = scriptArgs[0];
 
         const scriptRunner = new ScriptRunner();
         const appConfig: IKubeApplication = this.api.loadAppConfiguration(process.cwd());
@@ -27,7 +28,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
             throw new Error(` '${scriptName}' not found !`);
         }
 
-        await scriptRunner.run(script);
+        await scriptRunner.run(script, scriptArgs.slice(1));
     }
 
     public listApplications(args: any, options: any) {

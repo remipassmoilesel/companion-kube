@@ -5,7 +5,7 @@ export interface IInitOptions {
 }
 
 export interface IRunArguments {
-    script: string;
+    script: string[];
 }
 
 export interface IApplicationArguments {
