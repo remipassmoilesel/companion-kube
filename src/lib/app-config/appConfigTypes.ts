@@ -1,6 +1,10 @@
 import * as Ajv from 'ajv';
 
-export type AppStructure = 'deployment' | 'chart' | 'ansible';
+// ===================================
+// MAIN
+// ===================================
+
+export type AppStructure = 'scripts' | 'deployment' | 'chart' | 'ansible';
 
 export enum AppType {
     SERVICE = 'service',
@@ -21,11 +25,46 @@ export interface IKubeApplication {
     applicationStructure: AppStructure;
     displayOutput?: boolean;
     defaultEnvironment?: string;
+
     docker?: IDockerOptions;
+    deployment?: IDeploymentOptions;
     helm?: IHelmOptions;
     ansible?: IAnsibleOptions;
-    scripts?: { [s: string]: string };
+    scripts?: IScriptGroup;
+
+    hooks?: IHooksOptions;
 }
+
+// ===================================
+// DOCKER
+// ===================================
+
+export interface IDockerOptions {
+    imageName: string;
+    tag: string;
+    push: boolean;
+    buildDirectory: string;
+}
+
+// ===================================
+// DEPLOYMENTS
+// ===================================
+
+export interface IDeploymentOptions {
+    roots: string[];
+}
+
+// ===================================
+// HELM CHARTS
+// ===================================
+
+export interface IHelmOptions {
+    releaseName: string;
+}
+
+// ===================================
+// ANSIBLE
+// ===================================
 
 export interface IAnsiblePlaybook {
     path: string;
@@ -35,28 +74,23 @@ export interface IAnsibleOptions {
     playbooks: { [s: string]: IAnsiblePlaybook };
 }
 
-export interface IDockerOptions {
-    imageName: string;
-    tag: string;
-    push: boolean;
-    buildDirectory: string;
+// ===================================
+// SCRIPTS
+// ===================================
+
+export interface IScriptGroup {
+    [s: string]: string;
 }
 
-export interface IHelmOptions {
-    releaseName: string;
-}
+// ===================================
+// HOOKS
+// ===================================
 
-export interface IInvalidApplication {
-    config: IKubeApplication;
-    errors: Ajv.ErrorObject[];
-}
+export interface IHooksOptions {
+    preDeploy?: string;
+    postDeploy?: string;
 
-export interface IRecursiveLoadingResult {
-    valid: {
-        apps: IKubeApplication[],
-        serviceApps: IKubeApplication[],
-    };
-    invalid: IInvalidApplication[];
+    preDestroy?: string;
+    postDestroy?: string;
 }
-
 

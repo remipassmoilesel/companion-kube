@@ -3,9 +3,10 @@ import * as path from 'path';
 import * as Ajv from 'ajv';
 import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
-import {AppType, IInvalidApplication, IKubeApplication, IRecursiveLoadingResult} from './appConfigTypes';
+import {AppType, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
-import {IAppError, IContainsAppErrors} from '../misc/IAppError';
+import {IContainsAppErrors} from '../misc/IAppError';
+import {IInvalidApplication, IRecursiveLoadingResult} from './configTypes';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 

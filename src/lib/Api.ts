@@ -4,10 +4,11 @@ import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {AppType, IKubeApplication, IRecursiveLoadingResult} from './app-config/appConfigTypes';
+import {AppType, IKubeApplication } from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
 import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
 import {DockerBuilder} from './app-config/DockerBuilder';
+import {IRecursiveLoadingResult} from './app-config/configTypes';
 
 const logger = new Logger();
 

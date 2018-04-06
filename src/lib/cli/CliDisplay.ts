@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 import * as readline from 'readline';
-import {IKubeApplication, IRecursiveLoadingResult} from '../app-config/appConfigTypes';
+import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
 import {ICliOperation} from './CliOperations';
+import {IRecursiveLoadingResult} from '../app-config/configTypes';
 
 const logger = new Logger();
 
