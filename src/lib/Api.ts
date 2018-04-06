@@ -6,8 +6,8 @@ import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
 import {AppType, IKubeApplication } from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
-import {DirectoryInitHelper} from './app-config/DirectoryInitHelper';
-import {DockerBuilder} from './app-config/DockerBuilder';
+import {DirectoryInitHelper} from './helpers/DirectoryInitHelper';
+import {DockerBuilder} from './helpers/DockerBuilder';
 import {IRecursiveLoadingResult} from './app-config/configTypes';
 
 const logger = new Logger();

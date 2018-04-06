@@ -1,9 +1,9 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import _ = require('lodash');
 import {IMainConfig} from '../main-config/configTypes';
-import {exampleCkConfig} from './appConfigExample';
+import {exampleCkConfig} from '../app-config/appConfigExample';
+import {AppConfigHelpers} from '../app-config/AppConfigHelpers';
 
 export class DirectoryInitHelper {
 
@@ -21,12 +21,7 @@ export class DirectoryInitHelper {
 module.exports = %example-config
 `;
 
-        const lightConfig = _.clone(exampleCkConfig);
-        delete lightConfig.id;
-        delete lightConfig.rootPath;
-        delete lightConfig.configPath;
-        delete lightConfig.type;
-
+        const lightConfig = AppConfigHelpers.getLightAppConfig(exampleCkConfig);
         const formattedConfig = template.replace(
             '%example-config',
             JSON.stringify(lightConfig, null, 2),

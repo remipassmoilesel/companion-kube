@@ -1,12 +1,12 @@
 import {Logger} from '../misc/Logger';
 import {IMainConfig} from '../main-config/configTypes';
-import {exec, spawn} from 'child_process';
-import {IKubeApplication} from './appConfigTypes';
+import {spawn} from 'child_process';
+import {IKubeApplication} from '../app-config/appConfigTypes';
 import * as path from 'path';
 
 export class DockerBuilder {
 
-    private exec = exec;
+    private spawn = spawn;
     protected logger: Logger = new Logger();
     protected mainConfig: IMainConfig;
 
@@ -36,7 +36,7 @@ export class DockerBuilder {
 
 
         return new Promise((resolve, reject) => {
-            const commandExec = spawn(command, [], {shell: true});
+            const commandExec = this.spawn(command, [], {shell: true});
 
             commandExec.stdout.on('data', (data: any) => {
                 process.stdout.write(data.toString());
