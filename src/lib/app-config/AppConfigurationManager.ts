@@ -38,7 +38,7 @@ export class AppConfigurationManager {
         const app = res.valid.apps.concat(res.valid.serviceApps)[0];
         if (!app){
             const err: IContainsAppErrors = new Error('Invalid configuration !');
-            // TODO: show invalidation error
+            err.$invalidApps = res.invalid;
             throw err;
         }
         return app;
@@ -56,7 +56,7 @@ export class AppConfigurationManager {
                 valid.push(config);
             } else {
                 invalid.push({
-                    config,
+                    app: config,
                     errors: this.appConfigValidator.errors as Ajv.ErrorObject[],
                 });
             }

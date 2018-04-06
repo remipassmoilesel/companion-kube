@@ -1,4 +1,5 @@
 import {IKubeApplication} from '../app-config/appConfigTypes';
+import {IInvalidApplication} from '../app-config/configTypes';
 
 export interface IAppError {
     app: IKubeApplication;
@@ -7,4 +8,5 @@ export interface IAppError {
 
 export interface IContainsAppErrors extends Error {
     $appErrors?: IAppError[];
+    $invalidApps?: IInvalidApplication[];
 }

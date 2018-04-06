@@ -2,7 +2,7 @@ import {IKubeApplication} from './appConfigTypes';
 import * as Ajv from 'ajv';
 
 export interface IInvalidApplication {
-    config: IKubeApplication;
+    app: IKubeApplication;
     errors: Ajv.ErrorObject[];
 }
 

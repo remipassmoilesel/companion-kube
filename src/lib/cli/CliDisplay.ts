@@ -4,7 +4,8 @@ import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
 import {ICliOperation} from './CliOperations';
-import {IRecursiveLoadingResult} from '../app-config/configTypes';
+import {IInvalidApplication, IRecursiveLoadingResult} from '../app-config/configTypes';
+import {IAppError, IContainsAppErrors} from '../misc/IAppError';
 
 const logger = new Logger();
 
@@ -49,11 +50,11 @@ export class CliDisplay {
 
     }
 
-    public showInvalidConfigurations(appConfigs: IRecursiveLoadingResult) {
-        _.forEach(appConfigs.invalid, (invalid) => {
+    public showInvalidConfigurations(invalidApps: IInvalidApplication[]) {
+        _.forEach(invalidApps, (invalid) => {
             const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
 
-            logger.error(`Invalid configuration found: ${invalid.config.configPath}`);
+            logger.error(`Invalid configuration found: ${invalid.app.configPath}`);
             logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
             logger.error();
         });
@@ -92,6 +93,28 @@ export class CliDisplay {
 
         return this.waitForEnter('Press ENTER to confirm, or CTRL-C to cancel');
     }
+
+    public logFatalError(logger: Logger, e: IContainsAppErrors, debug: boolean) {
+
+        logger.error();
+        logger.error(`Fatal error: ${e.message}`, debug && e.stack);
+        logger.error();
+
+        if (e.$appErrors) {
+            _.forEach(e.$appErrors, (appError: IAppError) => {
+                logger.error(
+                    `Application: ${appError.app.name} \nError: ${appError.error.message}`,
+                    debug && appError.error.stack,
+                );
+                logger.error();
+            });
+        }
+
+        if (e.$invalidApps) {
+            this.showInvalidConfigurations(e.$invalidApps);
+        }
+    }
+
 
     private waitForEnter(message: string) {
         return new Promise((resolve, reject) => {

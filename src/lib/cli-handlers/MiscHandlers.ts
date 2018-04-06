@@ -4,6 +4,7 @@ import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
 import {ScriptRunner} from '../app-config/ScriptRunner';
 import {CliOperations} from '../cli/CliOperations';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
+import {IContainsAppErrors} from '../misc/IAppError';
 
 export class MiscHandlers extends AbstractCliHandlersGroup {
 
@@ -40,8 +41,9 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showValidServiceComponents(appConfigs);
 
         if (appConfigs.invalid.length > 0) {
-            this.display.showInvalidConfigurations(appConfigs);
-            throw new Error('Invalid configuration');
+            const err: IContainsAppErrors = new Error('Invalid configurations found !');
+            err.$invalidApps = appConfigs.invalid;
+            throw err;
         }
         else if (appConfigs.valid.apps.length > 0 || appConfigs.valid.serviceApps.length > 0) {
             this.logger.success('All configurations are valid !');

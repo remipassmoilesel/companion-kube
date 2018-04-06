@@ -4,9 +4,9 @@ import {CliHandlers} from './cli-handlers/CliHandlers';
 import {Help} from './cli/Help';
 import {Logger} from './misc/Logger';
 import {AppType} from './app-config/appConfigTypes';
-import {IApplicationArguments, IEnvironmentArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
-import {logFatalError} from './misc/utils';
+import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
 import {IS_DEBUG} from '../main';
+import {CliDisplay} from './cli/CliDisplay';
 
 const logger = new Logger();
 
@@ -16,6 +16,7 @@ export class Cli {
     private handlers: CliHandlers;
     private api: Api;
     private cliProg: any;
+    private cliDisplay = new CliDisplay();
 
     constructor(mainConfig: IMainConfig, api: Api) {
         this.mainConfig = mainConfig;
@@ -178,11 +179,13 @@ export class Cli {
         this.cliProg.parse(argv);
     }
 
+    // handlers errors are async
     private async catchHandlersErrors(cb: () => Promise<void>): Promise<void> {
         try {
             await cb();
         } catch (e) {
-            logFatalError(logger, e, IS_DEBUG);
+            this.cliDisplay.logFatalError(logger, e, IS_DEBUG);
+            process.exit(1);
         }
     }
 }
