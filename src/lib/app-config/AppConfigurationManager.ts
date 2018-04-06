@@ -18,23 +18,21 @@ export class AppConfigurationManager {
 
     private mainConfig: IMainConfig;
     private ajv: Ajv.Ajv;
-    private appConfigValidator: Ajv.ValidateFunction;
 
     constructor(mainConfig: IMainConfig) {
         this.mainConfig = mainConfig;
         this.ajv = new Ajv({allErrors: true});
         this.ajv.addMetaSchema(json6schema);
-        this.appConfigValidator = this.ajv.compile(new AppConfigSchema().schema);
     }
 
     // FIXME: throw if project name is duplicate
-    public loadAppConfigurationsRecursively(targetDirectory: string): IRecursiveLoadingResult {
+    public async loadAppConfigurationsRecursively(targetDirectory: string): Promise<IRecursiveLoadingResult> {
         const configPaths = this.searchConfigurations(targetDirectory);
         return this.loadAndValidateConfigurations(configPaths);
     }
 
-    public loadApplicationConfiguration(targetConfPath: string): IKubeApplication {
-        const res = this.loadAndValidateConfigurations([targetConfPath]);
+    public async loadApplicationConfiguration(targetConfPath: string): Promise<IKubeApplication> {
+        const res = await this.loadAndValidateConfigurations([targetConfPath]);
         const app = res.valid.apps.concat(res.valid.serviceApps)[0];
         if (!app){
             const err: IContainsAppErrors = new Error('Invalid configuration !');
@@ -44,23 +42,30 @@ export class AppConfigurationManager {
         return app;
     }
 
-    private loadAndValidateConfigurations(configPaths: string[]): IRecursiveLoadingResult {
+    public async validateConfig(config: any) {
+        const appConfigValidator = this.ajv.compile(new AppConfigSchema().schema);
+        const isValid: boolean = await appConfigValidator(config);
+        const errors = appConfigValidator.errors;
+        return { isValid, errors };
+    }
+
+    private async loadAndValidateConfigurations(configPaths: string[]): Promise<IRecursiveLoadingResult> {
         const valid: IKubeApplication[] = [];
         const invalid: IInvalidApplication[] = [];
-        _.forEach(configPaths, (configPath) => {
+        for (const configPath of configPaths){
             const config: IKubeApplication = require(configPath);
-            const validationResult: any = this.appConfigValidator(config);
+            const { isValid, errors } = await this.validateConfig(config);
             this.injectMetadataInConfig(config, configPath);
 
-            if (validationResult) {
+            if (isValid) {
                 valid.push(config);
             } else {
                 invalid.push({
                     app: config,
-                    errors: this.appConfigValidator.errors as Ajv.ErrorObject[],
+                    errors: errors as Ajv.ErrorObject[],
                 });
             }
-        });
+        }
         return {
             valid: this.filterSystemComponents(valid),
             invalid,

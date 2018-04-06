@@ -34,20 +34,20 @@ export class AbstractCliHandlersGroup {
 
         const targetDir = process.cwd();
 
-        const {appNames, appIds} = this.getAppNamesAndIds(args.applications);
+        const {appNames, appIds} = await this.getAppNamesAndIds(args.applications);
 
         let apps: IKubeApplication[];
 
         if (getAllConfig) {
-            apps = this.api.getAllAppsConfigs(targetDir, appType);
+            apps = await this.api.getAllAppsConfigs(targetDir, appType);
         }
 
         else if (!appNames.length && !appIds.length) {
-            apps = [this.api.loadAppConfiguration(targetDir)];
+            apps = [await this.api.loadAppConfiguration(targetDir)];
         }
 
         else {
-            apps = this.getAppConfigs(targetDir, appType, appNames, appIds);
+            apps = await this.getAppConfigs(targetDir, appType, appNames, appIds);
         }
 
         return {apps, envName};
@@ -64,9 +64,9 @@ export class AbstractCliHandlersGroup {
         return {appNames, appIds};
     }
 
-    protected getAppConfigs(targetDir: string, appType: AppType, appNames: string[],
-                            appIds: number[]): IKubeApplication[] {
-        const configurations = this.api.loadAppsConfigurationRecursively(targetDir);
+    protected async getAppConfigs(targetDir: string, appType: AppType, appNames: string[],
+                                  appIds: number[]): Promise<IKubeApplication[]> {
+        const configurations = await this.api.loadAppsConfigurationRecursively(targetDir);
 
         const allApps = configurations.valid.apps.concat(configurations.valid.serviceApps);
 

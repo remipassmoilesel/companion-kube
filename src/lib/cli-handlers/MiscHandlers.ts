@@ -22,7 +22,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         const scriptName = scriptArgs[0];
 
         const scriptRunner = new ScriptRunner();
-        const appConfig: IKubeApplication = this.api.loadAppConfiguration(process.cwd());
+        const appConfig: IKubeApplication = await this.api.loadAppConfiguration(process.cwd());
 
         const script = _.find(appConfig.scripts, (scriptCom, scriptNam) => scriptNam === scriptName);
         if (!script) {
@@ -32,11 +32,11 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         await scriptRunner.run(script, scriptArgs.slice(1));
     }
 
-    public listApplications(args: any, options: any) {
+    public async listApplications(args: any, options: any) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const appConfigs = this.api.loadAppsConfigurationRecursively(process.cwd());
+        const appConfigs = await this.api.loadAppsConfigurationRecursively(process.cwd());
         this.display.showValidApps(appConfigs);
         this.display.showValidServiceComponents(appConfigs);
 

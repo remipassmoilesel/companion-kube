@@ -39,23 +39,23 @@ export class Api {
         await this.dockerBuilder.build(app);
     }
 
-    public loadAppConfiguration(targetDir: string): IKubeApplication {
+    public loadAppConfiguration(targetDir: string): Promise<IKubeApplication> {
         const configPath = path.join(targetDir, 'ck-config.js');
         return this.appConfigMan.loadApplicationConfiguration(configPath);
     }
 
-    public loadAppsConfigurationRecursively(targetDir: string): IRecursiveLoadingResult {
+    public loadAppsConfigurationRecursively(targetDir: string): Promise<IRecursiveLoadingResult> {
         return this.appConfigMan.loadAppConfigurationsRecursively(targetDir);
     }
 
-    public getValidAppConfigurationsAsString(targetDir: string, appType: AppType): string[] {
-        const appConfigs = this.appConfigMan.loadAppConfigurationsRecursively(targetDir);
+    public async getValidAppConfigurationsAsString(targetDir: string, appType: AppType): Promise<string[]> {
+        const appConfigs = await this.appConfigMan.loadAppConfigurationsRecursively(targetDir);
         const inspectedApps = appType === AppType.SERVICE ? appConfigs.valid.serviceApps : appConfigs.valid.apps;
         return _.map(inspectedApps, (conf) => conf.name as string);
     }
 
-    public getAllAppsConfigs(targetDir: string, appType: AppType): IKubeApplication[] {
-        const appConfigs = this.loadAppsConfigurationRecursively(targetDir);
+    public async getAllAppsConfigs(targetDir: string, appType: AppType): Promise<IKubeApplication[]> {
+        const appConfigs = await this.loadAppsConfigurationRecursively(targetDir);
 
         switch (appType) {
             case AppType.BOTH:
