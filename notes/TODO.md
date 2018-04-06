@@ -1,12 +1,8 @@
 # TODO
 
-- Fonctionnalité de templating (helm chart, déploiement, etc ...)
-- Ecarter le dossier _cluster de all dans ck svc deploy all
-- Renommer _service-components ?
-- Renommer defaultEnvironment par defaultNamespace ?
-- Déplacer inventaire cluster dans applications ? Dans le but de versionner un inventaire hors du projet ?
+- Hooks predeploy, postdeploy, + destroy
+- Mettre le dossier _cluster à la racine, et ne pas le déployer avec les services
 - configuration: Helm > repo: string[] -> helm repo add
-- Hook predeploy dans le fichier de configuration js ?
 
 - ~~Création de la command build pour les images docker~~
 - ~~playbook ansible/kubeadm~~
