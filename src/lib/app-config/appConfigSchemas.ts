@@ -53,24 +53,13 @@ export class AppConfigSchema {
                     false,
                 ],
             },
-            helm: {
-                $id: '/properties/helm',
+            scripts: {
+                $id: '/properties/scripts',
                 type: 'object',
-                additionalProperties: false,
+                additionalProperties: true,
                 properties: {
-                    releaseName: {
-                        $id: '/properties/helm/properties/releaseName',
-                        type: 'string',
-                        title: 'The Releasename Schema ',
-                        default: '',
-                        examples: [
-                            'gitlab-dev',
-                        ],
-                    },
+
                 },
-                required: [
-                    'releaseName',
-                ],
             },
             docker: {
                 $id: '/properties/docker',
@@ -121,13 +110,48 @@ export class AppConfigSchema {
                     'buildDirectory',
                 ],
             },
-            scripts: {
-                $id: '/properties/scripts',
+            deployment: {
+                $id: '/properties/deployment',
                 type: 'object',
-                additionalProperties: true,
+                additionalProperties: false,
                 properties: {
-
+                    roots: {
+                        $id: '/properties/deployment/properties/roots',
+                        type: 'array',
+                        items: {
+                            $id: '/properties/deployment/properties/roots/items',
+                            type: 'string',
+                            title: 'The 0th Schema ',
+                            default: '',
+                            examples: [
+                                '.',
+                                './second/dir',
+                            ],
+                        },
+                    },
                 },
+                required: [
+                    'roots',
+                ],
+            },
+            helm: {
+                $id: '/properties/helm',
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                    releaseName: {
+                        $id: '/properties/helm/properties/releaseName',
+                        type: 'string',
+                        title: 'The Releasename Schema ',
+                        default: '',
+                        examples: [
+                            'gitlab-dev',
+                        ],
+                    },
+                },
+                required: [
+                    'releaseName',
+                ],
             },
             ansible: {
                 $id: '/properties/ansible',
@@ -141,8 +165,51 @@ export class AppConfigSchema {
                     },
                 },
             },
+            hooks: {
+                $id: '/properties/hooks',
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                    preDeploy: {
+                        $id: '/properties/hooks/properties/preDeploy',
+                        type: 'string',
+                        title: 'The Predeploy Schema ',
+                        default: '',
+                        examples: [
+                            './pre-deploy.sh',
+                        ],
+                    },
+                    postDeploy: {
+                        $id: '/properties/hooks/properties/postDeploy',
+                        type: 'string',
+                        title: 'The Postdeploy Schema ',
+                        default: '',
+                        examples: [
+                            './post-deploy.sh',
+                        ],
+                    },
+                    preDestroy: {
+                        $id: '/properties/hooks/properties/preDestroy',
+                        type: 'string',
+                        title: 'The Predestroy Schema ',
+                        default: '',
+                        examples: [
+                            './pre-destroy.sh',
+                        ],
+                    },
+                    postDestroy: {
+                        $id: '/properties/hooks/properties/postDestroy',
+                        type: 'string',
+                        title: 'The Postdestroy Schema ',
+                        default: '',
+                        examples: [
+                            './post-destroy.sh',
+                        ],
+                    },
+                },
+            },
         },
-        required: [
+         required: [
             'applicationStructure',
         ],
     };

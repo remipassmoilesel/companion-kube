@@ -12,8 +12,11 @@ export const exampleCkConfig: IKubeApplication = {
     displayOutput: false,
     applicationStructure: 'deployment',
     defaultEnvironment: 'dev',
-    helm: {
-        releaseName: 'gitlab-dev',
+    scripts: {
+        buildDev: './build --fancy application',
+        runDev: './run --without-bug application',
+        helmDebug: 'helm install --dry-run --debug .',
+        kubectlDebug: 'kubectl create -f . --dry-run',
     },
     docker: {
         imageName: 'deployment-with-docker-file',
@@ -21,11 +24,11 @@ export const exampleCkConfig: IKubeApplication = {
         push: true,
         buildDirectory: './path/to/docker/build',
     },
-    scripts: {
-        buildDev: './build --fancy application',
-        runDev: './run --without-bug application',
-        helmDebug: 'helm install --dry-run --debug .',
-        kubectlDebug: 'kubectl create -f . --dry-run',
+    deployment: {
+        roots: ['.', './second/dir'],
+    },
+    helm: {
+        releaseName: 'gitlab-dev',
     },
     ansible: {
         playbooks: {
@@ -40,4 +43,11 @@ export const exampleCkConfig: IKubeApplication = {
             },
         },
     },
+    hooks: {
+        preDeploy: './pre-deploy.sh',
+        postDeploy: './post-deploy.sh',
+        preDestroy: './pre-destroy.sh',
+        postDestroy: './post-destroy.sh',
+    },
+
 };

@@ -1,4 +1,4 @@
-import * as Ajv from 'ajv';
+// .....
 
 // ===================================
 // MAIN
@@ -26,11 +26,11 @@ export interface IKubeApplication {
     displayOutput?: boolean;
     defaultEnvironment?: string;
 
+    scripts?: IScriptGroup;
     docker?: IDockerOptions;
     deployment?: IDeploymentOptions;
     helm?: IHelmOptions;
     ansible?: IAnsibleOptions;
-    scripts?: IScriptGroup;
 
     hooks?: IHooksOptions;
 }
