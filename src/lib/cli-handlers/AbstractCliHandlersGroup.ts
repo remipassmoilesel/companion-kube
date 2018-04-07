@@ -78,7 +78,7 @@ export class AbstractCliHandlersGroup {
         for (const appName of appNames) {
             const app = _.find(allApps, (ap) => ap.name === appName && ap.type === appType);
             if (!app) {
-                throw new Error(`Not found: ${appName}`);
+                throw new Error(`Application not found: ${appName}. Is it a service application ?`);
             }
             toDeploy.push(app);
         }
@@ -86,7 +86,7 @@ export class AbstractCliHandlersGroup {
         for (const appId of appIds) {
             const app = _.find(allApps, (ap) => ap.id === appId && ap.type === appType);
             if (!app) {
-                throw new Error(`Not found: ${appId}`);
+                throw new Error(`Application not found: ${appId}. Is it a service application ?`);
             }
             toDeploy.push(app);
         }
