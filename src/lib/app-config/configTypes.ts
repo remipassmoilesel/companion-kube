@@ -6,11 +6,14 @@ export interface IInvalidApplication {
     errors: Ajv.ErrorObject[];
 }
 
+export interface ISortedAppGroup {
+    apps: IKubeApplication[];
+    serviceApps: IKubeApplication[];
+    clusterApps: IKubeApplication[];
+}
+
 export interface IRecursiveLoadingResult {
-    valid: {
-        apps: IKubeApplication[],
-        serviceApps: IKubeApplication[],
-    };
+    valid: ISortedAppGroup;
     invalid: IInvalidApplication[];
 }
 

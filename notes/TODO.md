@@ -1,9 +1,16 @@
 # TODO
 
-- Hooks predeploy, postdeploy, + destroy
+- Améliorer l'exp utilisateur en ligne de commande:
+    - suggérer des commandes en cas d'erreur
+    - expliquer l'utilisation d'une commande en cas d'erreur
+    - Terminer l'aide
+    - ...
+    
 - Mettre le dossier _cluster à la racine, et ne pas le déployer avec les services
 - configuration: Helm > repo: string[] -> helm repo add
 
+- ~~Hooks predeploy, postdeploy, + destroy~~
+- ~~Améliorer les messages d'erreurs de validation~~
 - ~~Création de la command build pour les images docker~~
 - ~~playbook ansible/kubeadm~~
 - ~~proposer installation dépendances ? kubectl, helm, etc ...~~

@@ -61,10 +61,12 @@ export class Api {
         const appConfigs = await this.loadAppsConfigurationRecursively(targetDir);
 
         switch (appType) {
-            case AppType.BOTH:
+            case AppType.ALL:
                 return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
             case AppType.SERVICE:
                 return appConfigs.valid.serviceApps;
+          case AppType.CLUSTER:
+                return appConfigs.valid.clusterApps;
             default:
                 return appConfigs.valid.apps;
         }

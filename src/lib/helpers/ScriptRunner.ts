@@ -25,6 +25,7 @@ export class ScriptRunner {
                     return;
                 }
                 this.logger.info(`Script exited with code ${code}`);
+                this.logger.info();
                 resolve(code);
             });
 

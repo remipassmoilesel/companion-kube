@@ -54,7 +54,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.BOTH, args, options);
+        const {envName, apps} = await this.selectApps(AppType.ALL, args, options);
         await this.display.showWarningOnApps(CliOperations.BUILD, apps, envName);
 
         await this._buildApplications(apps);

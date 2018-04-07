@@ -35,6 +35,7 @@ export class Cli {
 
         this.registerMiscCommands();
         this.registerServiceCommands();
+        this.registerClusterCommands();
         this.registerAppCommands();
     }
 
@@ -126,6 +127,28 @@ export class Cli {
 
     }
 
+    private registerClusterCommands() {
+
+        this.cliProg
+            .command('cluster deploy', 'Deploy Kubernetes cluster')
+            .help(Help.deployCluster)
+            .action(async (args: any, options: any) => {
+                await this.catchHandlersErrors(async () => {
+                    await this.handlers.appHandlers.deployApplications(AppType.CLUSTER, args, options);
+                });
+            });
+
+        this.cliProg
+            .command('cluster destroy', 'Destroy Kubernetes cluster')
+            .help(Help.destroyCluster)
+            .action(async (args: any, options: any) => {
+                await this.catchHandlersErrors(async () => {
+                    await this.handlers.appHandlers.destroyApplications(AppType.CLUSTER, args, options);
+                });
+            });
+
+    }
+
     public registerAppCommands(){
 
         this.cliProg
@@ -185,4 +208,5 @@ export class Cli {
             process.exit(1);
         }
     }
+
 }

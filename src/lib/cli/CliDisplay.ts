@@ -7,6 +7,7 @@ import {IPrerequisite} from '../prerequisites/prerequisites';
 import {ICliOperation} from './CliOperations';
 import {IInvalidApplication, IRecursiveLoadingResult} from '../app-config/configTypes';
 import {IAppError, IAugmentedError} from '../misc/IAppError';
+import {ILogLevel, LogLevels} from '../misc/LogLevels';
 
 const logger = new Logger();
 
@@ -23,7 +24,7 @@ export class CliDisplay {
 
             logger.info('Available applications:');
             _.forEach(appConfigs.valid.apps, (app) => {
-                logger.info(`  ${app.id} - ${app.name}`);
+                this.showAppAsListItem(LogLevels.info, app);
             });
             logger.info();
 
@@ -39,8 +40,8 @@ export class CliDisplay {
         if (appConfigs.valid.serviceApps.length > 0) {
 
             logger.info('Service components:');
-            _.forEach(appConfigs.valid.serviceApps, (valid, index) => {
-                logger.info(`  ${index} - ${valid.name}`);
+            _.forEach(appConfigs.valid.serviceApps, (app: IKubeApplication) => {
+                this.showAppAsListItem(LogLevels.info, app);
             });
             logger.info();
 
@@ -53,8 +54,6 @@ export class CliDisplay {
 
     public showInvalidConfigurations(invalidApps: IInvalidApplication[]) {
         _.forEach(invalidApps, (invalid) => {
-            const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
-
             logger.error(`Invalid configuration found: ${invalid.app.configPath}`);
             logger.error(`Errors: \n`);
             this.showValidationErrors(invalid.errors);
@@ -88,7 +87,7 @@ export class CliDisplay {
         log();
 
         _.forEach(apps, (app: IKubeApplication) => {
-            log(`\t - #${app.id} - ${app.name}: ${app.applicationStructure}`);
+            this.showAppAsListItem(operation.level, app);
         });
 
         log();
@@ -142,5 +141,13 @@ export class CliDisplay {
             message += `\n\tError: ${err.keyword.toLocaleUpperCase()} - ${err.message}\n`;
             logger.error(message);
         }
+    }
+
+    private showAppAsListItem(level: ILogLevel, app: IKubeApplication) {
+        const log = (message?: string) => {
+            logger.printColor(level, message);
+        };
+        const id = app.id < 10 ? 0 + String(app.id) : String(app.id);
+        log(`\t- #${id} ${app.name}: ${app.applicationStructure}`);
     }
 }

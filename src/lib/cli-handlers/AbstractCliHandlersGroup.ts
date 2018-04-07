@@ -30,7 +30,7 @@ export class AbstractCliHandlersGroup {
 
     protected async selectApps(appType: AppType, args: IApplicationArguments, options?: IEnvironmentOptions) {
         const envName: string | undefined = options && options.e;
-        const getAllConfig = args.applications.indexOf('all') !== -1;
+        const getAllConfig = args.applications && args.applications.indexOf('all') !== -1;
 
         const targetDir = process.cwd();
 
@@ -42,8 +42,12 @@ export class AbstractCliHandlersGroup {
             apps = await this.api.getAllAppsConfigs(targetDir, appType);
         }
 
-        else if (!appNames.length && !appIds.length) {
+        else if (appType !== AppType.CLUSTER && !appNames.length && !appIds.length) {
             apps = [await this.api.loadAppConfiguration(targetDir)];
+        }
+
+        else if (appType === AppType.CLUSTER && !appNames.length && !appIds.length) {
+            apps = await this.api.getAllAppsConfigs(targetDir, appType);
         }
 
         else {

@@ -9,7 +9,8 @@ export type AppStructure = 'scripts' | 'deployment' | 'chart' | 'ansible';
 export enum AppType {
     SERVICE = 'service',
     APPLICATION = 'application',
-    BOTH = 'both',
+    CLUSTER = 'cluster',
+    ALL = 'all',
 }
 
 export interface IKubeApplication {

@@ -6,14 +6,15 @@ import {GlobSync} from 'glob';
 import {AppType, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
 import {IAugmentedError} from '../misc/IAppError';
-import {IInvalidApplication, IRecursiveLoadingResult} from './configTypes';
+import {IInvalidApplication, IRecursiveLoadingResult, ISortedAppGroup} from './configTypes';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
 
 // TODO: add cache per directory
 
 export class AppConfigurationManager {
-    public static SYSTEM_COMP_DIRECTORY = '_service-components';
+    public static CLUSTER_DIRECTORY = '_cluster';
+    public static SERVICE_DIRECTORY = '_service-components';
     private static appCounter = 0;
 
     private mainConfig: IMainConfig;
@@ -67,7 +68,7 @@ export class AppConfigurationManager {
             }
         }
         return {
-            valid: this.filterSystemComponents(valid),
+            valid: this.sortApplications(valid),
             invalid,
         };
     }
@@ -89,18 +90,30 @@ export class AppConfigurationManager {
         app.configPath = configPath;
         app.rootPath = configPathArr.slice(0, configPathArr.length - 1).join(path.sep);
 
-        if (configPath.indexOf(AppConfigurationManager.SYSTEM_COMP_DIRECTORY) !== -1) {
+        if (this.isServiceApp(app)) {
             app.type = AppType.SERVICE;
+        } else if (this.isClusterApp(app)) {
+            app.type = AppType.CLUSTER;
         } else {
             app.type = AppType.APPLICATION;
         }
     }
 
-    private filterSystemComponents(appConfigs: IKubeApplication[]) {
+    private isServiceApp(app: IKubeApplication){
+        return app.configPath.indexOf(AppConfigurationManager.SERVICE_DIRECTORY) !== -1;
+    }
+
+    private isClusterApp(app: IKubeApplication){
+        return app.configPath.indexOf(AppConfigurationManager.CLUSTER_DIRECTORY) !== -1;
+    }
+
+    private sortApplications(appConfigs: IKubeApplication[]): ISortedAppGroup {
         const serviceApps = _.filter(appConfigs, (app: IKubeApplication) => app.type === AppType.SERVICE);
+        const clusterApps = _.filter(appConfigs, (app: IKubeApplication) => app.type === AppType.CLUSTER);
         const apps = _.filter(appConfigs, (app) => app.type === AppType.APPLICATION);
         return {
             serviceApps,
+            clusterApps,
             apps,
         };
     }
