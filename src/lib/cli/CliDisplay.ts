@@ -104,7 +104,7 @@ export class CliDisplay {
         if (e.$appErrors) {
             _.forEach(e.$appErrors, (appError: IAppError) => {
                 logger.error(
-                    `Application: ${appError.app.name} \nError: ${appError.error.message}`,
+                    `Application: ${appError.app.name} \n\tError: ${appError.error.message}`,
                     debug && appError.error.stack,
                 );
                 logger.error();

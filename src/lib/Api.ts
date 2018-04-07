@@ -73,6 +73,7 @@ export class Api {
     }
 
     public async deployApplication(app: IKubeApplication, envName?: string) {
+        this.checkAppType(app);
         await this.hookExecutor.executePreDeployHook(app);
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
         await executor.deploy(app, envName);
@@ -80,10 +81,16 @@ export class Api {
     }
 
     public async destroyApplication(app: IKubeApplication, envName?: string) {
+        this.checkAppType(app);
         await this.hookExecutor.executePreDestroyHook(app);
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
         await executor.destroy(app, envName);
         await this.hookExecutor.executePostDestroyHook(app);
     }
 
+    private checkAppType(app: IKubeApplication) {
+        if (app.applicationStructure === 'scripts'){
+            throw new Error('Script applications cannot be deployed or destroyed.');
+        }
+    }
 }
