@@ -1,4 +1,4 @@
-import {IAppError, IContainsAppErrors} from './IAppError';
+import {IAppError, IAugmentedError} from './IAppError';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 
 export async function walkApplications(apps: IKubeApplication[], cb: (app: IKubeApplication) => Promise<any>) {
@@ -15,7 +15,7 @@ export async function walkApplications(apps: IKubeApplication[], cb: (app: IKube
     }
 
     if (errors.length > 0) {
-        const err: IContainsAppErrors = new Error('The following errors occurred: ');
+        const err: IAugmentedError = new Error('The following errors occurred: ');
         err.$appErrors = errors;
         throw err;
     }

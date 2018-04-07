@@ -6,7 +6,7 @@ export interface IAppError {
     error: Error;
 }
 
-export interface IContainsAppErrors extends Error {
+export interface IAugmentedError extends Error {
     $appErrors?: IAppError[];
     $invalidApps?: IInvalidApplication[];
 }

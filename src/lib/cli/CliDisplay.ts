@@ -1,11 +1,12 @@
 import * as _ from 'lodash';
+import * as ajv from 'ajv';
 import * as readline from 'readline';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
 import {ICliOperation} from './CliOperations';
 import {IInvalidApplication, IRecursiveLoadingResult} from '../app-config/configTypes';
-import {IAppError, IContainsAppErrors} from '../misc/IAppError';
+import {IAppError, IAugmentedError} from '../misc/IAppError';
 
 const logger = new Logger();
 
@@ -55,7 +56,8 @@ export class CliDisplay {
             const errors: string[] = _.map(invalid.errors, (err) => err.message as string);
 
             logger.error(`Invalid configuration found: ${invalid.app.configPath}`);
-            logger.error(`Errors: \n\t${errors.join(', \n\t')}`);
+            logger.error(`Errors: \n`);
+            this.showValidationErrors(invalid.errors);
             logger.error();
         });
         logger.error(`You must fix this configurations before continue`);
@@ -94,7 +96,7 @@ export class CliDisplay {
         return this.waitForEnter('Press ENTER to confirm, or CTRL-C to cancel');
     }
 
-    public logFatalError(logger: Logger, e: IContainsAppErrors, debug: boolean) {
+    public logFatalError(e: IAugmentedError, debug: boolean) {
 
         logger.error();
         logger.error(`Fatal error: ${e.message}`, debug && e.stack);
@@ -134,4 +136,11 @@ export class CliDisplay {
         });
     }
 
+    private showValidationErrors(errors: ajv.ErrorObject[]) {
+        for (const err of errors) {
+            let message = `\tField: ${err.dataPath || 'root'}`;
+            message += `\n\tError: ${err.keyword.toLocaleUpperCase()} - ${err.message}\n`;
+            logger.error(message);
+        }
+    }
 }

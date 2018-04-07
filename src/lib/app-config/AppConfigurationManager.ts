@@ -5,7 +5,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
 import {AppType, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
-import {IContainsAppErrors} from '../misc/IAppError';
+import {IAugmentedError} from '../misc/IAppError';
 import {IInvalidApplication, IRecursiveLoadingResult} from './configTypes';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
@@ -35,7 +35,7 @@ export class AppConfigurationManager {
         const res = await this.loadAndValidateConfigurations([targetConfPath]);
         const app = res.valid.apps.concat(res.valid.serviceApps)[0];
         if (!app){
-            const err: IContainsAppErrors = new Error('Invalid configuration !');
+            const err: IAugmentedError = new Error('Invalid configuration !');
             err.$invalidApps = res.invalid;
             throw err;
         }

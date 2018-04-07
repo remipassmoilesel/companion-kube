@@ -2,13 +2,10 @@ import {IMainConfig} from './main-config/configTypes';
 import {Api} from './Api';
 import {CliHandlers} from './cli-handlers/CliHandlers';
 import {Help} from './cli/Help';
-import {Logger} from './misc/Logger';
 import {AppType} from './app-config/appConfigTypes';
 import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
 import {IS_DEBUG} from '../main';
 import {CliDisplay} from './cli/CliDisplay';
-
-const logger = new Logger();
 
 export class Cli {
 
@@ -184,7 +181,7 @@ export class Cli {
         try {
             await cb();
         } catch (e) {
-            this.cliDisplay.logFatalError(logger, e, IS_DEBUG);
+            this.cliDisplay.logFatalError(e, IS_DEBUG);
             process.exit(1);
         }
     }
