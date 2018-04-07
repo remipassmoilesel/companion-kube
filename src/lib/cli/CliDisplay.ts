@@ -116,6 +116,21 @@ export class CliDisplay {
         }
     }
 
+    public showScripts(appConfig: IKubeApplication) {
+        logger.info();
+        logger.info(`Application: ${appConfig.name}`);
+        logger.info();
+
+        if (!appConfig.scripts){
+            logger.warning('No scripts found here !');
+            return;
+        }
+
+        const keys = Object.keys(appConfig.scripts);
+        for (const scriptName of keys){
+            logger.info(`\t - ${scriptName.padEnd(20)}:   ${appConfig.scripts[scriptName]}`);
+        }
+    }
 
     private waitForEnter(message: string) {
         return new Promise((resolve, reject) => {
@@ -150,4 +165,5 @@ export class CliDisplay {
         const id = app.id < 10 ? 0 + String(app.id) : String(app.id);
         log(`\t- #${id} ${app.name}: ${app.applicationStructure}`);
     }
+
 }

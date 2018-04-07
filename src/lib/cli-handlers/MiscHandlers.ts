@@ -18,11 +18,17 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
+        const appConfig: IKubeApplication = await this.api.loadAppConfiguration(process.cwd());
+
+        if (!args.script || !args.script.length){
+            this.display.showScripts(appConfig);
+            throw new Error('You must specify a script to execute');
+        }
+
         const scriptArgs: string[] = args.script;
         const scriptName = scriptArgs[0];
 
         const scriptRunner = new ScriptRunner();
-        const appConfig: IKubeApplication = await this.api.loadAppConfiguration(process.cwd());
 
         const script = _.find(appConfig.scripts, (scriptCom, scriptNam) => scriptNam === scriptName);
         if (!script) {

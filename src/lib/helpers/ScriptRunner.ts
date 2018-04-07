@@ -24,6 +24,7 @@ export class ScriptRunner {
                     reject(new Error(`Bad code: ${code}`));
                     return;
                 }
+                this.logger.info();
                 this.logger.info(`Script exited with code ${code}`);
                 this.logger.info();
                 resolve(code);

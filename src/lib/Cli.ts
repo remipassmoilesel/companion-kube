@@ -73,7 +73,7 @@ export class Cli {
         this.cliProg
             .command('run', 'Run script from ck-config.js')
             .help(Help.script)
-            .argument('<script...>', 'Script to launch')
+            .argument('[script...]', 'Script to launch')
             .action(async (args: IRunArguments, options: IEnvironmentOptions) => {
                 await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.runScript(args, options);
