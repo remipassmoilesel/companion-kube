@@ -4,11 +4,12 @@ import {IMainConfig} from './main-config/configTypes';
 import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
-import {AppType, IKubeApplication } from './app-config/appConfigTypes';
+import {AppType, IKubeApplication} from './app-config/appConfigTypes';
 import {ExecutorFinder} from './app-executor/ExecutorFinder';
 import {DirectoryInitHelper} from './helpers/DirectoryInitHelper';
 import {DockerBuilder} from './helpers/DockerBuilder';
 import {IRecursiveLoadingResult} from './app-config/configTypes';
+import {HookExecutor} from './helpers/HookExecutor';
 
 const logger = new Logger();
 
@@ -18,6 +19,7 @@ export class Api {
     private appConfigMan: AppConfigurationManager;
     private directoryHelper: DirectoryInitHelper;
     private dockerBuilder: DockerBuilder;
+    private hookExecutor: HookExecutor;
 
     constructor(mainConfig: IMainConfig) {
         this.mainConfig = mainConfig;
@@ -25,6 +27,7 @@ export class Api {
         this.appConfigMan = new AppConfigurationManager(mainConfig);
         this.directoryHelper = new DirectoryInitHelper(mainConfig);
         this.dockerBuilder = new DockerBuilder(mainConfig);
+        this.hookExecutor = new HookExecutor();
     }
 
     public getMissingPrerequisites() {
@@ -68,13 +71,17 @@ export class Api {
     }
 
     public async deployApplication(app: IKubeApplication, envName?: string) {
+        await this.hookExecutor.executePreDeployHook(app);
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
         await executor.deploy(app, envName);
+        await this.hookExecutor.executePostDeployHook(app);
     }
 
     public async destroyApplication(app: IKubeApplication, envName?: string) {
+        await this.hookExecutor.executePreDestroyHook(app);
         const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
         await executor.destroy(app, envName);
+        await this.hookExecutor.executePostDestroyHook(app);
     }
 
 }
