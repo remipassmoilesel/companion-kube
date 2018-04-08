@@ -41,13 +41,14 @@ export class Cli {
 
     public registerMiscCommands() {
 
-        // default command, used to display help and exit with non zero code
+        // default command, used to display help and exit with non zero code if no command is specified
+        // or if command is incorrect
         this.cliProg
             .command('', '')
             .default()
             .action(async (args: any, options: any) => {
                 await this.catchHandlersErrors(async () => {
-                    await this.handlers.miscHandlers.showHelpAndExit();
+                    await this.handlers.miscHandlers.throwErrorForMissingCommand();
                 });
             });
 

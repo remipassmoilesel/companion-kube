@@ -66,7 +66,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         await this._buildApplications(apps);
     }
 
-    public showHelpAndExit() {
+    public throwErrorForMissingCommand() {
         throw new Error('You must specify a command. Try: ck help');
     }
 }
