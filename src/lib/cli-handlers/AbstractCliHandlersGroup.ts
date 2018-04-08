@@ -122,7 +122,7 @@ export class AbstractCliHandlersGroup {
     protected async _buildApplications(apps: IKubeApplication[]) {
         for (const app of apps) {
             if (app.docker) {
-                this.logger.info('Building application ...');
+                this.logger.info(`Building application: ${app.rootPath}`);
                 await this.api.buildApplication(app);
                 this.logger.success('Done !');
             }
