@@ -24,7 +24,7 @@ export class Cli {
 
     public setupAndParse(argv: string[]) {
         this.setupCli();
-        this.parse(argv);
+        return this.parse(argv);
     }
 
     private setupCli() {
@@ -39,12 +39,22 @@ export class Cli {
         this.registerAppCommands();
     }
 
-    public registerMiscCommands(){
+    public registerMiscCommands() {
+
+        // default command, used to display help and exit with non zero code
+        this.cliProg
+            .command('', '')
+            .default()
+            .action(async (args: any, options: any) => {
+                await this.catchHandlersErrors(async () => {
+                    await this.handlers.miscHandlers.showHelpAndExit();
+                });
+            });
 
         this.cliProg
             .command('init', 'Create a full ck-config.js example')
             .help(Help.init)
-            .option('-f', 'Force if file already exists')
+            .option('-f', 'Force creation. If file already exists it will be overwritten.')
             .action(async (args: any, options: any) => {
                 await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.initDirectory(args, options);
@@ -81,7 +91,7 @@ export class Cli {
             });
     }
 
-    public registerServiceCommands(){
+    public registerServiceCommands() {
 
         this.cliProg
             .command('svc deploy', 'Deploy one or more service applications')
@@ -149,7 +159,7 @@ export class Cli {
 
     }
 
-    public registerAppCommands(){
+    public registerAppCommands() {
 
         this.cliProg
             .command('deploy', 'Deploy one or more applications')
@@ -195,7 +205,7 @@ export class Cli {
 
     }
 
-    private parse(argv: string[]) {
+    private async parse(argv: string[]) {
         this.cliProg.parse(argv);
     }
 

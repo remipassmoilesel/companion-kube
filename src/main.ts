@@ -18,7 +18,7 @@ const cliDisplay = new CliDisplay();
 (async () => {
 
     try {
-        cli.setupAndParse(process.argv);
+        await cli.setupAndParse(process.argv);
     } catch (e) {
         cliDisplay.logFatalError(e, IS_DEBUG);
         process.exit(1);
