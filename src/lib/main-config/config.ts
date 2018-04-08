@@ -8,8 +8,10 @@ import {PREREQUISITES} from '../prerequisites/prerequisites';
 const projectRoot = path.resolve(__dirname, '..', '..', '..');
 assert.ok(fs.existsSync(path.resolve(projectRoot, 'package.json')), 'Project root is invalid');
 
+const packageJson = require(path.join(projectRoot, 'package.json'));
+
 export const mainConfig: IMainConfig = {
-    version: '0.1',
+    version: packageJson.version,
     prerequisites: PREREQUISITES,
     projectRoot,
     configSearchIgnore: [

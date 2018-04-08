@@ -19,7 +19,7 @@ export class Cli {
         this.mainConfig = mainConfig;
         this.api = api;
         this.handlers = new CliHandlers(mainConfig, api);
-        this.cliProg = require('caporal');
+        this.cliProg = require('caporal'); // create a new instance of program
     }
 
     public setupAndParse(argv: string[]) {
