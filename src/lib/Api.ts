@@ -10,6 +10,7 @@ import {DirectoryInitHelper} from './helpers/DirectoryInitHelper';
 import {DockerBuilder} from './helpers/DockerBuilder';
 import {IRecursiveLoadingResult} from './app-config/configTypes';
 import {HookExecutor} from './helpers/HookExecutor';
+import {CommandExecutor} from './misc/CommandExecutor';
 
 const logger = new Logger();
 
@@ -20,14 +21,16 @@ export class Api {
     private directoryHelper: DirectoryInitHelper;
     private dockerBuilder: DockerBuilder;
     private hookExecutor: HookExecutor;
+    private commandExec: CommandExecutor;
 
-    constructor(mainConfig: IMainConfig) {
+    constructor(mainConfig: IMainConfig, commandExec: CommandExecutor) {
+        this.commandExec = commandExec;
         this.mainConfig = mainConfig;
         this.prereqChecker = new PrerequisiteChecker(mainConfig);
         this.appConfigMan = new AppConfigurationManager(mainConfig);
         this.directoryHelper = new DirectoryInitHelper(mainConfig);
-        this.dockerBuilder = new DockerBuilder(mainConfig);
-        this.hookExecutor = new HookExecutor();
+        this.dockerBuilder = new DockerBuilder(mainConfig, commandExec);
+        this.hookExecutor = new HookExecutor(commandExec);
     }
 
     public getMissingPrerequisites() {
@@ -75,7 +78,7 @@ export class Api {
     public async deployApplication(app: IKubeApplication, envName?: string) {
         this.checkAppType(app);
         await this.hookExecutor.executePreDeployHook(app);
-        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, this.commandExec, app);
         await executor.deploy(app, envName);
         await this.hookExecutor.executePostDeployHook(app);
     }
@@ -83,7 +86,7 @@ export class Api {
     public async destroyApplication(app: IKubeApplication, envName?: string) {
         this.checkAppType(app);
         await this.hookExecutor.executePreDestroyHook(app);
-        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, app);
+        const executor = ExecutorFinder.getExecutorForApp(this.mainConfig, this.commandExec, app);
         await executor.destroy(app, envName);
         await this.hookExecutor.executePostDestroyHook(app);
     }

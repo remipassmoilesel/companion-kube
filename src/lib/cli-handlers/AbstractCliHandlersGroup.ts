@@ -6,17 +6,20 @@ import {Api} from '../Api';
 import {CliDisplay} from '../cli/CliDisplay';
 import {Logger} from '../misc/Logger';
 import {walkApplications} from '../misc/utils';
+import {CommandExecutor} from '../misc/CommandExecutor';
 
 export class AbstractCliHandlersGroup {
 
     protected logger = new Logger();
     protected mainConfig: IMainConfig;
+    protected commandExec: CommandExecutor;
     protected api: Api;
     protected display: CliDisplay;
 
-    constructor(mainConfig: IMainConfig, api: Api) {
+    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor) {
         this.mainConfig = mainConfig;
         this.api = api;
+        this.commandExec = commandExec;
         this.display = new CliDisplay();
     }
 

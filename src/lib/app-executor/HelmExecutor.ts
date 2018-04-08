@@ -8,10 +8,6 @@ import {Logger} from '../misc/Logger';
 export class HelmExecutor extends AbstractAppExecutor {
     public logger: Logger = new Logger();
 
-    constructor(mainConfig: IMainConfig) {
-        super(mainConfig);
-    }
-
     public isSupported(app: IKubeApplication): boolean {
         return app.applicationStructure === 'chart';
     }

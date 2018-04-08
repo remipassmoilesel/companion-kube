@@ -1,34 +1,44 @@
-import {ScriptRunner} from './ScriptRunner';
 import {IKubeApplication} from '../app-config/appConfigTypes';
+import {CommandExecutor} from '../misc/CommandExecutor';
+import {Logger} from '../misc/Logger';
 
 export class HookExecutor {
+    private logger = new Logger();
+    private commandExec: CommandExecutor;
 
-    public async executePostDestroyHook(app: IKubeApplication) {
+    constructor(commandExec: CommandExecutor) {
+        this.commandExec = commandExec;
+    }
+
+    public executePreDeployHook(app: IKubeApplication) {
         if (app.hooks && app.hooks.preDeploy) {
-            await this.runScript(app, app.hooks.preDeploy);
+            this.logger.info(`Executing pre-deploy hook: ${app.hooks.preDeploy}`);
+            return this.runScript(app, app.hooks.preDeploy);
         }
     }
 
-    public async executePreDestroyHook(app: IKubeApplication) {
-        if (app.hooks && app.hooks.preDestroy) {
-            await this.runScript(app, app.hooks.preDestroy);
-        }
-    }
-
-    public async executePostDeployHook(app: IKubeApplication) {
+    public executePostDeployHook(app: IKubeApplication) {
         if (app.hooks && app.hooks.postDeploy) {
-            await this.runScript(app, app.hooks.postDeploy);
+            this.logger.info(`Executing post-deploy hook: ${app.hooks.preDeploy}`);
+            return this.runScript(app, app.hooks.postDeploy);
         }
     }
 
-    public async executePreDeployHook(app: IKubeApplication) {
+    public executePreDestroyHook(app: IKubeApplication) {
+        if (app.hooks && app.hooks.preDestroy) {
+            this.logger.info(`Executing pre-destroy hook: ${app.hooks.preDeploy}`);
+            return this.runScript(app, app.hooks.preDestroy);
+        }
+    }
+
+    public executePostDestroyHook(app: IKubeApplication) {
         if (app.hooks && app.hooks.preDeploy) {
-            await this.runScript(app, app.hooks.preDeploy);
+            this.logger.info(`Executing post-destroy hook: ${app.hooks.preDeploy}`);
+            return this.runScript(app, app.hooks.preDeploy);
         }
     }
 
-    private async runScript(app: IKubeApplication, script: string) {
-        const scriptRunner = new ScriptRunner();
-        await scriptRunner.run(script, []);
+    private runScript(app: IKubeApplication, script: string) {
+        return this.commandExec.execCommand(script, [], {displayOutput: app.displayOutput});
     }
 }

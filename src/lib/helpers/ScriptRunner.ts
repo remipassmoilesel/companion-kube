@@ -1,39 +1,17 @@
-import {spawn} from 'child_process';
 import {Logger} from '../misc/Logger';
+import {CommandExecutor} from '../misc/CommandExecutor';
 
 export class ScriptRunner {
     private logger = new Logger();
-    private spawn = spawn;
+    private commandExec: CommandExecutor;
 
-    public run(script: string, scriptArgs: string[]) {
-        return new Promise((resolve, reject) => {
+    constructor(commandExec: CommandExecutor) {
+        this.commandExec = commandExec;
+    }
 
-            this.logger.warning(`Running script: ${script}`);
-            const scriptCmd = this.spawn(script, scriptArgs, {shell: true});
-
-            scriptCmd.stdout.on('data', (data: any) => {
-                process.stdout.write(data.toString());
-            });
-
-            scriptCmd.stderr.on('data', (data: any) => {
-                process.stdout.write(data.toString());
-            });
-
-            scriptCmd.on('close', (code: number) => {
-                if (code !== 0) {
-                    reject(new Error(`Bad code: ${code}`));
-                    return;
-                }
-                this.logger.info();
-                this.logger.info(`Script exited with code ${code}`);
-                this.logger.info();
-                resolve(code);
-            });
-
-            scriptCmd.on('error', (err: Error) => {
-                return reject(err);
-            });
-        });
+    public run(script: string, scriptArgs: string[]): Promise<any> {
+        this.logger.warning(`Running script: ${script}`);
+        return this.commandExec.execCommand(script, scriptArgs, {displayOutput: true});
     }
 
 }

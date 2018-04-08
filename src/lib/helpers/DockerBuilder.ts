@@ -1,21 +1,22 @@
 import {Logger} from '../misc/Logger';
 import {IMainConfig} from '../main-config/configTypes';
-import {spawn} from 'child_process';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import * as path from 'path';
+import {CommandExecutor} from '../misc/CommandExecutor';
 
 export class DockerBuilder {
 
-    private spawn = spawn;
     protected logger: Logger = new Logger();
     protected mainConfig: IMainConfig;
+    private commandExec: CommandExecutor;
 
-    constructor(mainConfig: IMainConfig) {
+    constructor(mainConfig: IMainConfig, commandExec: CommandExecutor) {
         this.mainConfig = mainConfig;
+        this.commandExec = commandExec;
     }
 
-    public async build(appConfig: IKubeApplication){
-        if (!appConfig.docker){
+    public async build(appConfig: IKubeApplication) {
+        if (!appConfig.docker) {
             throw new Error(`Application does not have a 'docker' configuration section`);
         }
 
@@ -25,40 +26,13 @@ export class DockerBuilder {
 
         await this.execCommand(dockerBuildCommand);
 
-        if (appConfig.docker.push){
+        if (appConfig.docker.push) {
             const dockerPushCommand = `docker push ${imageName}`;
             await this.execCommand(dockerPushCommand);
         }
     }
 
-    protected execCommand(command: string, options?: any): Promise<any> {
-        this.logger.debug(`Executing command: ${command}`);
-
-
-        return new Promise((resolve, reject) => {
-            const commandExec = this.spawn(command, [], {shell: true});
-
-            commandExec.stdout.on('data', (data: any) => {
-                process.stdout.write(data.toString());
-            });
-
-            commandExec.stderr.on('data', (data: any) => {
-                process.stdout.write(data.toString());
-            });
-
-            commandExec.on('close', (code: number) => {
-                if (code !== 0) {
-                    reject(new Error(`Bad code: ${code}`));
-                    return;
-                }
-                this.logger.info(`Script exited with code ${code}`);
-                resolve(code);
-            });
-
-            commandExec.on('error', (err: Error) => {
-                return reject(err);
-            });
-        });
-
+    protected execCommand(command: string): Promise<any> {
+        return this.commandExec.execCommand(command, [], {displayOutput: true});
     }
 }

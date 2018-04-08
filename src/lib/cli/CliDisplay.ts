@@ -23,6 +23,7 @@ export class CliDisplay {
         if (appConfigs.valid.apps.length > 0) {
 
             logger.info('Available applications:');
+            logger.info();
             _.forEach(appConfigs.valid.apps, (app) => {
                 this.showAppAsListItem(LogLevels.info, app);
             });
@@ -40,6 +41,7 @@ export class CliDisplay {
         if (appConfigs.valid.serviceApps.length > 0) {
 
             logger.info('Service components:');
+            logger.info();
             _.forEach(appConfigs.valid.serviceApps, (app: IKubeApplication) => {
                 this.showAppAsListItem(LogLevels.info, app);
             });

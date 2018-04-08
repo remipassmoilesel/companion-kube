@@ -3,16 +3,17 @@ import {Api} from '../Api';
 import {MiscHandlers} from './MiscHandlers';
 import {AppHandlers} from './AppHandlers';
 import {ClusterHandlers} from './ClusterHandlers';
+import {CommandExecutor} from '../misc/CommandExecutor';
 
 export class CliHandlers {
     public miscHandlers: MiscHandlers;
     public appHandlers: AppHandlers;
     public clusterHandlers: ClusterHandlers;
 
-    constructor(mainConfig: IMainConfig, api: Api) {
-        this.appHandlers = new AppHandlers(mainConfig, api);
-        this.clusterHandlers = new ClusterHandlers(mainConfig, api);
-        this.miscHandlers = new MiscHandlers(mainConfig, api);
+    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor) {
+        this.appHandlers = new AppHandlers(mainConfig, api, commandExec);
+        this.clusterHandlers = new ClusterHandlers(mainConfig, api, commandExec);
+        this.miscHandlers = new MiscHandlers(mainConfig, api, commandExec);
     }
 
 }

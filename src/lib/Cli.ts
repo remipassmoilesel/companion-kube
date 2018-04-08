@@ -6,6 +6,7 @@ import {AppType} from './app-config/appConfigTypes';
 import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
 import {IS_DEBUG} from '../main';
 import {CliDisplay} from './cli/CliDisplay';
+import {CommandExecutor} from './misc/CommandExecutor';
 
 export class Cli {
 
@@ -15,10 +16,10 @@ export class Cli {
     private cliProg: any;
     private cliDisplay = new CliDisplay();
 
-    constructor(mainConfig: IMainConfig, api: Api) {
+    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor) {
         this.mainConfig = mainConfig;
         this.api = api;
-        this.handlers = new CliHandlers(mainConfig, api);
+        this.handlers = new CliHandlers(mainConfig, api, commandExec);
         this.cliProg = require('caporal'); // create a new instance of program
     }
 
