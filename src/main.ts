@@ -9,21 +9,25 @@ import {LogLevels} from './lib/misc/LogLevels';
 import {CliDisplay} from './lib/cli/CliDisplay';
 import {CommandExecutor} from './lib/misc/CommandExecutor';
 
-export const IS_DEBUG = false;
-Logger.setDefaultLogLevel(IS_DEBUG ? LogLevels.debug : LogLevels.info);
-
-const commandExec = new CommandExecutor();
-const api = new Api(mainConfig, commandExec);
-const cli = new Cli(mainConfig, api, commandExec);
-const cliDisplay = new CliDisplay();
-
 (async () => {
 
+    const cliDisplay = new CliDisplay();
+    const onError = (e: Error) => {
+        cliDisplay.logFatalError(e, mainConfig.debug);
+        process.exit(1);
+    };
+
     try {
+
+        Logger.setDefaultLogLevel(mainConfig.debug ? LogLevels.debug : LogLevels.info);
+
+        const commandExec = new CommandExecutor();
+        const api = new Api(mainConfig, commandExec);
+        const cli = new Cli(mainConfig, api, commandExec, onError);
+
         await cli.setupAndParse(process.argv);
     } catch (e) {
-        cliDisplay.logFatalError(e, IS_DEBUG);
-        process.exit(1);
+        onError(e);
     }
 
 })();

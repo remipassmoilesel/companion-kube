@@ -4,9 +4,10 @@ import {CliHandlers} from './cli-handlers/CliHandlers';
 import {Help} from './cli/Help';
 import {AppType} from './app-config/appConfigTypes';
 import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
-import {IS_DEBUG} from '../main';
 import {CliDisplay} from './cli/CliDisplay';
 import {CommandExecutor} from './misc/CommandExecutor';
+
+export type IErrorHandler = (e: Error) => any;
 
 export class Cli {
 
@@ -15,12 +16,14 @@ export class Cli {
     private api: Api;
     private cliProg: any;
     private cliDisplay = new CliDisplay();
+    private onError: IErrorHandler;
 
-    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor) {
+    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor, onError: IErrorHandler) {
         this.mainConfig = mainConfig;
         this.api = api;
         this.handlers = new CliHandlers(mainConfig, api, commandExec);
-        this.cliProg = require('caporal'); // create a new instance of program
+        this.cliProg = require('caporal'); // create a new instance of cli program
+        this.onError = onError;
     }
 
     public setupAndParse(argv: string[]) {
@@ -216,8 +219,7 @@ export class Cli {
         try {
             await cb();
         } catch (e) {
-            this.cliDisplay.logFatalError(e, IS_DEBUG);
-            process.exit(1);
+            this.onError(e);
         }
     }
 

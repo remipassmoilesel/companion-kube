@@ -12,6 +12,7 @@ const packageJson = require(path.join(projectRoot, 'package.json'));
 
 export const mainConfig: IMainConfig = {
     version: packageJson.version,
+    debug: false,
     prerequisites: PREREQUISITES,
     projectRoot,
     configSearchIgnore: [
