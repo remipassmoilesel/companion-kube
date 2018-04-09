@@ -1,5 +1,9 @@
 # companion-kube
 
+[![Build Status](https://travis-ci.org/remipassmoilesel/companion-kube.svg?branch=master])](https://travis-ci.org/remipassmoilesel/companion-kube.svg?branch=master])
+
+[![Coverage Status](https://coveralls.io/repos/github/remipassmoilesel/companion-kube/badge.svg?branch=master)](https://coveralls.io/repos/github/remipassmoilesel/companion-kube/badge.svg?branch=master)
+
 ## Introduction
 
 Mass deployment tool for Kubernetes deployments and charts. 
