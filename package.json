@@ -18,7 +18,7 @@
     "compile": "tsc --pretty && chmod +x ./build/main.js",
     "compile-watch": "tsc --pretty -w",
     "clean-compile": "npm run clean && npm run compile",
-    "coverage": "npm run clean-build && node_modules/.bin/nyc node_modules/.bin/mocha --full-trace --recursive 'build/tests/**/*Spec.js'",
+    "coverage": "npm run clean-compile && node_modules/.bin/nyc node_modules/.bin/mocha --full-trace --recursive 'build/tests/**/*Spec.js'",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "dependencies": {
