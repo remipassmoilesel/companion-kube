@@ -23,7 +23,7 @@ export class HelmExecutor extends AbstractAppExecutor {
         }
 
         const command = `helm delete --purge ${app.helm.releaseName}`;
-        await this.execCommand(command, app.displayOutput);
+        await this.execCommand(command, app.displayCommandsOutput);
     }
 
 
@@ -39,7 +39,7 @@ export class HelmExecutor extends AbstractAppExecutor {
         const install = `helm install ${namespaceOption} ${valuesFilesOptions} `
             + `${app.rootPath} -n ${app.helm.releaseName}`;
 
-        await this.execCommand(install, app.displayOutput);
+        await this.execCommand(install, app.displayCommandsOutput);
 
     }
 
@@ -66,7 +66,7 @@ export class HelmExecutor extends AbstractAppExecutor {
 
     private async buildDependencies(app: IKubeApplication) {
         const dependencyBuild = `helm dependency build`;
-        await this.execCommand(dependencyBuild, app.displayOutput,{cwd: app.rootPath});
+        await this.execCommand(dependencyBuild, app.displayCommandsOutput,{cwd: app.rootPath});
     }
 
 }

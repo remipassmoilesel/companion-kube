@@ -44,10 +44,10 @@ export class AppConfigSchema {
                     'dev',
                 ],
             },
-            displayOutput: {
-                $id: '/properties/displayOutput',
+            displayCommandsOutput: {
+                $id: '/properties/displayCommandsOutput',
                 type: 'boolean',
-                title: 'The Displayoutput Schema ',
+                title: 'The DisplayCommandsOutput Schema ',
                 default: false,
                 examples: [
                     false,

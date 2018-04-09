@@ -32,13 +32,13 @@ export class HookExecutor {
     }
 
     public executePostDestroyHook(app: IKubeApplication) {
-        if (app.hooks && app.hooks.preDeploy) {
+        if (app.hooks && app.hooks.postDestroy) {
             this.logger.info(`Executing post-destroy hook: ${app.hooks.preDeploy}`);
-            return this.runScript(app, app.hooks.preDeploy);
+            return this.runScript(app, app.hooks.postDestroy);
         }
     }
 
     private runScript(app: IKubeApplication, script: string) {
-        return this.commandExec.execCommand(script, [], {displayOutput: app.displayOutput});
+        return this.commandExec.execCommand(script, [], {displayOutput: app.displayCommandsOutput});
     }
 }

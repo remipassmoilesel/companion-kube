@@ -24,7 +24,7 @@ export interface IKubeApplication {
 
     name: string; // default value: configuration directory name
     applicationStructure: AppStructure;
-    displayOutput?: boolean;
+    displayCommandsOutput?: boolean;
     defaultEnvironment?: string;
 
     scripts?: IScriptGroup;

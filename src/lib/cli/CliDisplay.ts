@@ -83,7 +83,7 @@ export class CliDisplay {
         };
 
         log(`Operation: ${operation.name}`);
-        log(`On environment: ${envName || 'unknown'}`);
+        log(`On environment: ${envName || 'not specified'}`);
         log();
         log(`The following applications will be concerned: `);
         log();

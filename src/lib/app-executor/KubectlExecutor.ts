@@ -18,7 +18,7 @@ export class KubectlExecutor extends AbstractAppExecutor {
             const namespaceOption = envName ? `--namespace ${envName}` : '';
             const command = `kubectl create ${namespaceOption} -f ${absolutePath}`;
 
-            await this.execCommand(command, app.displayOutput);
+            await this.execCommand(command, app.displayCommandsOutput);
         }
     }
 
@@ -29,7 +29,7 @@ export class KubectlExecutor extends AbstractAppExecutor {
             const namespaceOption = envName ? `--namespace ${envName}` : '';
             const command = `kubectl delete ${namespaceOption} -f ${absolutePath}`;
 
-            await this.execCommand(command, app.displayOutput);
+            await this.execCommand(command, app.displayCommandsOutput);
         }
     }
 

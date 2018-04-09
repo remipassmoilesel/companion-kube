@@ -97,6 +97,10 @@ export class AppConfigurationManager {
         } else {
             app.type = AppType.APPLICATION;
         }
+
+        if (typeof app.displayCommandsOutput !== 'boolean'){
+            app.displayCommandsOutput = true;
+        }
     }
 
     private isServiceApp(app: IKubeApplication){
