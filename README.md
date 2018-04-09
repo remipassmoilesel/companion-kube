@@ -48,3 +48,4 @@ Application is available as `companion-kube` or `ck`.
     [~] Destroying simple-deployment                    
     [+] Finished !                                      
                                                         
+
