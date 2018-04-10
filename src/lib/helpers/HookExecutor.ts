@@ -39,6 +39,7 @@ export class HookExecutor {
     }
 
     private runScript(app: IKubeApplication, script: string) {
-        return this.commandExec.execCommand(script, [], {displayOutput: app.displayCommandsOutput});
+        return this.commandExec.execCommand(script, [], {displayOutput: app.displayCommandsOutput},
+            {cwd: app.rootPath});
     }
 }
