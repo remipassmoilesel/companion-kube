@@ -5,6 +5,6 @@ module.exports = {
         releaseName: 'dev'
     },
     scripts: {
-        debug: 'helm install --dry-run --debug .'
+        debug: 'helm install --dry-run --debug . | tee helm-debug.log'
     }
 };
