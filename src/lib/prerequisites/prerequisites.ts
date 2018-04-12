@@ -7,18 +7,18 @@ export interface IPrerequisite {
 export const PREREQUISITES: IPrerequisite[] = [
     {
         command: 'docker',
-        installScript: 'scripts/prereq/install-docker.sh',
+        installScript: 'scripts/prerequisites/install-docker.sh',
     },
     {
         command: 'kubectl',
-        installScript: 'scripts/prereq/install-kubectl.sh',
+        installScript: 'scripts/prerequisites/install-kubectl.sh',
     },
     {
         command: 'helm',
-        installScript: 'scripts/prereq/install-helm.sh',
+        installScript: 'scripts/prerequisites/install-helm.sh',
     },
     {
         command: 'ansible',
-        installScript: 'scripts/prereq/install-ansible.sh',
+        installScript: 'scripts/prerequisites/install-ansible.sh',
     },
 ];

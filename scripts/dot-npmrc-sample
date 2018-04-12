@@ -1,0 +1,4 @@
+# Should be moved to /home/user in order to set another npm package root.
+# Can be usefull to avoid sudo usage
+
+prefix = /home/user/npm-root
