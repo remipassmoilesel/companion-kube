@@ -1,4 +1,4 @@
-import {IEnvironmentArguments} from '../cli/cliTypes';
+import {IEnvironmentArguments} from '../cliTypes';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
 
 export class ClusterHandlers extends AbstractCliHandlersGroup {

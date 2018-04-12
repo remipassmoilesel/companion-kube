@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
-import {IApplicationArguments, IEnvironmentOptions} from '../cli/cliTypes';
-import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
-import {IMainConfig} from '../main-config/configTypes';
-import {Api} from '../Api';
-import {CliDisplay} from '../cli/CliDisplay';
-import {Logger} from '../misc/Logger';
-import {walkApplications} from '../misc/utils';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {IApplicationArguments, IEnvironmentOptions} from '../cliTypes';
+import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
+import {IMainConfig} from '../../main-config/configTypes';
+import {Api} from '../../Api';
+import {CliDisplay} from '../CliDisplay';
+import {Logger} from '../../misc/Logger';
+import {walkApplications} from '../../misc/utils';
+import {CommandExecutor} from '../../misc/CommandExecutor';
 
 export class AbstractCliHandlersGroup {
 

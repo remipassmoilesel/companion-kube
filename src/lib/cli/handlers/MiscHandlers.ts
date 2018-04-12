@@ -1,10 +1,10 @@
 import * as _ from 'lodash';
-import {IApplicationArguments, IEnvironmentOptions, IInitOptions, IRunArguments} from '../cli/cliTypes';
-import {AppType, IKubeApplication} from '../app-config/appConfigTypes';
-import {ScriptRunner} from '../helpers/ScriptRunner';
-import {CliOperations} from '../cli/CliOperations';
+import {IApplicationArguments, IEnvironmentOptions, IInitOptions, IRunArguments} from '../cliTypes';
+import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
+import {ScriptRunner} from '../../helpers/ScriptRunner';
+import {CliOperations} from '../CliOperations';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
-import {IAugmentedError} from '../misc/IAppError';
+import {IAugmentedError} from '../../misc/IAppError';
 
 export class MiscHandlers extends AbstractCliHandlersGroup {
 

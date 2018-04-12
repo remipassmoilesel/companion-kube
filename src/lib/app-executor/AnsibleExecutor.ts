@@ -6,8 +6,14 @@ import {IAnsibleOptions, IAnsiblePlaybook, IKubeApplication} from '../app-config
 import {Logger} from '../misc/Logger';
 
 export class AnsibleExecutor extends AbstractAppExecutor {
+
+    /**
+     * When used in a playbook path, allow to make path relative to this project root
+     * @type {string}
+     */
+    private readonly RELATIVE_PATH_PREFIX: string = '#/';
     private readonly INVENTORY_FILE_NAME = 'inventory-%env.cfg';
-    public logger: Logger = new Logger();
+    protected logger: Logger = new Logger();
 
     public isSupported(app: IKubeApplication): boolean {
         return app.applicationStructure === 'ansible';
@@ -41,10 +47,9 @@ export class AnsibleExecutor extends AbstractAppExecutor {
             return playbookName === name;
         })[0];
         if (!playbook) {
-            throw new Error('A playbook with name ' + playbookName + ' must exists. Please define ' +
-                'it in ck-config.js.');
+            throw new Error(`A playbook with name ${playbookName} must exists. Please define it in ck-config.js.`);
         }
-        if (playbook.path.startsWith('#/')) {
+        if (playbook.path.startsWith(this.RELATIVE_PATH_PREFIX)) {
             const withoutPrefix = playbook.path.substring(2);
             return path.join(this.mainConfig.projectRoot, withoutPrefix);
         }

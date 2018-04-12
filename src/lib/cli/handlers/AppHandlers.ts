@@ -1,6 +1,6 @@
-import {IApplicationArguments, IEnvironmentOptions} from '../cli/cliTypes';
-import {AppType} from '../app-config/appConfigTypes';
-import {CliOperations} from '../cli/CliOperations';
+import {IApplicationArguments, IEnvironmentOptions} from '../cliTypes';
+import {AppType} from '../../app-config/appConfigTypes';
+import {CliOperations} from '../CliOperations';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
 
 export class AppHandlers extends AbstractCliHandlersGroup {

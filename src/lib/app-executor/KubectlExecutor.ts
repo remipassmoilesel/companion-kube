@@ -5,7 +5,7 @@ import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 
 export class KubectlExecutor extends AbstractAppExecutor {
-    public logger: Logger = new Logger();
+    protected logger: Logger = new Logger();
 
     public isSupported(app: IKubeApplication): boolean {
         return app.applicationStructure === 'deployment';

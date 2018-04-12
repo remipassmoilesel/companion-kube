@@ -1,12 +1,11 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import {IMainConfig} from '../main-config/configTypes';
 import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {Logger} from '../misc/Logger';
 
 export class HelmExecutor extends AbstractAppExecutor {
-    public logger: Logger = new Logger();
+    protected logger: Logger = new Logger();
 
     public isSupported(app: IKubeApplication): boolean {
         return app.applicationStructure === 'chart';

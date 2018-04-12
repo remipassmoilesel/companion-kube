@@ -52,9 +52,6 @@ Complete example:
           "destroy": {
             "path": "#/scripts/kubespray/reset.yml"
           },
-          "scale": {
-            "path": "#/scripts/kubespray/scale.yml"
-          }
         }
       },
       "hooks": {                                        // Hook run on specific lifecycle steps

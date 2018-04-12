@@ -3,7 +3,7 @@
 git submodule init
 git submodule update
 
-./scripts/prerequisites/kubespray-requirements.sh
+./scripts/prerequisites/install-kubespray-requirements.sh
 
 npm install
 npm run clean-compile

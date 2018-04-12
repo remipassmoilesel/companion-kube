@@ -1,9 +1,9 @@
-import {IMainConfig} from '../main-config/configTypes';
-import {Api} from '../Api';
+import {IMainConfig} from '../../main-config/configTypes';
+import {Api} from '../../Api';
 import {MiscHandlers} from './MiscHandlers';
 import {AppHandlers} from './AppHandlers';
 import {ClusterHandlers} from './ClusterHandlers';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {CommandExecutor} from '../../misc/CommandExecutor';
 
 export class CliHandlers {
     public miscHandlers: MiscHandlers;

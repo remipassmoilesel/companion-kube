@@ -1,6 +1,6 @@
 import {IMainConfig} from './main-config/configTypes';
 import {Api} from './Api';
-import {CliHandlers} from './cli-handlers/CliHandlers';
+import {CliHandlers} from './cli/handlers/CliHandlers';
 import {Help} from './cli/Help';
 import {AppType} from './app-config/appConfigTypes';
 import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
