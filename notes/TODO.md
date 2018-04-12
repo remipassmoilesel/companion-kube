@@ -1,12 +1,13 @@
 # TODO
 
+- Déplacer le push-image.yaml dans le dossier script, pour pouvoir l'utiliser avec toutes les images Docker
+
 - Améliorer l'exp utilisateur en ligne de commande:
     - suggérer des commandes en cas d'erreur
     - expliquer l'utilisation d'une commande en cas d'erreur
     - Terminer l'aide
     - ...
     
-- Mettre le dossier _cluster à la racine, et ne pas le déployer avec les services
 - configuration: Helm > repo: string[] -> helm repo add
 
 - ~~Hooks predeploy, postdeploy, + destroy~~

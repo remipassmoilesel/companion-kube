@@ -8,7 +8,7 @@ export const exampleCkConfig: IKubeApplication = {
     rootPath: '/path/to/app',
     // end
 
-    name: 'config',
+    name: 'application-name',
     displayCommandsOutput: true,
     applicationStructure: 'deployment',
     defaultEnvironment: 'dev',
