@@ -13,6 +13,7 @@ Applications to manage must be described using a ck-config.js file.
     public static list = 'List available applications which can be handled by Companion-Kube in current directory. ' +
         'Applications can be service applications or normal applications.';
     public static build = 'Build Docker images of applications.';
+    public static push = 'Push previously built image.';
     public static script = 'Run script from ck-config.js';
 
     public static deploy = 'Deploy specified applications. You can name applications by id or by name. ' +

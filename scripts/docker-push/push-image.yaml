@@ -1,12 +1,12 @@
-#--extra-vars "version=1.23.45 other_variable=foo"
 
 - hosts: kube-node
 
   vars:
 
+    # TODO: remove and pass them from command line
+    # TODO: with --extra-vars "version=1.23.45 other_variable=foo"
     - image_name: remipassmoilesel-traefik
     - tag: v1.6-alpine
-    - user: remipassmoilesel
     - local_archive_path: "{{ playbook_dir }}/{{ image_name }}:{{ tag }}.tar"
     - remote_archive_path: "/tmp/{{ image_name }}:{{ tag }}.tar"
     - docker_build_dir: "/tmp/{{ image_name }}:{{ tag }}.tar"

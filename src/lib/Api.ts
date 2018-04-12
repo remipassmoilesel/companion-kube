@@ -15,6 +15,7 @@ import {CommandExecutor} from './misc/CommandExecutor';
 const logger = new Logger();
 
 export class Api {
+
     private mainConfig: IMainConfig;
     private prereqChecker: PrerequisiteChecker;
     private appConfigMan: AppConfigurationManager;
@@ -43,6 +44,10 @@ export class Api {
 
     public async buildApplication(app: IKubeApplication) {
         await this.dockerBuilder.build(app);
+    }
+
+    public async pushApplication(app: IKubeApplication) {
+        await this.dockerBuilder.push(app);
     }
 
     public loadAppConfiguration(targetDir: string): Promise<IKubeApplication> {

@@ -18,6 +18,11 @@ export class CliOperations {
         level: LogLevels.info,
     };
 
+    public static PUSH: ICliOperation = {
+        name: 'PUSH',
+        level: LogLevels.info,
+    };
+
     public static REDEPLOY: ICliOperation = {
         name: 'REDEPLOY',
         level: LogLevels.warning,

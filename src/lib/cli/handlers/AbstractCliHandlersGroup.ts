@@ -129,6 +129,16 @@ export class AbstractCliHandlersGroup {
         }
     }
 
+    protected async _pushApplications(apps: IKubeApplication[]) {
+        for (const app of apps) {
+            if (app.docker) {
+                this.logger.info(`Pushing image for project: ${app.rootPath}`);
+                await this.api.pushApplication(app);
+                this.logger.success('Done !');
+            }
+        }
+    }
+
     protected wait(timeSec: number): Promise<any> {
         const timeMs = timeSec * 1000;
 

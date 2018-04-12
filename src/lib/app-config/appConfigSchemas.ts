@@ -93,6 +93,15 @@ export class AppConfigSchema {
                             true,
                         ],
                     },
+                    pushBySSH: {
+                        $id: '/properties/docker/properties/pushBySSH',
+                        type: 'boolean',
+                        title: 'The PushBySSH Schema ',
+                        default: false,
+                        examples: [
+                            true,
+                        ],
+                    },
                     buildDirectory: {
                         $id: '/properties/docker/properties/buildDirectory',
                         type: 'string',

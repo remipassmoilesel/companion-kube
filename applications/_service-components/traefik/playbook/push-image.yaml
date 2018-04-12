@@ -4,7 +4,6 @@
 
     - image_name: remipassmoilesel-traefik
     - tag: v1.6-alpine
-    - user: remipassmoilesel
     - local_archive_path: "{{ playbook_dir }}/{{ image_name }}:{{ tag }}.tar"
     - remote_archive_path: "/tmp/{{ image_name }}:{{ tag }}.tar"
 
