@@ -52,7 +52,7 @@ export class DockerBuilder {
         // TODO: retrieve inventory from _cluster,
         // TODO: get playbook variables from config
         // TODO: launch ansible
-        throw new Error('Method not implemented.');
+        throw new Error('Push image by ssh will be implemented soon !');
     }
 
     private getImageNameFromApp(dockerOptions: IDockerOptions): string {
