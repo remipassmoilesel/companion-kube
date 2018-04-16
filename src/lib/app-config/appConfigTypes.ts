@@ -89,6 +89,8 @@ export interface IScriptGroup {
 // ===================================
 
 export interface IHooksOptions {
+    preBuild?: string;
+
     preDeploy?: string;
     postDeploy?: string;
 

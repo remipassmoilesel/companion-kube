@@ -43,6 +43,7 @@ export class Api {
     }
 
     public async buildApplication(app: IKubeApplication) {
+        await this.hookExecutor.executePreBuildHook(app);
         await this.dockerBuilder.build(app);
     }
 

@@ -179,6 +179,15 @@ export class AppConfigSchema {
                 type: 'object',
                 additionalProperties: false,
                 properties: {
+                    preBuild: {
+                        $id: '/properties/hooks/properties/preBuild',
+                        type: 'string',
+                        title: 'The Prebuild Schema ',
+                        default: '',
+                        examples: [
+                            './pre-build.sh',
+                        ],
+                    },
                     preDeploy: {
                         $id: '/properties/hooks/properties/preDeploy',
                         type: 'string',

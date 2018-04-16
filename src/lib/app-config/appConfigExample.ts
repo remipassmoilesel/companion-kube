@@ -45,6 +45,7 @@ export const exampleCkConfig: IKubeApplication = {
         },
     },
     hooks: {
+        preBuild: './pre-build.sh',
         preDeploy: './pre-deploy.sh',
         postDeploy: './post-deploy.sh',
         preDestroy: './pre-destroy.sh',
