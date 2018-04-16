@@ -64,8 +64,8 @@ export class AbstractCliHandlersGroup {
         const appNames: string[] = [];
         const appIds: number[] = [];
 
-        _.forEach(args, (app: any) => {
-            isNaN(app) ? appNames.push(app) : appIds.push(app.id);
+        _.forEach(args, (app: string) => {
+            isNaN((app as any)) ? appNames.push(String(app)) : appIds.push(Number(app));
         });
 
         return {appNames, appIds};
