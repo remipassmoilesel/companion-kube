@@ -1,0 +1,179 @@
+[debug] Created tunnel using local port: '36859'
+
+[debug] SERVER: "127.0.0.1:36859"
+
+[debug] Original chart version: ""
+[debug] CHART PATH: /home/remipassmoilesel/projects/companion-kube/applications/_service-components/heapster
+
+NAME:   trendsetting-mongoose
+REVISION: 1
+RELEASED: Thu Apr 19 20:43:52 2018
+CHART: heapster-0.2.9
+USER-SUPPLIED VALUES:
+{}
+
+COMPUTED VALUES:
+annotations: {}
+command:
+- /heapster
+- --source=kubernetes.summary_api:''
+env: []
+eventer:
+  enabled: false
+  flags:
+  - --source=kubernetes:https://kubernetes.default
+  - --sink=log
+  resizer:
+    enabled: true
+    flags:
+    - --cpu=150m
+    - --extra-cpu=10m
+    - --memory=200Mi
+    - --extra-memory=6Mi
+    - --threshold=5
+    - --poll-period=300000
+    resources: {}
+  resources: {}
+image:
+  pullPolicy: IfNotPresent
+  repository: k8s.gcr.io/heapster
+  tag: v1.3.0
+labels: {}
+nodeSelector: {}
+podAnnotations: {}
+rbac:
+  create: false
+  serviceAccountName: default
+replicaCount: 1
+resizer:
+  enabled: true
+  flags:
+  - --cpu=150m
+  - --extra-cpu=10m
+  - --memory=200Mi
+  - --extra-memory=6Mi
+  - --threshold=5
+  - --poll-period=300000
+  image:
+    pullPolicy: IfNotPresent
+    repository: k8s.gcr.io/addon-resizer
+    tag: 1.7
+  resources:
+    limits:
+      cpu: 50m
+      memory: 90Mi
+    requests:
+      cpu: 50m
+      memory: 90Mi
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+service:
+  externalPort: 8082
+  internalPort: 8082
+  labels: null
+  type: ClusterIP
+
+HOOKS:
+MANIFEST:
+
+---
+# Source: heapster/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: heapster
+  labels:
+    chart: "heapster-0.2.9"
+    app: trendsetting-mongoose-heapster
+    heritage: "Tiller"
+    release: "trendsetting-mongoose"    
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8082
+    targetPort: 8082
+    protocol: TCP
+  selector:
+    app: trendsetting-mongoose-heapster
+---
+# Source: heapster/templates/deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: trendsetting-mongoose-heapster
+  annotations:
+    {}
+    
+  labels:
+    chart: "heapster-0.2.9"
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        {}
+        
+      labels:
+        app: trendsetting-mongoose-heapster
+    spec:
+      serviceAccountName: "default"
+      containers:
+      - name: heapster
+        image: "k8s.gcr.io/heapster:v1.3.0"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8082
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8082
+          initialDelaySeconds: 180
+          timeoutSeconds: 5
+        resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            
+        command:
+          - "/heapster"
+          - "--source=kubernetes.summary_api:''"
+
+      - name: heapster-nanny
+        
+        image: "k8s.gcr.io/addon-resizer:1.7"
+        imagePullPolicy: IfNotPresent
+        resources:
+            limits:
+              cpu: 50m
+              memory: 90Mi
+            requests:
+              cpu: 50m
+              memory: 90Mi
+            
+        env:
+          - name: MY_POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: MY_POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        command:
+          - "/pod_nanny"
+          - "--deployment=trendsetting-mongoose-heapster"
+          - "--container=heapster"
+          - "--cpu=150m"
+          - "--extra-cpu=10m"
+          - "--memory=200Mi"
+          - "--extra-memory=6Mi"
+          - "--threshold=5"
+          - "--poll-period=300000"
