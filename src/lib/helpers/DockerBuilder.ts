@@ -36,23 +36,12 @@ export class DockerBuilder {
             await this.pushImageToRegistry(appConfig.docker);
         }
 
-        if (appConfig.docker.pushBySSH) {
-            await this.pushImageBySSH(appConfig);
-        }
-
     }
 
     private async pushImageToRegistry(dockerOptions: IDockerOptions) {
         const imageName = this.getImageNameFromApp(dockerOptions);
         const dockerPushCommand = `docker push ${imageName}`;
         await this.execCommand(dockerPushCommand);
-    }
-
-    private pushImageBySSH(appConfig: IKubeApplication): any {
-        // TODO: retrieve inventory from _cluster,
-        // TODO: get playbook variables from config
-        // TODO: launch ansible
-        throw new Error('Push image by ssh will be implemented soon !');
     }
 
     private getImageNameFromApp(dockerOptions: IDockerOptions): string {

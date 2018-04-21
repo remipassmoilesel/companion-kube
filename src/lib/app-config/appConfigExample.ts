@@ -22,7 +22,6 @@ export const exampleCkConfig: IKubeApplication = {
         imageName: 'deployment-with-docker-file',
         tag: '0.1',
         push: true,
-        pushBySSH: true,
         buildDirectory: './path/to/docker/build',
     },
     deployment: {

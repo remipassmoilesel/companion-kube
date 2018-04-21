@@ -44,7 +44,6 @@ export interface IDockerOptions {
     imageName: string;
     tag: string;
     push: boolean;
-    pushBySSH: boolean;
     buildDirectory: string;
 }
 
