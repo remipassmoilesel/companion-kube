@@ -4,7 +4,7 @@
 
 [![Coverage Status](https://coveralls.io/repos/github/remipassmoilesel/companion-kube/badge.svg?branch=master)](https://coveralls.io/repos/github/remipassmoilesel/companion-kube/badge.svg?branch=master)
 
-**⚠️⚠️⚠ This application is experimental and under construction ⚠️⚠️⚠***️️ 
+**⚠️ This application is experimental and under construction ⚠️**️️ 
 
 ## Introduction
 
