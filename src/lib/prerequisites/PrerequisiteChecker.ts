@@ -3,22 +3,24 @@ import {execSync} from 'child_process';
 import {IMainConfig} from '../main-config/configTypes';
 import {Logger} from '../misc/Logger';
 import {IPrerequisite} from './prerequisites';
+import {CommandExecutor} from '../misc/CommandExecutor';
 
 const logger = new Logger();
 
 export class PrerequisiteChecker {
     private mainConfig: IMainConfig;
-    private execSync = execSync;
+    private commandExec: CommandExecutor;
 
-    constructor(mainConfig: IMainConfig) {
+    constructor(mainConfig: IMainConfig, commandExec: CommandExecutor) {
         this.mainConfig = mainConfig;
+        this.commandExec = commandExec;
     }
 
     public getMissingPrerequisites(): IPrerequisite[] {
         const missing: IPrerequisite[] = [];
         _.forEach(this.mainConfig.prerequisites, (prereq) => {
             try {
-                this.execSync(`which ${prereq.command}`, {stdio: 'ignore'});
+                return this.commandExec.execCommand(`which ${prereq.command}`, [], {displayOutput: false});
             } catch (e) {
                 missing.push(prereq);
             }

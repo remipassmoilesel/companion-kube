@@ -5,10 +5,11 @@ import {execSync} from 'child_process';
 import {IPrerequisite} from '../../lib/prerequisites/prerequisites';
 import {PrerequisiteChecker} from '../../lib/prerequisites/PrerequisiteChecker';
 import {IMainConfig} from '../../lib/main-config/configTypes';
+import {CommandExecutor} from '../../lib/misc/CommandExecutor';
 
 const assert = chai.assert;
 
-describe(' > PrerequisitesChecker', function() {
+describe(' > PrerequisitesChecker', function () {
     this.timeout(2000);
 
     const fakePrereq: IPrerequisite[] = [
@@ -26,8 +27,10 @@ describe(' > PrerequisitesChecker', function() {
     let execStub: SinonStub;
 
     beforeEach(() => {
-        prereqChecker = new PrerequisiteChecker(testConfig);
-        execStub = sinon.stub(prereqChecker as any, 'execSync');
+        const commandExec = new CommandExecutor();
+        execStub = sinon.stub(commandExec, 'execCommand');
+
+        prereqChecker = new PrerequisiteChecker(testConfig, commandExec);
     });
 
     afterEach(() => {

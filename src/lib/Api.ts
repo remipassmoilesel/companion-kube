@@ -24,7 +24,7 @@ export class Api {
     constructor(mainConfig: IMainConfig, commandExec: CommandExecutor) {
         this.commandExec = commandExec;
         this.mainConfig = mainConfig;
-        this.prereqChecker = new PrerequisiteChecker(mainConfig);
+        this.prereqChecker = new PrerequisiteChecker(mainConfig, commandExec);
         this.appConfigMan = new AppConfigurationManager(mainConfig);
         this.directoryHelper = new DirectoryInitHelper(mainConfig);
         this.dockerBuilder = new DockerBuilder(mainConfig, commandExec);
