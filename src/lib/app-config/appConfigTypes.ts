@@ -67,12 +67,14 @@ export interface IHelmOptions {
 // ANSIBLE
 // ===================================
 
-export interface IAnsiblePlaybook {
-    path: string;
-}
+export type DEFAULT_PLAYBOOKS = 'deploy' | 'destroy';
 
 export interface IAnsibleOptions {
-    playbooks: { [s: string]: IAnsiblePlaybook };
+    inventoryDirectory: string;
+    playbooks: {
+        deploy: string,
+        destroy: string,
+    };
 }
 
 // ===================================

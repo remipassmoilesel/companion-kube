@@ -31,16 +31,10 @@ export const exampleCkConfig: IKubeApplication = {
         releaseName: 'gitlab-dev',
     },
     ansible: {
+        inventoryDirectory: './path/to/dir/',
         playbooks: {
-            deploy: {
-                path: '#/scripts/kubespray/cluster.yml',
-            },
-            destroy: {
-                path: '#/scripts/kubespray/reset.yml',
-            },
-            scale: {
-                path: '#/scripts/kubespray/scale.yml',
-            },
+            deploy: '#/scripts/kubespray/cluster.yml',
+            destroy: '#/scripts/kubespray/reset.yml',
         },
     },
     hooks: {

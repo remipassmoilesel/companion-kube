@@ -1,4 +1,3 @@
-
 export class AppConfigSchema {
 
     // See https://jsonschema.net
@@ -57,9 +56,7 @@ export class AppConfigSchema {
                 $id: '/properties/scripts',
                 type: 'object',
                 additionalProperties: true,
-                properties: {
-
-                },
+                properties: {},
             },
             docker: {
                 $id: '/properties/docker',
@@ -157,13 +154,33 @@ export class AppConfigSchema {
                 $id: '/properties/ansible',
                 type: 'object',
                 properties: {
+                    inventoryDirectory: {
+                        $id: '/properties/ansible/properties/inventoryDirectory',
+                        type: 'string',
+                    },
                     playbooks: {
                         $id: '/properties/ansible/properties/playbooks',
                         type: 'object',
-                        additionalProperties: true,
-                        properties: {},
+                        additionalProperties: false,
+                        properties: {
+                            deploy: {
+                                $id: '/properties/ansible/properties/playbooks/deploy',
+                                type: 'string',
+                            },
+                            destroy: {
+                                $id: '/properties/ansible/properties/playbooks/destroy',
+                                type: 'string',
+                            },
+                        },
+                        required: [
+                            'deploy',
+                            'destroy',
+                        ],
                     },
                 },
+                required: [
+                    'playbooks',
+                ],
             },
             hooks: {
                 $id: '/properties/hooks',
@@ -218,7 +235,7 @@ export class AppConfigSchema {
                 },
             },
         },
-         required: [
+        required: [
             'applicationStructure',
         ],
     };
