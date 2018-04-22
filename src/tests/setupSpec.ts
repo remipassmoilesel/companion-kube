@@ -1,9 +1,13 @@
 import * as path from 'path';
 import * as assert from 'assert';
 import * as fs from 'fs';
+import {Logger} from '../lib/misc/Logger';
+import {LogLevels} from '../lib/misc/LogLevels';
 
 const sourceMapSupport = require('source-map-support');
 sourceMapSupport.install();
+
+Logger.setLogLevel(LogLevels.error);
 
 export const TEST_DATA_DIR = path.join(__dirname, '../../src/tests/test-data');
 export const INVALID_CONF_DIR = path.join(TEST_DATA_DIR, 'invalid');

@@ -19,7 +19,7 @@ import {CommandExecutor} from './lib/misc/CommandExecutor';
 
     try {
 
-        Logger.setDefaultLogLevel(mainConfig.debug ? LogLevels.debug : LogLevels.info);
+        Logger.setLogLevel(mainConfig.debug ? LogLevels.debug : LogLevels.info);
 
         const commandExec = new CommandExecutor();
         const api = new Api(mainConfig, commandExec);

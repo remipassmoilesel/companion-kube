@@ -1,4 +1,3 @@
-
 import {IPrerequisite} from '../prerequisites/prerequisites';
 
 export interface IMainConfig {

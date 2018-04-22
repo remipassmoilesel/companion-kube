@@ -2,26 +2,11 @@ import {ILogLevel, LogLevels} from './LogLevels';
 
 const chalk = require('chalk');
 
-interface ILoggerOptions {
-    namespace: string;
-    logLevel: ILogLevel;
-}
-
 export class Logger {
-    private static defaultLogLevel: ILogLevel = LogLevels.info;
+    private static logLevel: ILogLevel = LogLevels.info;
 
-    public static setDefaultLogLevel(iLogLevel: ILogLevel) {
-        this.defaultLogLevel = iLogLevel;
-    }
-
-    public static getDefaultOptions(): ILoggerOptions {
-        return {namespace: 'main', logLevel: this.defaultLogLevel};
-    }
-
-    private options: ILoggerOptions;
-
-    constructor(options: ILoggerOptions = Logger.getDefaultOptions()) {
-        this.options = options;
+    public static setLogLevel(iLogLevel: ILogLevel) {
+        this.logLevel = iLogLevel;
     }
 
     public title(message: string, level = LogLevels.info) {
@@ -57,7 +42,7 @@ export class Logger {
 
     public printColor(level: ILogLevel, message?: string, data?: any) {
 
-        if (level.value < this.options.logLevel.value) {
+        if (level.value < Logger.logLevel.value) {
             return;
         }
 
