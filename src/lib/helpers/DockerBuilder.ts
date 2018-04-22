@@ -28,6 +28,7 @@ export class DockerBuilder {
     }
 
     public async push(appConfig: IKubeApplication){
+
         if (!appConfig.docker) {
             throw new Error(`Application does not have a 'docker' configuration section`);
         }

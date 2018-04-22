@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 import {IMainConfig} from './main-config/configTypes';
-import {Logger} from './misc/Logger';
 import {PrerequisiteChecker} from './prerequisites/PrerequisiteChecker';
 import {AppConfigurationManager} from './app-config/AppConfigurationManager';
 import {AppType, IKubeApplication} from './app-config/appConfigTypes';
@@ -11,8 +10,6 @@ import {DockerBuilder} from './helpers/DockerBuilder';
 import {IRecursiveLoadingResult} from './app-config/configTypes';
 import {HookExecutor} from './helpers/HookExecutor';
 import {CommandExecutor} from './misc/CommandExecutor';
-
-const logger = new Logger();
 
 export class Api {
 
@@ -74,7 +71,7 @@ export class Api {
                 return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
             case AppType.SERVICE:
                 return appConfigs.valid.serviceApps;
-          case AppType.CLUSTER:
+            case AppType.CLUSTER:
                 return appConfigs.valid.clusterApps;
             default:
                 return appConfigs.valid.apps;
@@ -98,7 +95,7 @@ export class Api {
     }
 
     private checkAppType(app: IKubeApplication) {
-        if (app.applicationStructure === 'scripts'){
+        if (app.applicationStructure === 'scripts') {
             throw new Error('Script applications cannot be deployed or destroyed.');
         }
     }

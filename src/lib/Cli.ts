@@ -72,6 +72,7 @@ export class Cli {
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.listApplications(args, options);
+                    console.log(' after await this.handlers.miscHandlers.listApplications(args, options);');
                 });
             });
 
@@ -221,7 +222,7 @@ export class Cli {
     }
 
     private async parse(argv: string[]) {
-        this.cliProg.parse(argv);
+        await this.cliProg.parse(argv);
     }
 
     // handlers errors are async

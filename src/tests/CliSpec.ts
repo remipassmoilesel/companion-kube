@@ -5,6 +5,7 @@ import {CommandExecutor} from '../lib/misc/CommandExecutor';
 import {Api} from '../lib/Api';
 import {mainConfig} from '../lib/main-config/config';
 import {Cli} from '../lib/Cli';
+import {INVALID_CONF_DIR} from './setupSpec';
 
 const assert = chai.assert;
 
@@ -14,6 +15,7 @@ describe(' > CliSpec', function () {
     const commandExec = new CommandExecutor();
     const execStub: SinonStub = sinon.stub(commandExec, 'execCommand');
 
+    const processCwdStub: SinonStub = sinon.stub(process, 'cwd');
     const onErrorStub: SinonStub = sinon.stub();
 
     const api = new Api(mainConfig, commandExec);
@@ -21,24 +23,34 @@ describe(' > CliSpec', function () {
 
     const argvPart: string[] = [
         '/usr/local/bin/node',
-        '/home/remipassmoilesel/npm-root/bin/ck',
+        '/home/user/npm-root/bin/ck',
     ];
 
-    const assertError = (regexp: RegExp) => {
-        assert.lengthOf(onErrorStub.getCalls(), 1);
+    const buildCommand = (command: string): string[] => {
+        return argvPart.concat(command.split(' '));
+    };
+
+    const assertCliError = (regexp: RegExp) => {
+        assert.lengthOf(onErrorStub.getCalls(), 1, 'Error stub was not called');
         const error = onErrorStub.getCalls()[0].args[0];
         assert.instanceOf(error, Error);
         assert.match(error.message, regexp);
     };
 
     afterEach(() => {
-        onErrorStub.resetHistory();
+        processCwdStub.reset();
+        onErrorStub.reset();
     });
 
     it(' > Invalid commands should throw', async () => {
-        const args: string[] = argvPart.concat('');
-        await cli.setupAndParse(args);
-        assertError(/You must specify a command. Try: ck help/i);
+        await cli.setupAndParse(buildCommand(''));
+        assertCliError(/You must specify a command. Try: ck help/i);
+    });
+
+    it(' > Invalid config should throw', async () => {
+        processCwdStub.returns(INVALID_CONF_DIR);
+        await cli.setupAndParse(buildCommand('list'));
+        assertCliError(/Invalid configurations found/i);
     });
 
 });
