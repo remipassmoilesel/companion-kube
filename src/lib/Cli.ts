@@ -97,6 +97,16 @@ export class Cli {
             });
 
         this.cliProg
+            .command('build-push', 'Build and push one or more images of applications')
+            .help(Help.push)
+            .argument('[applications...]', 'Applications to build')
+            .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
+                await this.catchHandlersErrors(async () => {
+                    await this.handlers.miscHandlers.buildAndPushApplications(args, options);
+                });
+            });
+
+        this.cliProg
             .command('run', 'Run script from ck-config.js')
             .help(Help.script)
             .argument('[script...]', 'Script to launch')
