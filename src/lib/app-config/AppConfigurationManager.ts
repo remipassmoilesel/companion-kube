@@ -54,7 +54,7 @@ export class AppConfigurationManager {
         const valid: IKubeApplication[] = [];
         const invalid: IInvalidApplication[] = [];
         for (const configPath of configPaths){
-            const config: IKubeApplication = require(configPath);
+            const config: IKubeApplication = JSON.parse(JSON.stringify(require(configPath)));
             const { isValid, errors } = await this.validateConfig(config);
             this.injectMetadataInConfig(config, configPath);
 

@@ -76,6 +76,17 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         await this._pushApplications(apps);
     }
 
+    public async buildAndPushApplications(args: IApplicationArguments, options: IEnvironmentOptions) {
+        this.display.showCliHeader();
+        this.checkPrerequisites();
+
+        const {envName, apps} = await this.selectApps(AppType.ALL, args, options);
+        await this.display.showWarningOnApps(CliOperations.PUSH, apps, envName);
+
+        await this._buildApplications(apps);
+        await this._pushApplications(apps);
+    }
+
     public throwErrorForMissingCommand() {
         throw new Error('You must specify a command. Try: ck help');
     }
