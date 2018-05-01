@@ -72,7 +72,6 @@ export class Cli {
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchHandlersErrors(async () => {
                     await this.handlers.miscHandlers.listApplications(args, options);
-                    console.log(' after await this.handlers.miscHandlers.listApplications(args, options);');
                 });
             });
 

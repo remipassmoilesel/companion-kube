@@ -11,6 +11,8 @@ import {CommandExecutor} from './lib/misc/CommandExecutor';
 
 (async () => {
 
+    // TODO: check node version above 8
+
     const cliDisplay = new CliDisplay();
     const onError = (e: Error) => {
         cliDisplay.logFatalError(e, mainConfig.debug);
