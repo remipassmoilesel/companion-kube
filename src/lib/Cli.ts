@@ -33,6 +33,8 @@ export class Cli {
 
     private setupCli() {
 
+        // TODO: use yargs
+
         this.cliProg
             .version(this.mainConfig.version)
             .help(Help.global);
