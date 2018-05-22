@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as assert from 'assert';
 import * as fs from 'fs';
-import {Logger} from '../lib/misc/Logger';
-import {LogLevels} from '../lib/misc/LogLevels';
+import {Logger} from '../lib/log/Logger';
+import {LogLevels} from '../lib/log/LogLevels';
 
 const sourceMapSupport = require('source-map-support');
 sourceMapSupport.install();

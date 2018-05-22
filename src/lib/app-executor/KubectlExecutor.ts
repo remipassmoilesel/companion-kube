@@ -2,7 +2,7 @@ import * as path from 'path';
 import _ = require('lodash');
 import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
-import {Logger} from '../misc/Logger';
+import {Logger} from '../log/Logger';
 
 export class KubectlExecutor extends AbstractAppExecutor {
     protected logger: Logger = new Logger();

@@ -4,9 +4,9 @@ import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {IMainConfig} from '../../main-config/configTypes';
 import {Api} from '../../Api';
 import {CliDisplay} from '../CliDisplay';
-import {Logger} from '../../misc/Logger';
-import {walkApplications} from '../../misc/utils';
-import {CommandExecutor} from '../../misc/CommandExecutor';
+import {Logger} from '../../log/Logger';
+import {walkApplications} from '../../utils/utils';
+import {CommandExecutor} from '../../utils/CommandExecutor';
 
 export class AbstractCliHandlersGroup {
 
@@ -121,7 +121,7 @@ export class AbstractCliHandlersGroup {
 
     protected async _buildApplications(apps: IKubeApplication[]) {
         for (const app of apps) {
-            if (app.docker) {
+            if (app.dockerImages) {
                 this.logger.info(`Building application: ${app.rootPath}`);
                 await this.api.buildApplication(app);
                 this.logger.success('Done !');
@@ -131,7 +131,7 @@ export class AbstractCliHandlersGroup {
 
     protected async _pushApplications(apps: IKubeApplication[]) {
         for (const app of apps) {
-            if (app.docker) {
+            if (app.dockerImages) {
                 this.logger.info(`Pushing image for project: ${app.rootPath}`);
                 await this.api.pushApplication(app);
                 this.logger.success('Done !');

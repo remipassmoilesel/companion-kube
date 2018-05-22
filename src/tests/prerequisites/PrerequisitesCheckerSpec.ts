@@ -5,7 +5,7 @@ import {execSync} from 'child_process';
 import {IPrerequisite} from '../../lib/prerequisites/prerequisites';
 import {PrerequisiteChecker} from '../../lib/prerequisites/PrerequisiteChecker';
 import {IMainConfig} from '../../lib/main-config/configTypes';
-import {CommandExecutor} from '../../lib/misc/CommandExecutor';
+import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 
 const assert = chai.assert;
 

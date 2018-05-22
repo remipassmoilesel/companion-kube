@@ -12,7 +12,7 @@
     "install-cli": "./scripts/install-cli.sh",
     "test": "npm run clean-compile && node_modules/.bin/mocha --recursive 'build/tests/**/*Spec.js'",
     "dev": "npm run clean-compile && NODE_ENV=dev node ./build/main.js",
-    "lint": "./node_modules/.bin/tslint --force --format verbose 'src/**/*.ts'",
+    "lint": "./node_modules/.bin/tslint --format verbose 'src/**/*.ts'",
     "lint-fix": "npm run lint -- --fix",
     "clean": "./node_modules/.bin/rimraf build",
     "compile": "tsc --pretty && chmod +x ./build/main.js",

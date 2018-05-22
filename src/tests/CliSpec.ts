@@ -1,9 +1,9 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import {SinonStub} from 'sinon';
-import {CommandExecutor} from '../lib/misc/CommandExecutor';
+import {CommandExecutor} from '../lib/utils/CommandExecutor';
 import {Api} from '../lib/Api';
-import {mainConfig} from '../lib/main-config/config';
+import {getMainConfig} from '../lib/main-config/config';
 import {Cli} from '../lib/Cli';
 import {INVALID_CONF_DIR} from './setupSpec';
 
@@ -18,6 +18,8 @@ describe(' > CliSpec', function () {
     const processCwdStub: SinonStub = sinon.stub(process, 'cwd');
     const onErrorStub: SinonStub = sinon.stub();
 
+    const mainConfig = getMainConfig();
+    mainConfig.configSearchIgnore = [];
     const api = new Api(mainConfig, commandExec);
     const cli = new Cli(mainConfig, api, commandExec, onErrorStub);
 
@@ -40,6 +42,7 @@ describe(' > CliSpec', function () {
     afterEach(() => {
         processCwdStub.reset();
         onErrorStub.reset();
+        execStub.reset();
     });
 
     it(' > Invalid commands should throw', async () => {

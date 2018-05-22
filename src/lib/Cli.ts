@@ -5,7 +5,7 @@ import {Help} from './cli/Help';
 import {AppType} from './app-config/appConfigTypes';
 import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
 import {CliDisplay} from './cli/CliDisplay';
-import {CommandExecutor} from './misc/CommandExecutor';
+import {CommandExecutor} from './utils/CommandExecutor';
 
 export type IErrorHandler = (e: Error) => any;
 
@@ -192,11 +192,11 @@ export class Cli {
             .argument('[applications...]', 'Applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.NORMAL);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchHandlersErrors(async () => {
-                    await this.handlers.appHandlers.deployApplications(AppType.APPLICATION, args, options);
+                    await this.handlers.appHandlers.deployApplications(AppType.NORMAL, args, options);
                 });
             });
 
@@ -206,11 +206,11 @@ export class Cli {
             .argument('[applications...]', 'Applications to deploy')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.NORMAL);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchHandlersErrors(async () => {
-                    await this.handlers.appHandlers.redeployApplications(AppType.APPLICATION, args, options);
+                    await this.handlers.appHandlers.redeployApplications(AppType.NORMAL, args, options);
                 });
             });
 
@@ -220,11 +220,11 @@ export class Cli {
             .argument('[applications...]', 'Applications to destroy')
             .option('-e <env>', 'Environment to execute action on')
             .complete(() => {
-                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.APPLICATION);
+                return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.NORMAL);
             })
             .action(async (args: IApplicationArguments, options: IEnvironmentOptions) => {
                 await this.catchHandlersErrors(async () => {
-                    await this.handlers.appHandlers.destroyApplications(AppType.APPLICATION, args, options);
+                    await this.handlers.appHandlers.destroyApplications(AppType.NORMAL, args, options);
                 });
             });
 

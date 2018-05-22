@@ -1,8 +1,8 @@
 import * as path from 'path';
-import {Logger} from '../misc/Logger';
+import {Logger} from '../log/Logger';
 import {IMainConfig} from '../main-config/configTypes';
-import {IDockerOptions, IKubeApplication} from '../app-config/appConfigTypes';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {IDockerImageOptions, IKubeApplication} from '../app-config/appConfigTypes';
+import {CommandExecutor} from '../utils/CommandExecutor';
 
 export class DockerBuilder {
 
@@ -16,44 +16,44 @@ export class DockerBuilder {
     }
 
     public async build(appConfig: IKubeApplication) {
-        if (!appConfig.docker) {
+        if (!appConfig.dockerImages) {
             throw new Error(`Application does not have a 'docker' configuration section`);
         }
 
-        const buildDir = this.getBuildPathFromApp(appConfig);
-        const imageName = this.getImageNameFromApp(appConfig.docker);
-        const dockerBuildCommand = `docker build ${buildDir} -t ${imageName}`;
+        for (const dockerImg of appConfig.dockerImages){
+            const buildDir = this.getBuildPathFromApp(appConfig, dockerImg);
+            const imageName = this.getImageNameFromApp(dockerImg);
+            const dockerBuildCommand = `docker build ${buildDir} -t ${imageName}`;
 
-        await this.execCommand(dockerBuildCommand);
+            await this.execCommand(dockerBuildCommand);
+        }
     }
 
     public async push(appConfig: IKubeApplication){
 
-        if (!appConfig.docker) {
+        if (!appConfig.dockerImages) {
             throw new Error(`Application does not have a 'docker' configuration section`);
         }
 
-        if (appConfig.docker.push) {
-            await this.pushImageToRegistry(appConfig.docker);
+        for (const dockerImg of appConfig.dockerImages){
+            if (dockerImg.push) {
+                await this.pushImageToRegistry(dockerImg);
+            }
         }
-
     }
 
-    private async pushImageToRegistry(dockerOptions: IDockerOptions) {
+    private async pushImageToRegistry(dockerOptions: IDockerImageOptions) {
         const imageName = this.getImageNameFromApp(dockerOptions);
         const dockerPushCommand = `docker push ${imageName}`;
         await this.execCommand(dockerPushCommand);
     }
 
-    private getImageNameFromApp(dockerOptions: IDockerOptions): string {
+    private getImageNameFromApp(dockerOptions: IDockerImageOptions): string {
         return dockerOptions.imageName + ':' + dockerOptions.tag;
     }
 
-    private getBuildPathFromApp(appConfig: IKubeApplication): string {
-        if (!appConfig.docker) {
-            throw new Error(`Application does not have a 'docker' configuration section`);
-        }
-        return path.join(appConfig.rootPath, appConfig.docker.buildDirectory);
+    private getBuildPathFromApp(appConfig: IKubeApplication, dockerImg: IDockerImageOptions): string {
+        return path.join(appConfig.rootPath, dockerImg.buildDirectory);
     }
 
     protected execCommand(command: string): Promise<any> {

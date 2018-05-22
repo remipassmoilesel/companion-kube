@@ -58,54 +58,58 @@ export class AppConfigSchema {
                 additionalProperties: true,
                 properties: {},
             },
-            docker: {
+            dockerImages: {
                 $id: '/properties/docker',
-                type: 'object',
-                additionalProperties: false,
-                properties: {
-                    imageName: {
-                        $id: '/properties/docker/properties/imageName',
-                        type: 'string',
-                        title: 'The Containername Schema ',
-                        default: '',
-                        examples: [
-                            'deployment-with-docker-file',
-                        ],
+                type: 'array',
+                items: {
+                    $id: '/properties/docker/items',
+                    type: 'object',
+                    additionalProperties: false,
+                    properties: {
+                        imageName: {
+                            $id: '/properties/docker/properties/imageName',
+                            type: 'string',
+                            title: 'The Containername Schema ',
+                            default: '',
+                            examples: [
+                                'deployment-with-docker-file',
+                            ],
+                        },
+                        tag: {
+                            $id: '/properties/docker/properties/tag',
+                            type: 'string',
+                            title: 'The Tag Schema ',
+                            default: '',
+                            examples: [
+                                '0.1',
+                            ],
+                        },
+                        push: {
+                            $id: '/properties/docker/properties/push',
+                            type: 'boolean',
+                            title: 'The Push Schema ',
+                            default: false,
+                            examples: [
+                                true,
+                            ],
+                        },
+                        buildDirectory: {
+                            $id: '/properties/docker/properties/buildDirectory',
+                            type: 'string',
+                            title: 'The Builddirectory Schema ',
+                            default: '',
+                            examples: [
+                                './path/to/docker/build',
+                            ],
+                        },
                     },
-                    tag: {
-                        $id: '/properties/docker/properties/tag',
-                        type: 'string',
-                        title: 'The Tag Schema ',
-                        default: '',
-                        examples: [
-                            '0.1',
-                        ],
-                    },
-                    push: {
-                        $id: '/properties/docker/properties/push',
-                        type: 'boolean',
-                        title: 'The Push Schema ',
-                        default: false,
-                        examples: [
-                            true,
-                        ],
-                    },
-                    buildDirectory: {
-                        $id: '/properties/docker/properties/buildDirectory',
-                        type: 'string',
-                        title: 'The Builddirectory Schema ',
-                        default: '',
-                        examples: [
-                            './path/to/docker/build',
-                        ],
-                    },
+                    required: [
+                        'imageName',
+                        'tag',
+                        'push',
+                        'buildDirectory',
+                    ],
                 },
-                required: [
-                    'imageName',
-                    'tag',
-                    'push',
-                    'buildDirectory',
-                ],
             },
             deployment: {
                 $id: '/properties/deployment',

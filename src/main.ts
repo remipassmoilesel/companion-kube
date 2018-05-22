@@ -2,16 +2,18 @@
 
 import 'source-map-support/register';
 import {Api} from './lib/Api';
-import {Logger} from './lib/misc/Logger';
-import {mainConfig} from './lib/main-config/config';
+import {Logger} from './lib/log/Logger';
+import {getMainConfig} from './lib/main-config/config';
 import {Cli} from './lib/Cli';
-import {LogLevels} from './lib/misc/LogLevels';
+import {LogLevels} from './lib/log/LogLevels';
 import {CliDisplay} from './lib/cli/CliDisplay';
-import {CommandExecutor} from './lib/misc/CommandExecutor';
+import {CommandExecutor} from './lib/utils/CommandExecutor';
 
 (async () => {
 
     // TODO: check node version above 8
+
+    const mainConfig = getMainConfig();
 
     const cliDisplay = new CliDisplay();
     const onError = (e: Error) => {

@@ -1,12 +1,10 @@
-import {AppType, IKubeApplication} from './appConfigTypes';
+import {AppType, IKubeApplication} from '../../lib/app-config/appConfigTypes';
 
-export const exampleCkConfig: IKubeApplication = {
-    // these values will be deleted when persisted
+export const testValidCkConfig: IKubeApplication = {
     id: 0,
+    configPath: '/test/config/path/',
+    rootPath: '/test/root/path/',
     type: AppType.NORMAL,
-    configPath: '/path/to/config',
-    rootPath: '/path/to/app',
-    // end
 
     name: 'application-name',
     displayCommandsOutput: true,
@@ -20,14 +18,23 @@ export const exampleCkConfig: IKubeApplication = {
     },
     dockerImages: [
         {
-            imageName: 'deployment-with-docker-file',
+            imageName: 'deployment-with-docker-file-1',
             tag: '0.1',
             push: true,
-            buildDirectory: './path/to/docker/build',
+            buildDirectory: './path/to/docker/build-1',
+        },
+        {
+            imageName: 'deployment-with-docker-file-2',
+            tag: '0.1',
+            push: true,
+            buildDirectory: './path/to/docker/build-2',
         },
     ],
     deployment: {
-        roots: ['.', './second/dir'],
+        roots: [
+            '.',
+            './second/dir',
+        ],
     },
     helm: {
         releaseName: 'gitlab-dev',
@@ -45,6 +52,6 @@ export const exampleCkConfig: IKubeApplication = {
         postDeploy: './post-deploy.sh',
         preDestroy: './pre-destroy.sh',
         postDestroy: './post-destroy.sh',
-    },
 
+    },
 };

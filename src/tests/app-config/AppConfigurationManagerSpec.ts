@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import {mainConfig} from '../../lib/main-config/config';
+import {getMainConfig} from '../../lib/main-config/config';
 import {AppConfigurationManager} from '../../lib/app-config/AppConfigurationManager';
 import {exampleCkConfig} from '../../lib/app-config/appConfigExample';
 import {AppConfigHelpers} from '../../lib/app-config/AppConfigHelpers';
@@ -10,7 +10,7 @@ const assert = chai.assert;
 describe(' > AppConfigurationManagerSpec', function () {
     this.timeout(2000);
 
-    const configMan = new AppConfigurationManager(mainConfig);
+    const configMan = new AppConfigurationManager(getMainConfig());
     const validConfig = JSON.parse(JSON.stringify(AppConfigHelpers.getLightAppConfig(exampleCkConfig)));
 
     it(' > Validate example config should succeed', async () => {

@@ -5,7 +5,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IKubeApplication} from '../app-config/appConfigTypes';
 import {AnsibleExecutor} from './AnsibleExecutor';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {CommandExecutor} from '../utils/CommandExecutor';
 
 export class ExecutorFinder {
 

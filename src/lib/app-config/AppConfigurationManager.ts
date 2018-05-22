@@ -5,7 +5,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
 import {AppType, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
-import {IAugmentedError} from '../misc/IAppError';
+import {IAugmentedError} from '../utils/IAppError';
 import {IInvalidApplication, IRecursiveLoadingResult, ISortedAppGroup} from './configTypes';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');
@@ -95,7 +95,7 @@ export class AppConfigurationManager {
         } else if (this.isClusterApp(app)) {
             app.type = AppType.CLUSTER;
         } else {
-            app.type = AppType.APPLICATION;
+            app.type = AppType.NORMAL;
         }
 
         if (typeof app.displayCommandsOutput !== 'boolean'){
@@ -114,7 +114,7 @@ export class AppConfigurationManager {
     private sortApplications(appConfigs: IKubeApplication[]): ISortedAppGroup {
         const serviceApps = _.filter(appConfigs, (app: IKubeApplication) => app.type === AppType.SERVICE);
         const clusterApps = _.filter(appConfigs, (app: IKubeApplication) => app.type === AppType.CLUSTER);
-        const apps = _.filter(appConfigs, (app) => app.type === AppType.APPLICATION);
+        const apps = _.filter(appConfigs, (app) => app.type === AppType.NORMAL);
         return {
             serviceApps,
             clusterApps,

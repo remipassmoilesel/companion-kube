@@ -4,7 +4,7 @@ import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {ScriptRunner} from '../../helpers/ScriptRunner';
 import {CliOperations} from '../CliOperations';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
-import {IAugmentedError} from '../../misc/IAppError';
+import {IAugmentedError} from '../../utils/IAppError';
 
 export class MiscHandlers extends AbstractCliHandlersGroup {
 

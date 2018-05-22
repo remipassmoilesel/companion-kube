@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {AbstractAppExecutor} from './AbstractAppExecutor';
 import {IAnsibleOptions, IKubeApplication, DEFAULT_PLAYBOOKS} from '../app-config/appConfigTypes';
-import {Logger} from '../misc/Logger';
+import {Logger} from '../log/Logger';
 
 export class AnsibleExecutor extends AbstractAppExecutor {
 

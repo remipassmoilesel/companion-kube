@@ -1,4 +1,5 @@
 import * as path from 'path';
+import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as assert from 'assert';
 import {IMainConfig} from './configTypes';
@@ -9,7 +10,7 @@ assert.ok(fs.existsSync(path.resolve(projectRoot, 'package.json')), 'Project roo
 
 const packageJson = require(path.join(projectRoot, 'package.json'));
 
-export const mainConfig: IMainConfig = {
+const mainConfig: IMainConfig = {
     version: packageJson.version,
     debug: false,
     prerequisites: PREREQUISITES,
@@ -17,5 +18,11 @@ export const mainConfig: IMainConfig = {
     configSearchIgnore: [
         'node_modules/**/*',
         'build/**/*',
+        path.join(projectRoot, 'src/tests/test-data/**/*'),
+        path.join(projectRoot, 'build/tests/test-data/**/*'),
     ],
 };
+
+export function getMainConfig(): IMainConfig {
+    return _.cloneDeep(mainConfig);
+}

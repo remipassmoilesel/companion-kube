@@ -9,7 +9,7 @@ import {DirectoryInitHelper} from './helpers/DirectoryInitHelper';
 import {DockerBuilder} from './helpers/DockerBuilder';
 import {IRecursiveLoadingResult} from './app-config/configTypes';
 import {HookExecutor} from './helpers/HookExecutor';
-import {CommandExecutor} from './misc/CommandExecutor';
+import {CommandExecutor} from './utils/CommandExecutor';
 
 export class Api {
 
