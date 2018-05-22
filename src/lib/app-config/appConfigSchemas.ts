@@ -58,7 +58,7 @@ export class AppConfigSchema {
                 additionalProperties: true,
                 properties: {},
             },
-            docker: {
+            dockerImages: {
                 $id: '/properties/docker',
                 type: 'array',
                 items: {

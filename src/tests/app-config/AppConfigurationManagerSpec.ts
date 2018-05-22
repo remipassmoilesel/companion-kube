@@ -15,7 +15,7 @@ describe(' > AppConfigurationManagerSpec', function () {
 
     it(' > Validate example config should succeed', async () => {
         const {isValid, errors} = await configMan.validateConfig(validConfig);
-
+        
         assert.isTrue(isValid);
         assert.isNull(errors);
     });
