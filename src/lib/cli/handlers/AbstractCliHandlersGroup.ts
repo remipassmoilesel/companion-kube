@@ -121,7 +121,7 @@ export class AbstractCliHandlersGroup {
 
     protected async _buildApplications(apps: IKubeApplication[]) {
         for (const app of apps) {
-            if (app.docker) {
+            if (app.dockerImages) {
                 this.logger.info(`Building application: ${app.rootPath}`);
                 await this.api.buildApplication(app);
                 this.logger.success('Done !');
@@ -131,7 +131,7 @@ export class AbstractCliHandlersGroup {
 
     protected async _pushApplications(apps: IKubeApplication[]) {
         for (const app of apps) {
-            if (app.docker) {
+            if (app.dockerImages) {
                 this.logger.info(`Pushing image for project: ${app.rootPath}`);
                 await this.api.pushApplication(app);
                 this.logger.success('Done !');

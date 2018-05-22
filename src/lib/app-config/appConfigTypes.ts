@@ -28,7 +28,7 @@ export interface IKubeApplication {
     defaultEnvironment?: string;
 
     scripts?: IScriptGroup;
-    docker?: IDockerOptions;
+    dockerImages?: IDockerImageOptions[];
     deployment?: IDeploymentOptions;
     helm?: IHelmOptions;
     ansible?: IAnsibleOptions;
@@ -40,7 +40,7 @@ export interface IKubeApplication {
 // DOCKER
 // ===================================
 
-export interface IDockerOptions {
+export interface IDockerImageOptions {
     imageName: string;
     tag: string;
     push: boolean;

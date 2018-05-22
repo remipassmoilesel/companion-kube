@@ -18,12 +18,14 @@ export const exampleCkConfig: IKubeApplication = {
         helmDebug: 'helm install --dry-run --debug .',
         kubectlDebug: 'kubectl create -f . --dry-run',
     },
-    docker: {
-        imageName: 'deployment-with-docker-file',
-        tag: '0.1',
-        push: true,
-        buildDirectory: './path/to/docker/build',
-    },
+    dockerImages: [
+        {
+            imageName: 'deployment-with-docker-file',
+            tag: '0.1',
+            push: true,
+            buildDirectory: './path/to/docker/build',
+        },
+    ],
     deployment: {
         roots: ['.', './second/dir'],
     },
