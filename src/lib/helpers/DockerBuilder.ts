@@ -1,8 +1,8 @@
 import * as path from 'path';
-import {Logger} from '../misc/Logger';
+import {Logger} from '../log/Logger';
 import {IMainConfig} from '../main-config/configTypes';
 import {IDockerOptions, IKubeApplication} from '../app-config/appConfigTypes';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {CommandExecutor} from '../utils/CommandExecutor';
 
 export class DockerBuilder {
 

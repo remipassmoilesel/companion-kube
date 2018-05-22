@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
 import {SinonStub} from 'sinon';
-import {CommandExecutor} from '../lib/misc/CommandExecutor';
+import {CommandExecutor} from '../lib/utils/CommandExecutor';
 import {Api} from '../lib/Api';
 import {mainConfig} from '../lib/main-config/config';
 import {Cli} from '../lib/Cli';

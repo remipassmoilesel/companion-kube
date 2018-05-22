@@ -4,9 +4,9 @@ import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {IMainConfig} from '../../main-config/configTypes';
 import {Api} from '../../Api';
 import {CliDisplay} from '../CliDisplay';
-import {Logger} from '../../misc/Logger';
-import {walkApplications} from '../../misc/utils';
-import {CommandExecutor} from '../../misc/CommandExecutor';
+import {Logger} from '../../log/Logger';
+import {walkApplications} from '../../utils/utils';
+import {CommandExecutor} from '../../utils/CommandExecutor';
 
 export class AbstractCliHandlersGroup {
 

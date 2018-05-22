@@ -1,6 +1,6 @@
 import {IKubeApplication} from '../app-config/appConfigTypes';
-import {CommandExecutor} from '../misc/CommandExecutor';
-import {Logger} from '../misc/Logger';
+import {CommandExecutor} from '../utils/CommandExecutor';
+import {Logger} from '../log/Logger';
 
 export class HookExecutor {
     private logger = new Logger();

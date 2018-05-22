@@ -5,7 +5,7 @@ import {Help} from './cli/Help';
 import {AppType} from './app-config/appConfigTypes';
 import {IApplicationArguments, IEnvironmentOptions, IRunArguments} from './cli/cliTypes';
 import {CliDisplay} from './cli/CliDisplay';
-import {CommandExecutor} from './misc/CommandExecutor';
+import {CommandExecutor} from './utils/CommandExecutor';
 
 export type IErrorHandler = (e: Error) => any;
 

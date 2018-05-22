@@ -5,7 +5,7 @@ import {IMainConfig} from '../main-config/configTypes';
 import {GlobSync} from 'glob';
 import {AppType, IKubeApplication} from './appConfigTypes';
 import {AppConfigSchema} from './appConfigSchemas';
-import {IAugmentedError} from '../misc/IAppError';
+import {IAugmentedError} from '../utils/IAppError';
 import {IInvalidApplication, IRecursiveLoadingResult, ISortedAppGroup} from './configTypes';
 
 const json6schema = require('ajv/lib/refs/json-schema-draft-06.json');

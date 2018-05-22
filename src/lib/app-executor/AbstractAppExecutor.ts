@@ -1,8 +1,8 @@
 import {IMainConfig} from '../main-config/configTypes';
 import {IKubeApplication} from '../app-config/appConfigTypes';
-import {Logger} from '../misc/Logger';
+import {Logger} from '../log/Logger';
 import {spawn} from 'child_process';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {CommandExecutor} from '../utils/CommandExecutor';
 
 export abstract class AbstractAppExecutor {
 

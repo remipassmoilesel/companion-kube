@@ -2,12 +2,12 @@ import * as _ from 'lodash';
 import * as ajv from 'ajv';
 import * as readline from 'readline';
 import {IKubeApplication} from '../app-config/appConfigTypes';
-import {Logger} from '../misc/Logger';
+import {Logger} from '../log/Logger';
 import {IPrerequisite} from '../prerequisites/prerequisites';
 import {ICliOperation} from './CliOperations';
 import {IInvalidApplication, IRecursiveLoadingResult} from '../app-config/configTypes';
-import {IAppError, IAugmentedError} from '../misc/IAppError';
-import {ILogLevel, LogLevels} from '../misc/LogLevels';
+import {IAppError, IAugmentedError} from '../utils/IAppError';
+import {ILogLevel, LogLevels} from '../log/LogLevels';
 
 const logger = new Logger();
 

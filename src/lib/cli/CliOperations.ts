@@ -1,4 +1,4 @@
-import {ILogLevel, LogLevels} from '../misc/LogLevels';
+import {ILogLevel, LogLevels} from '../log/LogLevels';
 
 
 export interface ICliOperation {

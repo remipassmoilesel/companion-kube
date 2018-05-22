@@ -1,5 +1,5 @@
-import {Logger} from '../misc/Logger';
-import {CommandExecutor} from '../misc/CommandExecutor';
+import {Logger} from '../log/Logger';
+import {CommandExecutor} from '../utils/CommandExecutor';
 
 export class ScriptRunner {
     private logger = new Logger();
