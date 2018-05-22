@@ -8,7 +8,7 @@ export type AppStructure = 'scripts' | 'deployment' | 'chart' | 'ansible';
 
 export enum AppType {
     SERVICE = 'service',
-    APPLICATION = 'application',
+    NORMAL = 'application',
     CLUSTER = 'cluster',
     ALL = 'all',
 }

@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as _ from 'lodash';
 import {Logger} from '../log/Logger';
 import {IMainConfig} from '../main-config/configTypes';
 import {IDockerImageOptions, IKubeApplication} from '../app-config/appConfigTypes';

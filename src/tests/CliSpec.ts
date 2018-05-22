@@ -40,6 +40,7 @@ describe(' > CliSpec', function () {
     afterEach(() => {
         processCwdStub.reset();
         onErrorStub.reset();
+        execStub.reset();
     });
 
     it(' > Invalid commands should throw', async () => {
