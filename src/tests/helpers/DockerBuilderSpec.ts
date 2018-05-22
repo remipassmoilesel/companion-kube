@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as sinon from 'sinon';
 import {SinonSpyCall, SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
-import {mainConfig} from '../../lib/main-config/config';
+import {getMainConfig} from '../../lib/main-config/config';
 import {DockerBuilder} from '../../lib/helpers/DockerBuilder';
 import {testValidCkConfig} from '../test-data/testValidCkConfig';
 
@@ -11,6 +11,7 @@ const assert = chai.assert;
 describe(' > DockerBuilderSpec', function () {
     this.timeout(2000);
 
+    const mainConfig = getMainConfig();
     const commandExec = new CommandExecutor();
     const execStub: SinonStub = sinon.stub(commandExec, 'execCommand');
 
