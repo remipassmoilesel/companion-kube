@@ -1,5 +1,8 @@
 import * as _ from 'lodash';
-import {IApplicationArguments, IEnvironmentOptions, IInitOptions, IRunArguments} from '../cliTypes';
+import {
+    ICliApplicationsArguments,
+    ICliBaseArguments, ICliRunArguments,
+} from '../cliTypes';
 import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {ScriptRunner} from '../../helpers/ScriptRunner';
 import {CliOperations} from '../CliOperations';
@@ -8,13 +11,13 @@ import {IAugmentedError} from '../../utils/IAppError';
 
 export class MiscHandlers extends AbstractCliHandlersGroup {
 
-    public initDirectory(args: any, options: IInitOptions) {
+    public initDirectory(args: ICliBaseArguments) {
         this.display.showCliHeader();
-        this.api.initDirectory(process.cwd(), options.f);
+        this.api.initDirectory(process.cwd(), args.f);
         this.logger.success('File ck-config.js created !');
     }
 
-    public async runScript(args: IRunArguments, options: any) {
+    public async runScript(args: ICliRunArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
@@ -38,7 +41,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         await scriptRunner.run(script, scriptArgs.slice(1));
     }
 
-    public async listApplications(args: any, options: any) {
+    public async listApplications(args: ICliBaseArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
@@ -56,31 +59,31 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         }
     }
 
-    public async buildApplications(args: IApplicationArguments, options: IEnvironmentOptions) {
+    public async buildApplications(args: ICliApplicationsArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.ALL, args, options);
+        const {envName, apps} = await this.selectApps(AppType.ALL, args);
         await this.display.showWarningOnApps(CliOperations.BUILD, apps, envName);
 
         await this._buildApplications(apps);
     }
 
-    public async pushApplications(args: IApplicationArguments, options: IEnvironmentOptions) {
+    public async pushApplications(args: ICliApplicationsArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.ALL, args, options);
+        const {envName, apps} = await this.selectApps(AppType.ALL, args);
         await this.display.showWarningOnApps(CliOperations.PUSH, apps, envName);
 
         await this._pushApplications(apps);
     }
 
-    public async buildAndPushApplications(args: IApplicationArguments, options: IEnvironmentOptions) {
+    public async buildAndPushApplications(args: ICliApplicationsArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.ALL, args, options);
+        const {envName, apps} = await this.selectApps(AppType.ALL, args);
         await this.display.showWarningOnApps(CliOperations.PUSH, apps, envName);
 
         await this._buildApplications(apps);

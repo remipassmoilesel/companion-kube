@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {IApplicationArguments, IEnvironmentOptions} from '../cliTypes';
+import {ICliApplicationsArguments} from '../cliTypes';
 import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {IMainConfig} from '../../main-config/configTypes';
 import {Api} from '../../Api';
@@ -31,8 +31,8 @@ export class AbstractCliHandlersGroup {
         }
     }
 
-    protected async selectApps(appType: AppType, args: IApplicationArguments, options?: IEnvironmentOptions) {
-        const envName: string | undefined = options && options.e;
+    protected async selectApps(appType: AppType, args: ICliApplicationsArguments) {
+        const envName: string | undefined = args.environment || undefined;
         const getAllConfig = args.applications && args.applications.indexOf('all') !== -1;
         const targetDir = process.cwd();
 

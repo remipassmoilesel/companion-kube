@@ -1,15 +1,15 @@
-import {IApplicationArguments, IEnvironmentOptions} from '../cliTypes';
+import {ICliApplicationsArguments} from '../cliTypes';
 import {AppType} from '../../app-config/appConfigTypes';
 import {CliOperations} from '../CliOperations';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
 
 export class AppHandlers extends AbstractCliHandlersGroup {
 
-    public async deployApplications(appType: AppType, args: IApplicationArguments, options: IEnvironmentOptions) {
+    public async deployApplications(appType: AppType, args: ICliApplicationsArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectApps(appType, args, options);
+        const {apps, envName} = await this.selectApps(appType, args);
         await this.display.showWarningOnApps(CliOperations.DEPLOY, apps, envName);
 
         await this._buildApplications(apps);
@@ -17,11 +17,11 @@ export class AppHandlers extends AbstractCliHandlersGroup {
         await this._deployApplications(apps, envName);
     }
 
-    public async redeployApplications(appType: AppType, args: IApplicationArguments, options: IEnvironmentOptions) {
+    public async redeployApplications(appType: AppType, args: ICliApplicationsArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectApps(appType, args, options);
+        const {apps, envName} = await this.selectApps(appType, args);
         await this.display.showWarningOnApps(CliOperations.REDEPLOY, apps, envName);
 
         try {
@@ -37,11 +37,11 @@ export class AppHandlers extends AbstractCliHandlersGroup {
         await this._deployApplications(apps, envName);
     }
 
-    public async destroyApplications(appType: AppType, args: IApplicationArguments, options: IEnvironmentOptions) {
+    public async destroyApplications(appType: AppType, args: ICliApplicationsArguments) {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {apps, envName} = await this.selectApps(appType, args, options);
+        const {apps, envName} = await this.selectApps(appType, args);
         await this.display.showWarningOnApps(CliOperations.DESTROY, apps, envName);
 
         await this._destroyApplications(apps, envName);

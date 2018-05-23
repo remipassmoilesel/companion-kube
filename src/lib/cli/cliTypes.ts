@@ -1,21 +1,14 @@
-import {ILogLevel, LogLevels} from '../log/LogLevels';
-
-export interface IInitOptions {
+export interface ICliBaseArguments {
     f: boolean;
+    force: boolean;
+    e: string;
+    environment: string;
 }
 
-export interface IRunArguments {
-    script: string[];
-}
-
-export interface IApplicationArguments {
+export interface ICliApplicationsArguments extends ICliBaseArguments{
     applications: string[];
 }
 
-export interface IEnvironmentOptions {
-    e?: string;
-}
-
-export interface IEnvironmentArguments {
-    env: string;
+export interface ICliRunArguments extends ICliBaseArguments{
+    script: string[]; // Script name then arguments. Example: ck run dashboard --gui
 }

@@ -23,11 +23,11 @@
   },
   "dependencies": {
     "ajv": "^6.3.0",
-    "caporal": "^0.10.0",
     "chalk": "^2.3.2",
     "fs-extra": "^5.0.0",
     "glob": "^7.1.2",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "yargs": "^11.0.0"
   },
   "devDependencies": {
     "@types/ajv": "^1.0.0",
