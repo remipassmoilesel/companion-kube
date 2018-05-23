@@ -16,6 +16,7 @@ export class Cli {
     private handlers: CliHandlers;
     private api: Api;
     private onError: IErrorHandler;
+    private parser: any;
 
     constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor, onError: IErrorHandler) {
         this.mainConfig = mainConfig;
@@ -24,12 +25,14 @@ export class Cli {
         this.onError = onError;
     }
 
-    public setupAndParse(argv: string[]) {
-        return this.parse(argv);
+    public async setupAndParse(argv: string[]) {
+        this.setupParser();
+        this.parse(argv);
     }
 
-    private async parse(argv: string[]) {
-        return yargs
+    private setupParser() {
+
+        this.parser = yargs
             .usage('Usage: $0 <cmd> [options]')
             .option('f', {
                 alias: 'force',
@@ -45,7 +48,7 @@ export class Cli {
             })
             // default command, used to display help and exit with non zero code if no command is specified
             // or if command is incorrect
-            .command('*', false, _.noop, async () => {
+            .command('*', false, _.noop, async (args: any) => {
                 await this.catchErrors(async () => {
                     await this.handlers.miscHandlers.throwErrorForMissingCommand();
                 });
@@ -133,9 +136,13 @@ export class Cli {
             .example('ck list', 'TODO...')
             .example('ck build', 'TODO...')
             .epilog('For more information visit https://github.com/remipassmoilesel/companion-kube')
-            .showHelpOnFail(false, 'Whoops, something went wrong! run with help')
-            .detectLocale(false)
-            .argv;
+            .showHelpOnFail(false, 'Whoops, something went wrong ! run with help')
+            .detectLocale(false);
+
+    }
+
+    private parse(argv: string[]): void {
+        this.parser.parse(argv.slice(2));
     }
 
     private async catchErrors(cb: () => Promise<void>): Promise<void> {
