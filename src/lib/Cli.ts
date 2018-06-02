@@ -129,6 +129,19 @@ export class Cli {
                         await this.handlers.appHandlers.destroyApplications(AppType.NORMAL, args);
                     });
                 })
+            .command('cluster deploy', 'Deploy Kubernetes cluster',
+                _.noop, async (args: ICliApplicationsArguments) => {
+                    await this.catchErrors(async () => {
+                        await this.handlers.appHandlers.deployApplications(AppType.CLUSTER, args);
+                    });
+                })
+            .command('cluster destroy', 'Destroy Kubernetes cluster',
+                _.noop, async (args: ICliApplicationsArguments) => {
+                    await this.catchErrors(async () => {
+                        await this.handlers.appHandlers.deployApplications(AppType.CLUSTER, args);
+                    });
+                })
+
             .help('help')
             .version(this.mainConfig.version, 'version', 'display version information') // the version string.
             .alias('version', 'v')
