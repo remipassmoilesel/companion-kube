@@ -3,7 +3,7 @@ import {TestHelpers} from './TestHelpers';
 
 const assert = chai.assert;
 
-describe.only(' > TestHelperSpec', async function () {
+describe(' > TestHelperSpec', async function () {
     this.timeout(2000);
 
     it('TestHelper.asyncAssertThrows should fail if cb does not throw', async () => {
