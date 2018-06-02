@@ -15,16 +15,24 @@ export class CliParser {
     }
 
     public async parse(args: string[]): Promise<void>{
-        const command: CliCommand | undefined = this.findCorrespondingCommand(args);
-        if (!command){
-            throw new Error('Invalid command: ' + args.join(' '));
-        }
+        const command: CliCommand = this.findCorrespondingCommand(args);
         const options = this.parseOptions(args);
         await command.handler(command, options);
     }
 
-    private findCorrespondingCommand(args: string[]): CliCommand | undefined {
-        return undefined;
+    private findCorrespondingCommand(args: string[]): CliCommand {
+        const found: CliCommand[] = _.filter(this.commands, (comm: CliCommand) => {
+            const parsedComm = comm.command.split(' ');
+            const slicedArgs = args.slice(0, parsedComm.length);
+            return _.isEqual(parsedComm, slicedArgs);
+        });
+        if (!found.length){
+            throw new Error('Invalid command: ' + args.join(' '));
+        }
+        if (found.length > 1){
+            throw new Error('Several commands matching: ' + args.join(' '));
+        }
+        return found[0];
     }
 
     private parseOptions(args: string[]): CliOption[] {

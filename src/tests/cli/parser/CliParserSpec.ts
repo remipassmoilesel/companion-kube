@@ -21,22 +21,16 @@ describe.only(' > CliParserSpec', async function () {
                 new CliOption('force', 'f', 'boolean', 'Force'),
                 new CliOption('environment', 'e', 'string', 'Environment'),
             ],
-            async (command, options) => {
-                console.log(command);
-                console.log(options);
-            },
+            listStub,
         ),
         new CliCommand(
-            'deploy',
+            'svc deploy',
             'Deploy some stuff',
             [
                 new CliOption('force', 'f', 'boolean', 'Force'),
                 new CliOption('environment', 'e', 'string', 'Environment'),
             ],
-            async (command, options) => {
-                console.log(command);
-                console.log(options);
-            },
+            deployStub,
         ),
     ];
 
@@ -54,6 +48,18 @@ describe.only(' > CliParserSpec', async function () {
         }, /Invalid command:.+/);
         assert.lengthOf(listStub.getCalls(), 0);
         assert.lengthOf(deployStub.getCalls(), 0);
+    });
+
+    it('Parser should execute list handler', async () => {
+        await cliParser.parse(['list']);
+        assert.lengthOf(listStub.getCalls(), 1);
+        assert.lengthOf(deployStub.getCalls(), 0);
+    });
+
+    it('Parser should execute deploy handler', async () => {
+        await cliParser.parse(['svc', 'deploy']);
+        assert.lengthOf(listStub.getCalls(), 0);
+        assert.lengthOf(deployStub.getCalls(), 1);
     });
 
 });
