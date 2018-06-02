@@ -63,7 +63,8 @@ export class AnsibleExecutor extends AbstractAppExecutor {
             '-%env',
             envName ? '-' + envName : '');
 
-        const inventoryPath = path.join(app.ansible.inventoryDirectory, inventoryName);
+        const inventoryDirectory = app.ansible.inventoryDirectory || app.rootPath;
+        const inventoryPath = path.join(inventoryDirectory, inventoryName);
         if (!fs.existsSync(inventoryPath)) {
             throw new Error(`Inventory not found at location: ${inventoryPath}`);
         }
