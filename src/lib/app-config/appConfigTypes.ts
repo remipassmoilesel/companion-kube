@@ -70,7 +70,7 @@ export interface IHelmOptions {
 export type DEFAULT_PLAYBOOKS = 'deploy' | 'destroy';
 
 export interface IAnsibleOptions {
-    inventoryDirectory: string;
+    inventoryDirectory?: string;
     playbooks: {
         deploy: string,
         destroy: string,

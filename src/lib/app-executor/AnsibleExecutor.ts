@@ -11,7 +11,7 @@ export class AnsibleExecutor extends AbstractAppExecutor {
      * When used in a playbook path, allow to make path relative to this project root
      * @type {string}
      */
-    private readonly RELATIVE_PATH_PREFIX: string = '#/';
+    private readonly CK_RELATIVE_PATH_PREFIX: string = '#/';
     private readonly INVENTORY_FILE_NAME = 'inventory-%env.cfg';
     protected logger: Logger = new Logger();
 
@@ -47,11 +47,11 @@ export class AnsibleExecutor extends AbstractAppExecutor {
         if (!playbook) {
             throw new Error(`A playbook with name ${playbookName} must exists. Please define it in ck-config.js.`);
         }
-        if (playbook.startsWith(this.RELATIVE_PATH_PREFIX)) {
-            const withoutPrefix = playbook.substring(this.RELATIVE_PATH_PREFIX.length);
+        if (playbook.startsWith(this.CK_RELATIVE_PATH_PREFIX)) {
+            const withoutPrefix = playbook.substring(this.CK_RELATIVE_PATH_PREFIX.length);
             return path.join(this.mainConfig.projectRoot, withoutPrefix);
         }
-        return playbook;
+        return path.resolve(playbook);
     }
 
     private getInventoryPath(app: IKubeApplication, envName?: string): string {
@@ -63,12 +63,14 @@ export class AnsibleExecutor extends AbstractAppExecutor {
             '-%env',
             envName ? '-' + envName : '');
 
-        const inventoryDirectory = app.ansible.inventoryDirectory || app.rootPath;
+        const inventoryDirectory = path.resolve(app.ansible.inventoryDirectory || app.rootPath);
         const inventoryPath = path.join(inventoryDirectory, inventoryName);
         if (!fs.existsSync(inventoryPath)) {
             throw new Error(`Inventory not found at location: ${inventoryPath}`);
         }
         return inventoryPath;
     }
+
 }
+
 
