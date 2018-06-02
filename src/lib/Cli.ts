@@ -105,7 +105,7 @@ export class Cli {
                         await this.handlers.appHandlers.destroyApplications(AppType.SERVICE, args);
                     });
                 })
-            .command('deploy <applications...>', 'Deploy one or more service applications',
+            .command('deploy [applications...]', 'Deploy one or more service applications',
                 _.noop, async (args: ICliApplicationsArguments) => {
                     await this.catchErrors(async () => {
                         // TODO: restore completion:
@@ -113,7 +113,7 @@ export class Cli {
                         await this.handlers.appHandlers.deployApplications(AppType.NORMAL, args);
                     });
                 })
-            .command('redeploy <applications...>', 'Destroy then deploy one or more service applications',
+            .command('redeploy [applications...]', 'Destroy then deploy one or more service applications',
                 _.noop, async (args: ICliApplicationsArguments) => {
                     await this.catchErrors(async () => {
                         // TODO: restore completion:
@@ -121,7 +121,7 @@ export class Cli {
                         await this.handlers.appHandlers.redeployApplications(AppType.NORMAL, args);
                     });
                 })
-            .command('destroy <applications...>', 'Destroy one or more service applications',
+            .command('destroy [applications...]', 'Destroy one or more service applications',
                 _.noop, async (args: ICliApplicationsArguments) => {
                     await this.catchErrors(async () => {
                         // TODO: restore completion:
