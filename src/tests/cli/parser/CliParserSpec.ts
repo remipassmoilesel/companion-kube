@@ -13,26 +13,26 @@ describe.only(' > CliParserSpec', async function () {
     const listStub = sinon.stub();
     const deployStub = sinon.stub();
 
-    const commands: CliCommand[] = [
-        new CliCommand(
-            'list',
-            'List some stuff',
-            [
-                new CliOption('force', 'f', 'boolean', 'Force'),
-                new CliOption('environment', 'e', 'string', 'Environment'),
-            ],
-            listStub,
-        ),
-        new CliCommand(
-            'svc deploy',
-            'Deploy some stuff',
-            [
-                new CliOption('force', 'f', 'boolean', 'Force'),
-                new CliOption('environment', 'e', 'string', 'Environment'),
-            ],
-            deployStub,
-        ),
-    ];
+    const listCommand = new CliCommand(
+        'list',
+        'List some stuff',
+        [
+            new CliOption('force', 'f', 'boolean', 'Force'),
+            new CliOption('environment', 'e', 'string', 'Environment'),
+        ],
+        listStub,
+    );
+    const deployCommand = new CliCommand(
+        'svc deploy',
+        'Deploy some stuff',
+        [
+            new CliOption('force', 'f', 'boolean', 'Force'),
+            new CliOption('environment', 'e', 'string', 'Environment'),
+        ],
+        deployStub,
+    );
+
+    const commands: CliCommand[] = [listCommand, deployCommand];
 
     let cliParser: CliParser;
 
@@ -54,12 +54,18 @@ describe.only(' > CliParserSpec', async function () {
         await cliParser.parse(['list']);
         assert.lengthOf(listStub.getCalls(), 1);
         assert.lengthOf(deployStub.getCalls(), 0);
+
+        const calledCommand: CliCommand = listStub.getCall(0).args[0];
+        assert.deepEqual(calledCommand.command, listCommand.command);
     });
 
     it('Parser should execute deploy handler', async () => {
         await cliParser.parse(['svc', 'deploy']);
         assert.lengthOf(listStub.getCalls(), 0);
         assert.lengthOf(deployStub.getCalls(), 1);
+
+        const calledCommand: CliCommand = deployStub.getCall(0).args[0];
+        assert.deepEqual(calledCommand.command, deployCommand.command);
     });
 
 });
