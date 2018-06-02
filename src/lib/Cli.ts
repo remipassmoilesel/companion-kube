@@ -81,7 +81,7 @@ export class Cli {
                         await this.handlers.miscHandlers.runScript(args);
                     });
                 })
-            .command('svc deploy <applications...>', 'Deploy one or more service applications',
+            .command('svc-deploy <applications...>', 'Deploy one or more service applications',
                 _.noop, async (args: ICliApplicationsArguments) => {
                     await this.catchErrors(async () => {
                         // TODO: restore completion:
@@ -89,7 +89,7 @@ export class Cli {
                         await this.handlers.appHandlers.deployApplications(AppType.SERVICE, args);
                     });
                 })
-            .command('svc redeploy <applications...>', 'Destroy then deploy one or more service applications',
+            .command('svc-redeploy <applications...>', 'Destroy then deploy one or more service applications',
                 _.noop, async (args: ICliApplicationsArguments) => {
                     await this.catchErrors(async () => {
                         // TODO: restore completion:
@@ -97,7 +97,7 @@ export class Cli {
                         await this.handlers.appHandlers.redeployApplications(AppType.SERVICE, args);
                     });
                 })
-            .command('svc destroy <applications...>', 'Destroy one or more service applications',
+            .command('svc-destroy <applications...>', 'Destroy one or more service applications',
                 _.noop, async (args: ICliApplicationsArguments) => {
                     await this.catchErrors(async () => {
                         // TODO: restore completion:
