@@ -7,6 +7,9 @@ export class TestHelpers {
                 throw new Error('Function expected to throw an error');
             })
             .catch((e) => {
+                if (e.message.match(/Function expected to throw an error/)){
+                    throw e;
+                }
                 if (e.message.match(errorMessage)) {
                     return Promise.resolve();
                 }
