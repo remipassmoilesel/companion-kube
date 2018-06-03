@@ -10,7 +10,7 @@ import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
     assertNoCliErrors,
-    buildCommand, expectedBuildCommands,
+    buildCommand, expectedBuildCommands, expectedBuildPushCommands,
     getCallArgumentsWithoutPrereqChecks,
     getTestConfig,
 } from './CliSpecHelpers';
@@ -120,17 +120,35 @@ describe(' > CliSpec', function () {
             await cli.parseArguments(buildCommand('build'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
-            assert.deepEqual(callArgs, expectedBuildCommands);
             assertNoCliErrors(onErrorStub);
+            assert.deepEqual(callArgs, expectedBuildCommands);
         });
 
         it(' > Build images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_CONF_DIR);
-            await cli.parseArguments(buildCommand('build'));
+            processCwdStub.returns(VALID_CONF_DIR_PARENT);
+            await cli.parseArguments(buildCommand('build application-name'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
-            assert.deepEqual(callArgs, expectedBuildCommands);
             assertNoCliErrors(onErrorStub);
+            assert.deepEqual(callArgs, expectedBuildCommands);
+        });
+
+        it(' > Build and push images in current dir should work', async () => {
+            processCwdStub.returns(VALID_CONF_DIR);
+            await cli.parseArguments(buildCommand('build-push'));
+            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+            assertNoCliErrors(onErrorStub);
+            assert.deepEqual(callArgs, expectedBuildPushCommands);
+        });
+
+        it(' > Build and push images from parent dir should work', async () => {
+            processCwdStub.returns(VALID_CONF_DIR_PARENT);
+            await cli.parseArguments(buildCommand('build-push application-name'));
+            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+            assertNoCliErrors(onErrorStub);
+            assert.deepEqual(callArgs, expectedBuildPushCommands);
         });
 
     });

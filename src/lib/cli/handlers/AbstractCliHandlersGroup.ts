@@ -32,6 +32,7 @@ export class AbstractCliHandlersGroup {
         }
     }
 
+    // TODO: simplify after end of tests, improve selection
     protected async selectApps(appType: AppType, args: ICliApplicationsArguments) {
         const envName: string | undefined = args.environment || undefined;
         const getAllConfig = args.remainingArguments && args.remainingArguments.indexOf('all') !== -1;
@@ -41,7 +42,6 @@ export class AbstractCliHandlersGroup {
 
         let apps: IKubeApplication[];
 
-        // TODO: improve selection, add tests
         if (getAllConfig) {
             apps = await this.api.getAllAppsConfigs(targetDir, appType);
         }
@@ -61,19 +61,9 @@ export class AbstractCliHandlersGroup {
         return {apps, envName};
     }
 
-    protected getAppNamesAndIds(args: string[]) {
-        const appNames: string[] = [];
-        const appIds: number[] = [];
-
-        _.forEach(args, (app: string) => {
-            isNaN((app as any)) ? appNames.push(String(app)) : appIds.push(Number(app));
-        });
-
-        return {appNames, appIds};
-    }
-
     protected async getAppConfigs(targetDir: string, appType: AppType, appNames: string[],
                                   appIds: number[]): Promise<IKubeApplication[]> {
+
         const configurations = await this.api.loadAppsConfigurationRecursively(targetDir);
         // console.log(JSON.stringify(configurations, null, 2))
         const allApps = configurations.valid.apps.concat(configurations.valid.serviceApps);
@@ -100,6 +90,17 @@ export class AbstractCliHandlersGroup {
         }
 
         return selectedApps;
+    }
+
+    protected getAppNamesAndIds(args: string[]) {
+        const appNames: string[] = [];
+        const appIds: number[] = [];
+
+        _.forEach(args, (app: string) => {
+            isNaN((app as any)) ? appNames.push(String(app)) : appIds.push(Number(app));
+        });
+
+        return {appNames, appIds};
     }
 
     protected async _deployApplications(apps: IKubeApplication[], envName?: string) {
