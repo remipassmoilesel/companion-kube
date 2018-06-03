@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import * as sinon from 'sinon';
-import {CliCommand} from '../../../lib/cli/parser/CliCommand';
+import {CliCommand, IParsedArguments} from '../../../lib/cli/parser/CliCommand';
 import {CliOption} from '../../../lib/cli/parser/CliOption';
 import {CliParser} from '../../../lib/cli/parser/CliParser';
 import {TestHelpers} from '../../utils/TestHelpers';
@@ -66,6 +66,15 @@ describe.only(' > CliParserSpec', async function () {
 
         const calledCommand: CliCommand = deployStub.getCall(0).args[0];
         assert.deepEqual(calledCommand.command, deployCommand.command);
+    });
+
+    it('Parser should parse options correctly', async () => {
+        await cliParser.parse(['svc', 'deploy', '-f']);
+        const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
+        assert.isTrue(parsedArguments.f);
+        assert.isTrue(parsedArguments.force);
+        assert.isUndefined(parsedArguments.e);
+        assert.isUndefined(parsedArguments.environment);
     });
 
 });
