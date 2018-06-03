@@ -6,11 +6,10 @@ import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
 import {
-    INVALID_CONF_DIR,
     VALID_CHART_DIR,
     VALID_CHART_DIR_PARENT,
     VALID_DEPLOYMENT_DIR,
-    VALID_DEPLOYMENT_DIR_PARENT
+    VALID_DEPLOYMENT_DIR_PARENT,
 } from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
@@ -21,36 +20,47 @@ import {
     getTestConfig,
 } from './CliSpecHelpers';
 import {
-    expectedDockerBuildCommands,
-    expectedBuildPushCommands,
+    expectedDeployCommandsForHelmChartWithEnvFlag,
+    expectedDeployCommandsForHelmChartWithoutEnvFlag,
     expectedDeployCommandsForManifestWithEnvFlag,
     expectedDeployCommandsForManifestWithoutEnvFlag,
-    expectedDeployCommandsForHelmChartWithoutEnvFlag,
-    expectedDeployCommandsForHelmChartWithEnvFlag
 } from './CliSpecData';
 
 const assert = chai.assert;
 
-describe(' > CliSpec', function () {
+describe(' > MiscCommandsSpec', function () {
     this.timeout(2000);
-
-    const commandExec = new CommandExecutor();
-    const commandExecStub: SinonStub = sinon.stub(commandExec, 'execCommand');
-
-    const processCwdStub: SinonStub = sinon.stub(process, 'cwd');
-    const onErrorStub: SinonStub = sinon.stub();
-
-    const fsWriteFileSyncStub = sinon.stub(fs, 'writeFileSync');
-    const fsExistsSyncStub = sinon.stub(fs, 'existsSync');
 
     const mainConfig = getTestConfig();
 
-    const cliDisplay = new CliDisplay();
-    const showWarningOnAppsStub = sinon.stub(cliDisplay, 'showWarningOnApps');
+    let commandExec: CommandExecutor;
+    let commandExecStub: SinonStub;
+    let processCwdStub: SinonStub;
+    let onErrorStub: SinonStub;
+    let fsWriteFileSyncStub: SinonStub;
+    let fsExistsSyncStub: SinonStub;
+    let cliDisplay: CliDisplay;
+    let showWarningOnAppsStub: SinonStub;
+    let api: Api;
+    let cli: Cli;
 
-    const api = new Api(mainConfig, commandExec);
-    const cli = new Cli(mainConfig, api, commandExec, cliDisplay, onErrorStub);
-    cli.setupParser();
+    before(() => {
+        commandExec = new CommandExecutor();
+        commandExecStub = sinon.stub(commandExec, 'execCommand');
+
+        processCwdStub = sinon.stub(process, 'cwd');
+        onErrorStub = sinon.stub();
+
+        fsWriteFileSyncStub = sinon.stub(fs, 'writeFileSync');
+        fsExistsSyncStub = sinon.stub(fs, 'existsSync');
+
+        cliDisplay = new CliDisplay();
+        showWarningOnAppsStub = sinon.stub(cliDisplay, 'showWarningOnApps');
+
+        api = new Api(mainConfig, commandExec);
+        cli = new Cli(mainConfig, api, commandExec, cliDisplay, onErrorStub);
+        cli.setupParser();
+    });
 
     afterEach(() => {
         processCwdStub.reset();
@@ -77,92 +87,6 @@ describe(' > CliSpec', function () {
         it(' > Non existing command should throw', async () => {
             await cli.parseArguments(buildCommand('non existing command'));
             assertCliError(/Invalid command:.+/i, onErrorStub);
-        });
-
-    });
-
-    describe('Init', () => {
-
-        beforeEach(() => {
-            processCwdStub.returns('/tmp');
-        });
-
-        it(' > Init should work', async () => {
-            fsExistsSyncStub.returns(false);
-            await cli.parseArguments(buildCommand('init'));
-            assertNoCliErrors(onErrorStub);
-        });
-
-        it(' > Init should throw if file already exists', async () => {
-            fsExistsSyncStub.returns(true);
-            await cli.parseArguments(buildCommand('init'));
-            assertCliError(/File 'ck-config.js' already exist !/i, onErrorStub);
-        });
-
-        it(' > Init should not throw if file already exists and if forced', async () => {
-            fsExistsSyncStub.returns(true);
-            await cli.parseArguments(buildCommand('init -f'));
-            assertNoCliErrors(onErrorStub);
-        });
-
-    });
-
-    describe('List', () => {
-
-        it(' > List should not throw if all configurations are valid', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
-            await cli.parseArguments(buildCommand('list'));
-            assertNoCliErrors(onErrorStub);
-        });
-
-        it(' > List should throw if configurations are invalid', async () => {
-            processCwdStub.returns(INVALID_CONF_DIR);
-            await cli.parseArguments(buildCommand('list'));
-            assertCliError(/Invalid configurations found/i, onErrorStub);
-        });
-
-    });
-
-    describe('Docker commands', () => {
-
-        beforeEach(() => {
-            showWarningOnAppsStub.returns(Promise.resolve());
-        });
-
-        it(' > Build images in current dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
-            await cli.parseArguments(buildCommand('build'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
-
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedDockerBuildCommands);
-        });
-
-        it(' > Build images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
-            await cli.parseArguments(buildCommand('build valid-deployment-app'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
-
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedDockerBuildCommands);
-        });
-
-        it(' > Build and push images in current dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
-            await cli.parseArguments(buildCommand('build-push'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
-
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedBuildPushCommands);
-        });
-
-        it(' > Build and push images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
-            await cli.parseArguments(buildCommand('build-push valid-deployment-app'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
-
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedBuildPushCommands);
         });
 
     });
