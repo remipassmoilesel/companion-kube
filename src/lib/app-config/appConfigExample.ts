@@ -3,7 +3,7 @@ import {AppType, IKubeApplication} from './appConfigTypes';
 export const exampleCkConfig: IKubeApplication = {
     // these values will be deleted when persisted
     id: 0,
-    type: AppType.NORMAL,
+    type: AppType.APPLICATION,
     configPath: '/path/to/config',
     rootPath: '/path/to/app',
     // end

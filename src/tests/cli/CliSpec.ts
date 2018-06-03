@@ -5,12 +5,12 @@ import {SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
-import {INVALID_CONF_DIR, VALID_CONF_DIR} from '../setupSpec';
+import {INVALID_CONF_DIR, VALID_CONF_DIR, VALID_CONF_DIR_PARENT} from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
     assertNoCliErrors,
-    buildCommand,
+    buildCommand, expectedBuildCommands,
     getCallArgumentsWithoutPrereqChecks,
     getTestConfig,
 } from './CliSpecHelpers';
@@ -115,19 +115,22 @@ describe(' > CliSpec', function () {
             showWarningOnAppsStub.returns(Promise.resolve());
         });
 
-        it(' > Build images should work', async () => {
+        it(' > Build images in current dir should work', async () => {
             processCwdStub.returns(VALID_CONF_DIR);
             await cli.parseArguments(buildCommand('build'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
-            const expected = [
-                ['./pre-build.sh', {displayOutput: true},
-                    {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid'}],
-                ['docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid/path/to/'
-                + 'docker/build -t deployment-with-docker-file:0.1',
-                    {displayOutput: true}],
-            ];
 
-            assert.deepEqual(callArgs, expected);
+            assert.deepEqual(callArgs, expectedBuildCommands);
+            assertNoCliErrors(onErrorStub);
+        });
+
+        it(' > Build images from parent dir should work', async () => {
+            processCwdStub.returns(VALID_CONF_DIR);
+            await cli.parseArguments(buildCommand('build'));
+            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+            assert.deepEqual(callArgs, expectedBuildCommands);
+            assertNoCliErrors(onErrorStub);
         });
 
     });

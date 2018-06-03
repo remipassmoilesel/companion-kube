@@ -4,7 +4,7 @@ export const testValidCkConfig: IKubeApplication = {
     id: 0,
     configPath: '/test/config/path/',
     rootPath: '/test/root/path/',
-    type: AppType.NORMAL,
+    type: AppType.APPLICATION,
 
     name: 'application-name',
     displayCommandsOutput: true,

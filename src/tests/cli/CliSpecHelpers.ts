@@ -48,10 +48,21 @@ export const showStubCallArguments = (stubs: SinonStub[]) => {
 };
 
 export const assertNoCliErrors = (onErrorStub: SinonStub) => {
-    assert.lengthOf(onErrorStub.getCalls(), 0, 'Cli errors occurred');
+    const calls = onErrorStub.getCalls();
+    const errors: Error[] = _.map(calls, (call) => call.args[0]);
+    assert.lengthOf(onErrorStub.getCalls(), 0, `Cli errors occurred: ${_.map(errors, (err) => err.message)}`);
 };
 
 export const getCallArgumentsWithoutPrereqChecks = (stub: SinonStub): any[] => {
-    const calls = stub.getCalls().slice(mainConfig.prerequisites.length);
-    return _.map(calls, (call) => call.args);
+    const allArgs = _.map(stub.getCalls(), (call) => call.args);
+    // console.log(allArgs);
+    return allArgs.slice(mainConfig.prerequisites.length);
 };
+
+export const expectedBuildCommands = [
+    ['./pre-build.sh', {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid'}],
+    ['docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid/path/to/'
+    + 'docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true}],
+];

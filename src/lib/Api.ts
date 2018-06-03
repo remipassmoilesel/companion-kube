@@ -67,7 +67,7 @@ export class Api {
         const appConfigs = await this.loadAppsConfigurationRecursively(targetDir);
 
         switch (appType) {
-            case AppType.ALL:
+            case AppType.SERVICE_AND_APPLICATION:
                 return appConfigs.valid.serviceApps.concat(appConfigs.valid.apps);
             case AppType.SERVICE:
                 return appConfigs.valid.serviceApps;

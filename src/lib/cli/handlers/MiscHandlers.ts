@@ -61,7 +61,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.ALL, args);
+        const {envName, apps} = await this.selectApps(AppType.SERVICE_AND_APPLICATION, args);
         await this.display.showWarningOnApps(CliOperations.BUILD, apps, envName);
 
         await this._buildApplications(apps);
@@ -71,7 +71,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.ALL, args);
+        const {envName, apps} = await this.selectApps(AppType.SERVICE_AND_APPLICATION, args);
         await this.display.showWarningOnApps(CliOperations.PUSH, apps, envName);
 
         await this._pushApplications(apps);
@@ -81,7 +81,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         this.display.showCliHeader();
         this.checkPrerequisites();
 
-        const {envName, apps} = await this.selectApps(AppType.ALL, args);
+        const {envName, apps} = await this.selectApps(AppType.SERVICE_AND_APPLICATION, args);
         await this.display.showWarningOnApps(CliOperations.PUSH, apps, envName);
 
         await this._buildApplications(apps);

@@ -12,7 +12,7 @@ const packageJson = require(path.join(projectRoot, 'package.json'));
 
 const mainConfig: IMainConfig = {
     version: packageJson.version,
-    debug: false,
+    debug: true,
     prerequisites: PREREQUISITES,
     projectRoot,
     configSearchIgnore: [

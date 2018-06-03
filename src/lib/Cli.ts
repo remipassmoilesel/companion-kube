@@ -113,7 +113,7 @@ export class Cli {
                 async (command: CliCommand, args: IParsedArguments) => {
                     // TODO: restore completion:
                     // return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.NORMAL);
-                    await this.handlers.appHandlers.deployApplications(AppType.NORMAL, args);
+                    await this.handlers.appHandlers.deployApplications(AppType.APPLICATION, args);
                 }).addOption(envOption),
         );
 
@@ -122,7 +122,7 @@ export class Cli {
                 async (command: CliCommand, args: IParsedArguments) => {
                     // TODO: restore completion:
                     // return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.NORMAL);
-                    await this.handlers.appHandlers.redeployApplications(AppType.NORMAL, args);
+                    await this.handlers.appHandlers.redeployApplications(AppType.APPLICATION, args);
                 }).addOption(envOption),
         );
 
@@ -131,7 +131,7 @@ export class Cli {
                 async (command: CliCommand, args: IParsedArguments) => {
                     // TODO: restore completion:
                     // return this.api.getValidAppConfigurationsAsString(process.cwd(), AppType.NORMAL);
-                    await this.handlers.appHandlers.destroyApplications(AppType.NORMAL, args);
+                    await this.handlers.appHandlers.destroyApplications(AppType.APPLICATION, args);
                 }).addOption(envOption),
         );
 

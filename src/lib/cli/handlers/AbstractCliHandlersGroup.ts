@@ -7,6 +7,7 @@ import {CliDisplay} from '../CliDisplay';
 import {Logger} from '../../log/Logger';
 import {walkApplications} from '../../utils/utils';
 import {CommandExecutor} from '../../utils/CommandExecutor';
+import {AppConfigHelpers} from '../../app-config/AppConfigHelpers';
 
 export class AbstractCliHandlersGroup {
 
@@ -74,27 +75,31 @@ export class AbstractCliHandlersGroup {
     protected async getAppConfigs(targetDir: string, appType: AppType, appNames: string[],
                                   appIds: number[]): Promise<IKubeApplication[]> {
         const configurations = await this.api.loadAppsConfigurationRecursively(targetDir);
-
+        // console.log(JSON.stringify(configurations, null, 2))
         const allApps = configurations.valid.apps.concat(configurations.valid.serviceApps);
 
-        const toDeploy: IKubeApplication[] = [];
+        const selectedApps: IKubeApplication[] = [];
         for (const appName of appNames) {
-            const app = _.find(allApps, (ap) => ap.name === appName && ap.type === appType);
+            const app = _.find(allApps, (ap: IKubeApplication) => {
+                return ap.name === appName && AppConfigHelpers.isType(ap, appType);
+            });
             if (!app) {
                 throw new Error(`Application not found: ${appName}. Is it a service application ?`);
             }
-            toDeploy.push(app);
+            selectedApps.push(app);
         }
 
         for (const appId of appIds) {
-            const app = _.find(allApps, (ap) => ap.id === appId && ap.type === appType);
+            const app = _.find(allApps, (ap: IKubeApplication) => {
+                return ap.id === appId && AppConfigHelpers.isType(ap, appType);
+            });
             if (!app) {
                 throw new Error(`Application not found: ${appId}. Is it a service application ?`);
             }
-            toDeploy.push(app);
+            selectedApps.push(app);
         }
 
-        return toDeploy;
+        return selectedApps;
     }
 
     protected async _deployApplications(apps: IKubeApplication[], envName?: string) {
