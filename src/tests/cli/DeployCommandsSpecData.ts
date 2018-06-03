@@ -118,7 +118,7 @@ export const expectedSvcDeployCommandsForManifestWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-deployment'},
+        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
     ],
     [
         'kubectl create --namespace prod -f ' + VALID_SVC_ROOT + '/valid-deployment',
@@ -131,7 +131,7 @@ export const expectedSvcDeployCommandsForManifestWithEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-deployment'},
+        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
     ],
 ];
 
@@ -147,7 +147,7 @@ export const expectedAppDeployCommandsForHelmChartWithoutEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-chart'}],
+        {cwd: VALID_APP_ROOT + '/valid-chart'}],
     [
         'helm dependency build ' + VALID_APP_ROOT + '/valid-chart',
         {displayOutput: true},
@@ -175,7 +175,7 @@ export const expectedAppDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-chart'}],
+        {cwd: VALID_APP_ROOT + '/valid-chart'}],
     [
         'helm dependency build ' + VALID_APP_ROOT + '/valid-chart',
         {displayOutput: true},
@@ -195,7 +195,7 @@ export const expectedSvcDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-chart'},
+        {cwd: VALID_SVC_ROOT + '/valid-chart'},
     ],
     [
         'docker build ' + VALID_SVC_ROOT + '/valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
@@ -204,7 +204,7 @@ export const expectedSvcDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-chart'},
+        {cwd: VALID_SVC_ROOT + '/valid-chart'},
     ],
     [
         'helm dependency build ' + VALID_SVC_ROOT + '/valid-chart',
@@ -217,7 +217,7 @@ export const expectedSvcDeployCommandsForHelmChartWithEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-chart'},
+        {cwd: VALID_SVC_ROOT + '/valid-chart'},
     ],
 ];
 
@@ -226,7 +226,7 @@ export const expectedAppDeployCommandsForAnsibleWithoutEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+        {cwd: VALID_APP_ROOT + '/valid-ansible'},
     ],
     [
         'docker build ' + VALID_APP_ROOT + '/valid-ansible/path/to/docker/build -t deployment-with-docker-file:0.1',
@@ -235,7 +235,7 @@ export const expectedAppDeployCommandsForAnsibleWithoutEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+        {cwd: VALID_APP_ROOT + '/valid-ansible'},
     ],
     [
         'ansible-playbook -i ' + VALID_APP_ROOT + '/valid-ansible/path/to/dir/inventory-dev.cfg '
@@ -245,7 +245,7 @@ export const expectedAppDeployCommandsForAnsibleWithoutEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+        {cwd: VALID_APP_ROOT + '/valid-ansible'},
     ],
 ];
 
@@ -253,7 +253,7 @@ export const expectedAppDeployCommandsForAnsibleWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+        {cwd: VALID_APP_ROOT + '/valid-ansible'},
     ],
     [
         'docker build ' + VALID_APP_ROOT + '/valid-ansible/path/to/docker/build -t deployment-with-docker-file:0.1',
@@ -262,7 +262,7 @@ export const expectedAppDeployCommandsForAnsibleWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+        {cwd: VALID_APP_ROOT + '/valid-ansible'},
     ],
     [
         'ansible-playbook -i ' + VALID_APP_ROOT + '/valid-ansible/path/to/dir/inventory-prod.cfg '
@@ -271,7 +271,7 @@ export const expectedAppDeployCommandsForAnsibleWithEnvFlag = [
     ],
     ['./post-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+        {cwd: VALID_APP_ROOT + '/valid-ansible'},
     ],
 ];
 
@@ -279,7 +279,7 @@ export const expectedSvcDeployCommandsForAnsibleWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-ansible'},
+        {cwd: VALID_SVC_ROOT + '/valid-ansible'},
     ],
     [
         'docker build ' + VALID_SVC_ROOT + '/valid-ansible/path/to/docker/build -t deployment-with-docker-file:0.1',
@@ -288,7 +288,7 @@ export const expectedSvcDeployCommandsForAnsibleWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-ansible'},
+        {cwd: VALID_SVC_ROOT + '/valid-ansible'},
     ],
     [
         'ansible-playbook -i ' + VALID_SVC_ROOT + '/valid-ansible/path/to/dir/inventory-prod.cfg '
@@ -298,6 +298,6 @@ export const expectedSvcDeployCommandsForAnsibleWithEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '' + VALID_SVC_ROOT + '/valid-ansible'},
+        {cwd: VALID_SVC_ROOT + '/valid-ansible'},
     ],
 ];
