@@ -5,7 +5,13 @@ import {SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
-import {INVALID_CONF_DIR, VALID_DEPLOYMENT_DIR, VALID_DEPLOYMENT_DIR_PARENT} from '../setupSpec';
+import {
+    INVALID_CONF_DIR,
+    VALID_CHART_DIR,
+    VALID_CHART_DIR_PARENT,
+    VALID_DEPLOYMENT_DIR,
+    VALID_DEPLOYMENT_DIR_PARENT
+} from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
@@ -17,8 +23,10 @@ import {
 import {
     expectedDockerBuildCommands,
     expectedBuildPushCommands,
-    expectedDeployCommandsWithEnvFlag,
-    expectedDeployCommandsWithoutEnvFlag
+    expectedDeployCommandsForManifestWithEnvFlag,
+    expectedDeployCommandsForManifestWithoutEnvFlag,
+    expectedDeployCommandsForHelmChartWithoutEnvFlag,
+    expectedDeployCommandsForHelmChartWithEnvFlag
 } from './CliSpecData';
 
 const assert = chai.assert;
@@ -159,7 +167,7 @@ describe(' > CliSpec', function () {
 
     });
 
-    describe('Deployment commands', () => {
+    describe('Deployment commands with Kubernetes manifests', () => {
 
         describe('Without environment flag', () => {
 
@@ -173,7 +181,7 @@ describe(' > CliSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsWithoutEnvFlag);
+                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithoutEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -182,7 +190,7 @@ describe(' > CliSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsWithoutEnvFlag);
+                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithoutEnvFlag);
             });
 
         });
@@ -199,7 +207,7 @@ describe(' > CliSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsWithEnvFlag);
+                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -208,7 +216,63 @@ describe(' > CliSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsWithEnvFlag);
+                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+            });
+
+        });
+
+    });
+
+    describe('Deployment commands with Helm Charts', () => {
+
+        describe('Without environment flag', () => {
+
+            beforeEach(() => {
+                showWarningOnAppsStub.returns(Promise.resolve());
+            });
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_CHART_DIR);
+                await cli.parseArguments(buildCommand('deploy'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithoutEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_CHART_DIR_PARENT);
+                await cli.parseArguments(buildCommand('deploy valid-chart-app'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithoutEnvFlag);
+            });
+
+        });
+
+        describe('With environment flag', () => {
+
+            beforeEach(() => {
+                showWarningOnAppsStub.returns(Promise.resolve());
+            });
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_CHART_DIR);
+                await cli.parseArguments(buildCommand('deploy -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_CHART_DIR_PARENT);
+                await cli.parseArguments(buildCommand('deploy valid-chart-app -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithEnvFlag);
             });
 
         });

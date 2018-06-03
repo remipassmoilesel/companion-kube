@@ -28,7 +28,7 @@ export const expectedBuildPushCommands = [
     ],
 ];
 
-export const expectedDeployCommandsWithoutEnvFlag = [
+export const expectedDeployCommandsForManifestWithoutEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
@@ -61,7 +61,7 @@ export const expectedDeployCommandsWithoutEnvFlag = [
     ],
 ];
 
-export const expectedDeployCommandsWithEnvFlag = [
+export const expectedDeployCommandsForManifestWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
@@ -91,5 +91,69 @@ export const expectedDeployCommandsWithEnvFlag = [
         './post-deploy.sh',
         {displayOutput: true},
         {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+    ],
+];
+
+export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+    ],
+    [
+        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/'
+        + 'valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+    [
+        './pre-deploy.sh',
+        {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+    ],
+    ['kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube'
+    + '/src/tests/test-data/valid-chart',
+        {displayOutput: true},
+    ],
+    [
+        'kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube/src'
+        + '/tests/test-data/valid-chart/second/dir',
+        {displayOutput: true},
+    ],
+    [
+        './post-deploy.sh',
+        {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+    ],
+];
+
+export const expectedDeployCommandsForHelmChartWithEnvFlag = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+    ],
+    [
+        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/'
+        + 'valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+    [
+        './pre-deploy.sh',
+        {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+    ],
+    ['kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube'
+    + '/src/tests/test-data/valid-chart',
+        {displayOutput: true},
+    ],
+    [
+        'kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube/src'
+        + '/tests/test-data/valid-chart/second/dir',
+        {displayOutput: true},
+    ],
+    [
+        './post-deploy.sh',
+        {displayOutput: true},
+        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
     ],
 ];
