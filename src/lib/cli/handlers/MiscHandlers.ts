@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {
     ICliApplicationsArguments,
-    ICliBaseArguments, ICliRunArguments,
+    ICliEnvOptions, ICliForceEnvOptions, ICliRunArguments,
 } from '../cliTypes';
 import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {ScriptRunner} from '../../helpers/ScriptRunner';
@@ -11,9 +11,9 @@ import {IAugmentedError} from '../../utils/IAppError';
 
 export class MiscHandlers extends AbstractCliHandlersGroup {
 
-    public initDirectory(args: ICliBaseArguments) {
+    public initDirectory(args: ICliForceEnvOptions) {
         this.display.showCliHeader();
-        this.api.initDirectory(process.cwd(), args.f);
+        this.api.initDirectory(process.cwd(), args.f || false);
         this.logger.success('File ck-config.js created !');
     }
 
@@ -23,12 +23,12 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
 
         const appConfig: IKubeApplication = await this.api.loadAppConfiguration(process.cwd());
 
-        if (!args.script || !args.script.length){
+        if (!args.remainingArguments || !args.remainingArguments.length){
             this.display.showScripts(appConfig);
             throw new Error('You must specify a script to execute');
         }
 
-        const scriptArgs: string[] = args.script;
+        const scriptArgs: string[] = args.remainingArguments;
         const scriptName = scriptArgs[0];
 
         const scriptRunner = new ScriptRunner(this.commandExec);
@@ -41,7 +41,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         await scriptRunner.run(script, scriptArgs.slice(1));
     }
 
-    public async listApplications(args: ICliBaseArguments) {
+    public async listApplications() {
         this.display.showCliHeader();
         this.checkPrerequisites();
 

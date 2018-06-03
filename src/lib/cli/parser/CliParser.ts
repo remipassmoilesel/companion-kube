@@ -6,9 +6,11 @@ export class CliParser {
 
     private commands: CliCommand[];
 
-    constructor(commands: CliCommand[]) {
+    constructor(commands?: CliCommand[]) {
         this.commands = [];
-        this.addAllCommands(commands);
+        if (commands){
+            this.addAllCommands(commands);
+        }
     }
 
     public addCommand(command: CliCommand) {

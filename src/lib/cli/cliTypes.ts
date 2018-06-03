@@ -1,14 +1,18 @@
-export interface ICliBaseArguments {
-    f: boolean;
-    force: boolean;
-    e: string;
-    environment: string;
+
+export interface ICliForceEnvOptions {
+    f?: boolean;
+    force?: boolean;
 }
 
-export interface ICliApplicationsArguments extends ICliBaseArguments{
-    applications: string[];
+export interface ICliEnvOptions {
+    e?: string;
+    environment?: string;
 }
 
-export interface ICliRunArguments extends ICliBaseArguments{
-    script: string[]; // Script name then arguments. Example: ck run dashboard --gui
+export interface ICliApplicationsArguments extends ICliEnvOptions {
+    remainingArguments: string[]; // Application names
+}
+
+export interface ICliRunArguments extends ICliEnvOptions {
+    remainingArguments: string[]; // Script name then arguments. Example: ck run dashboard --gui
 }

@@ -33,10 +33,10 @@ export class AbstractCliHandlersGroup {
 
     protected async selectApps(appType: AppType, args: ICliApplicationsArguments) {
         const envName: string | undefined = args.environment || undefined;
-        const getAllConfig = args.applications && args.applications.indexOf('all') !== -1;
+        const getAllConfig = args.remainingArguments && args.remainingArguments.indexOf('all') !== -1;
         const targetDir = process.cwd();
 
-        const {appNames, appIds} = await this.getAppNamesAndIds(args.applications);
+        const {appNames, appIds} = await this.getAppNamesAndIds(args.remainingArguments);
 
         let apps: IKubeApplication[];
 
