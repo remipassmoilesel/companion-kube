@@ -6,12 +6,10 @@ import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
 import {
+    VALID_APP_ROOT,
     VALID_CHART_APP_DIR,
-    VALID_CHART_APP_PARENT,
     VALID_DEPLOYMENT_APP_DIR,
-    VALID_DEPLOYMENT_APP_PARENT,
-    VALID_DEPLOYMENT_SVC_DIR,
-    VALID_DEPLOYMENT_SVC_PARENT,
+    VALID_DEPLOYMENT_SVC_DIR, VALID_SVC_ROOT,
 } from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
@@ -25,7 +23,9 @@ import {
     expectedAppDeployCommandsForManifestWithEnvFlag,
     expectedAppDeployCommandsForManifestWithoutEnvFlag,
     expectedAppDeployCommandsForHelmChartWithEnvFlag,
-    expectedSvcDeployCommandsForManifestWithEnvFlag, expectedAppDeployCommandsForHelmChartWithoutEnvFlag,
+    expectedSvcDeployCommandsForManifestWithEnvFlag,
+    expectedAppDeployCommandsForHelmChartWithoutEnvFlag,
+    expectedSvcDeployCommandsForHelmChartWithEnvFlag,
 } from './CliSpecData';
 
 const assert = chai.assert;
@@ -79,9 +79,9 @@ describe(' > DeployCommandsSpec', function () {
         fsExistsSyncStub.restore();
     });
 
-    describe('Deployment commands with Kubernetes manifests', () => {
+    describe('Deploy Kubernetes manifests', () => {
 
-        describe('Without environment flag', () => {
+        describe('Application without environment flag', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
@@ -97,7 +97,7 @@ describe(' > DeployCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                processCwdStub.returns(VALID_APP_ROOT);
                 await cli.parseArguments(buildCommand('deploy valid-deployment-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -107,7 +107,7 @@ describe(' > DeployCommandsSpec', function () {
 
         });
 
-        describe('With environment flag', () => {
+        describe('Application with environment flag', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
@@ -123,7 +123,7 @@ describe(' > DeployCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                processCwdStub.returns(VALID_APP_ROOT);
                 await cli.parseArguments(buildCommand('deploy valid-deployment-app -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -133,7 +133,7 @@ describe(' > DeployCommandsSpec', function () {
 
         });
 
-        describe('Services', () => {
+        describe('Deploy services', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
@@ -141,7 +141,7 @@ describe(' > DeployCommandsSpec', function () {
 
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
-                await cli.parseArguments(buildCommand('deploy -e prod'));
+                await cli.parseArguments(buildCommand('svc deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
@@ -149,7 +149,7 @@ describe(' > DeployCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_SVC_PARENT);
+                processCwdStub.returns(VALID_SVC_ROOT);
                 await cli.parseArguments(buildCommand('svc deploy valid-deployment-svc -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -158,7 +158,7 @@ describe(' > DeployCommandsSpec', function () {
             });
 
             it(' > Deploy without svc prefix should fail', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_SVC_PARENT);
+                processCwdStub.returns(VALID_SVC_ROOT);
                 await cli.parseArguments(buildCommand('deploy valid-deployment-svc -e prod'));
                 assertCliError(/Application not found:.+/i, onErrorStub);
             });
@@ -167,9 +167,9 @@ describe(' > DeployCommandsSpec', function () {
 
     });
 
-    describe('Deployment commands with Helm Charts', () => {
+    describe('Deploy Helm Charts', () => {
 
-        describe('Without environment flag', () => {
+        describe('Application without environment flag', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
@@ -185,7 +185,7 @@ describe(' > DeployCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_CHART_APP_PARENT);
+                processCwdStub.returns(VALID_APP_ROOT);
                 await cli.parseArguments(buildCommand('deploy valid-chart-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -195,7 +195,7 @@ describe(' > DeployCommandsSpec', function () {
 
         });
 
-        describe('With environment flag', () => {
+        describe('Application with environment flag', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
@@ -211,12 +211,44 @@ describe(' > DeployCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_CHART_APP_PARENT);
+                processCwdStub.returns(VALID_APP_ROOT);
                 await cli.parseArguments(buildCommand('deploy valid-chart-app -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
                 assert.deepEqual(callArgs, expectedAppDeployCommandsForHelmChartWithEnvFlag);
+            });
+
+        });
+
+        describe('Deploy services', () => {
+
+            beforeEach(() => {
+                showWarningOnAppsStub.returns(Promise.resolve());
+            });
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
+                await cli.parseArguments(buildCommand('svc deploy -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForHelmChartWithEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_SVC_ROOT);
+                await cli.parseArguments(buildCommand('svc deploy valid-deployment-svc -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForHelmChartWithEnvFlag);
+            });
+
+            it(' > Deploy without svc prefix should fail', async () => {
+                processCwdStub.returns(VALID_SVC_ROOT);
+                await cli.parseArguments(buildCommand('deploy valid-deployment-svc -e prod'));
+                assertCliError(/Application not found:.+/i, onErrorStub);
             });
 
         });

@@ -6,9 +6,8 @@ import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
 import {
-    INVALID_APP_DIR,
+    INVALID_APP_DIR, VALID_APP_ROOT,
     VALID_DEPLOYMENT_APP_DIR,
-    VALID_DEPLOYMENT_APP_PARENT,
     VALID_DEPLOYMENT_SVC_DIR,
 } from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
@@ -150,7 +149,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Build images from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                processCwdStub.returns(VALID_APP_ROOT);
                 await cli.parseArguments(buildCommand('build valid-deployment-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -168,7 +167,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Build and push images from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                processCwdStub.returns(VALID_APP_ROOT);
                 await cli.parseArguments(buildCommand('build-push valid-deployment-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 

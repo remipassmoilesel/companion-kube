@@ -190,3 +190,31 @@ export const expectedAppDeployCommandsForHelmChartWithEnvFlag = [
         {cwd: VALID_APP_ROOT + '/valid-chart'},
     ],
 ];
+
+export const expectedSvcDeployCommandsForHelmChartWithEnvFlag = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+    ],
+    [
+        'docker build ' + VALID_SVC_ROOT + '/valid-deployment/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+    [
+        './pre-deploy.sh',
+        {displayOutput: true},
+        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+    ],
+    [
+        'kubectl create --namespace prod -f ' + VALID_SVC_ROOT + '/valid-deployment',
+        {displayOutput: true}],
+    [
+        'kubectl create --namespace prod -f ' + VALID_SVC_ROOT + '/valid-deployment/second/dir',
+        {displayOutput: true}],
+    [
+        './post-deploy.sh',
+        {displayOutput: true},
+        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+    ],
+];
