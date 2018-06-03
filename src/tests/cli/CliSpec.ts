@@ -14,7 +14,12 @@ import {
     getCallArgumentsWithoutPrereqChecks,
     getTestConfig,
 } from './CliSpecHelpers';
-import {expectedBuildCommands, expectedBuildPushCommands, expectedDeployCommands} from './CliSpecData';
+import {
+    expectedBuildCommands,
+    expectedBuildPushCommands,
+    expectedDeployCommandsWithEnvFlag,
+    expectedDeployCommandsWithoutEnvFlag
+} from './CliSpecData';
 
 const assert = chai.assert;
 
@@ -154,9 +159,9 @@ describe(' > CliSpec', function () {
 
     });
 
-    describe.only('Deployment commands', () => {
+    describe('Deployment commands', () => {
 
-        describe.only('Without environment flag', () => {
+        describe('Without environment flag', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
@@ -168,7 +173,7 @@ describe(' > CliSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommands);
+                assert.deepEqual(callArgs, expectedDeployCommandsWithoutEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -177,7 +182,33 @@ describe(' > CliSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommands);
+                assert.deepEqual(callArgs, expectedDeployCommandsWithoutEnvFlag);
+            });
+
+        });
+
+        describe('With environment flag', () => {
+
+            beforeEach(() => {
+                showWarningOnAppsStub.returns(Promise.resolve());
+            });
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_CONF_DIR);
+                await cli.parseArguments(buildCommand('deploy -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsWithEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_CONF_DIR_PARENT);
+                await cli.parseArguments(buildCommand('deploy application-name -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsWithEnvFlag);
             });
 
         });
