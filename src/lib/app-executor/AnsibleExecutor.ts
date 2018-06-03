@@ -12,7 +12,7 @@ export class AnsibleExecutor extends AbstractAppExecutor {
      * @type {string}
      */
     private readonly CK_RELATIVE_PATH_PREFIX: string = '#/';
-    private readonly INVENTORY_FILE_NAME = 'inventory-%env.cfg';
+    private readonly INVENTORY_FILE_TEMPLATE = 'inventory-%env.cfg';
     protected logger: Logger = new Logger();
 
     public isSupported(app: IKubeApplication): boolean {
@@ -21,7 +21,7 @@ export class AnsibleExecutor extends AbstractAppExecutor {
 
     public async deploy(app: IKubeApplication, envName?: string): Promise<any> {
         if (!app.ansible) {
-            throw new Error();
+            throw new Error('Ansible section is mandatory !');
         }
 
         const playbookPath = this.getPlaybookPath('deploy', app.ansible);
@@ -30,8 +30,9 @@ export class AnsibleExecutor extends AbstractAppExecutor {
 
     public async destroy(app: IKubeApplication, envName?: string): Promise<any> {
         if (!app.ansible) {
-            throw new Error();
+            throw new Error('Ansible section is mandatory !');
         }
+
         const playbookPath = this.getPlaybookPath('destroy', app.ansible);
         await this.executePlaybook(playbookPath, app, envName);
     }
@@ -59,11 +60,11 @@ export class AnsibleExecutor extends AbstractAppExecutor {
             throw new Error();
         }
 
-        const inventoryName = this.INVENTORY_FILE_NAME.replace(
+        const inventoryName = this.INVENTORY_FILE_TEMPLATE.replace(
             '-%env',
             envName ? '-' + envName : '');
 
-        const inventoryDirectory = path.resolve(app.ansible.inventoryDirectory || app.rootPath);
+        const inventoryDirectory = path.join(app.rootPath, app.ansible.inventoryDirectory || '');
         const inventoryPath = path.join(inventoryDirectory, inventoryName);
         if (!fs.existsSync(inventoryPath)) {
             throw new Error(`Inventory not found at location: ${inventoryPath}`);
