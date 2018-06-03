@@ -1,6 +1,6 @@
-import {VALID_APP_ROOT} from '../setupSpec';
+import {VALID_APP_ROOT, VALID_SVC_ROOT} from '../setupSpec';
 
-export const expectedDockerBuildCommands = [
+export const expectedAppDockerBuildCommands = [
     [
         './pre-build.sh',
         {displayOutput: true},
@@ -13,7 +13,20 @@ export const expectedDockerBuildCommands = [
     ],
 ];
 
-export const expectedBuildPushCommands = [
+export const expectedSvcDockerBuildCommands = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+    ],
+    [
+        'docker build ' + VALID_SVC_ROOT + '/valid-deployment/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+];
+
+
+export const expectedAppBuildPushCommands = [
     [
         './pre-build.sh',
         {displayOutput: true},

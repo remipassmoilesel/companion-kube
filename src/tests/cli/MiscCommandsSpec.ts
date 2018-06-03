@@ -5,7 +5,12 @@ import {SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
-import {INVALID_APP_DIR, VALID_DEPLOYMENT_APP_DIR, VALID_DEPLOYMENT_APP_PARENT} from '../setupSpec';
+import {
+    INVALID_APP_DIR,
+    VALID_DEPLOYMENT_APP_DIR,
+    VALID_DEPLOYMENT_APP_PARENT,
+    VALID_DEPLOYMENT_SVC_DIR
+} from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
@@ -14,7 +19,11 @@ import {
     getCallArgumentsWithoutPrereqChecks,
     getTestConfig,
 } from './CliSpecHelpers';
-import {expectedBuildPushCommands, expectedDockerBuildCommands} from './CliSpecData';
+import {
+    expectedAppBuildPushCommands,
+    expectedAppDockerBuildCommands,
+    expectedSvcDockerBuildCommands
+} from './CliSpecData';
 
 const assert = chai.assert;
 
@@ -129,40 +138,66 @@ describe(' > MiscCommandsSpec', function () {
             showWarningOnAppsStub.returns(Promise.resolve());
         });
 
-        it(' > Build images in current dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
-            await cli.parseArguments(buildCommand('build'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+        describe('Applications', () => {
 
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedDockerBuildCommands);
+            it(' > Build images in current dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
+                await cli.parseArguments(buildCommand('build'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppDockerBuildCommands);
+            });
+
+            it(' > Build images from parent dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                await cli.parseArguments(buildCommand('build valid-deployment-app'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppDockerBuildCommands);
+            });
+
+            it(' > Build and push images in current dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
+                await cli.parseArguments(buildCommand('build-push'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppBuildPushCommands);
+            });
+
+            it(' > Build and push images from parent dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                await cli.parseArguments(buildCommand('build-push valid-deployment-app'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppBuildPushCommands);
+            });
+
         });
 
-        it(' > Build images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
-            await cli.parseArguments(buildCommand('build valid-deployment-app'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+        describe('Services', () => {
 
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedDockerBuildCommands);
-        });
+            it(' > Build images in current dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
+                await cli.parseArguments(buildCommand('build'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
-        it(' > Build and push images in current dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
-            await cli.parseArguments(buildCommand('build-push'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedSvcDockerBuildCommands);
+            });
 
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedBuildPushCommands);
-        });
+            it(' > Build images from parent dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
+                await cli.parseArguments(buildCommand('build valid-deployment-svc'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
-        it(' > Build and push images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
-            await cli.parseArguments(buildCommand('build-push valid-deployment-app'));
-            const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedSvcDockerBuildCommands);
+            });
 
-            assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedBuildPushCommands);
         });
 
     });
