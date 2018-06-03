@@ -42,68 +42,96 @@ describe(' > CliParserSpec', async function () {
         deployStub.reset();
     });
 
-    it('Parser should throw if command is invalid', async () => {
-        await TestHelpers.asyncAssertThrows(() => {
-            return cliParser.parse(['non existing command']);
-        }, /Invalid command:.+/);
-        assert.lengthOf(listStub.getCalls(), 0);
-        assert.lengthOf(deployStub.getCalls(), 0);
+    describe('With invalid commands or options', () => {
+
+        it('Parser should throw if command to parse is invalid', async () => {
+            await TestHelpers.asyncAssertThrows(() => {
+                return cliParser.parse(['non existing command']);
+            }, /Invalid command:.+/);
+            assert.lengthOf(listStub.getCalls(), 0);
+            assert.lengthOf(deployStub.getCalls(), 0);
+        });
+
+        it('Parser should throw if command name is invalid', async () => {
+            assert.throws(() => {
+                cliParser.addAllCommands([new CliCommand('list$', '', [], listStub)]);
+            }, /Invalid command name, must match: .+/i);
+        });
+
+        it('Parser should throw if option short name is invalid', async () => {
+            assert.throws(() => {
+                const badOption = new CliOption('name', '$short', 'boolean', '');
+                cliParser.addAllCommands([new CliCommand('list', '', [badOption], listStub)]);
+            }, /Invalid option shortname, must match: .+/i);
+        });
+
+        it('Parser should throw if option name is invalid', async () => {
+            assert.throws(() => {
+                const badOption = new CliOption('$name', 'short', 'boolean', '');
+                cliParser.addAllCommands([new CliCommand('list', '', [badOption], listStub)]);
+            }, /Invalid option name, must match: .+/i);
+        });
+
     });
 
-    it('Parser should execute list handler', async () => {
-        await cliParser.parse(['list']);
-        assert.lengthOf(listStub.getCalls(), 1);
-        assert.lengthOf(deployStub.getCalls(), 0);
+    describe('Command parsing', () => {
 
-        const calledCommand: CliCommand = listStub.getCall(0).args[0];
-        assert.deepEqual(calledCommand.command, listCommand.command);
-    });
+        it('Parser should execute list handler', async () => {
+            await cliParser.parse(['list']);
+            assert.lengthOf(listStub.getCalls(), 1);
+            assert.lengthOf(deployStub.getCalls(), 0);
 
-    it('Parser should execute deploy handler', async () => {
-        await cliParser.parse(['svc', 'deploy']);
-        assert.lengthOf(listStub.getCalls(), 0);
-        assert.lengthOf(deployStub.getCalls(), 1);
+            const calledCommand: CliCommand = listStub.getCall(0).args[0];
+            assert.deepEqual(calledCommand.command, listCommand.command);
+        });
 
-        const calledCommand: CliCommand = deployStub.getCall(0).args[0];
-        assert.deepEqual(calledCommand.command, deployCommand.command);
-    });
+        it('Parser should execute deploy handler', async () => {
+            await cliParser.parse(['svc', 'deploy']);
+            assert.lengthOf(listStub.getCalls(), 0);
+            assert.lengthOf(deployStub.getCalls(), 1);
 
-    it('Parser should parse boolean options correctly', async () => {
-        await cliParser.parse(['svc', 'deploy', '-f']);
-        const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
-        assert.isTrue(parsedArguments.f);
-        assert.isTrue(parsedArguments.force);
-        assert.isUndefined(parsedArguments.e);
-        assert.isUndefined(parsedArguments.environment);
-    });
+            const calledCommand: CliCommand = deployStub.getCall(0).args[0];
+            assert.deepEqual(calledCommand.command, deployCommand.command);
+        });
 
-    it('Parser should parse string options correctly', async () => {
-        await cliParser.parse(['svc', 'deploy', '-f', '-e', 'dev']);
-        const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
-        assert.isTrue(parsedArguments.f);
-        assert.isTrue(parsedArguments.force);
-        assert.equal(parsedArguments.e, 'dev');
-        assert.equal(parsedArguments.environment, 'dev');
-        assert.deepEqual(parsedArguments.remainingArguments, []);
-    });
+        it('Parser should parse boolean options correctly', async () => {
+            await cliParser.parse(['svc', 'deploy', '-f']);
+            const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
+            assert.isTrue(parsedArguments.f);
+            assert.isTrue(parsedArguments.force);
+            assert.isUndefined(parsedArguments.e);
+            assert.isUndefined(parsedArguments.environment);
+        });
 
-    it('Parser should parse string options correctly', async () => {
-        await TestHelpers.asyncAssertThrows(() => {
-            return cliParser.parse(['svc', 'deploy', '-f', '-e']);
-        }, /Option --environment must have a value/);
+        it('Parser should parse string options correctly', async () => {
+            await cliParser.parse(['svc', 'deploy', '-f', '-e', 'dev']);
+            const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
+            assert.isTrue(parsedArguments.f);
+            assert.isTrue(parsedArguments.force);
+            assert.equal(parsedArguments.e, 'dev');
+            assert.equal(parsedArguments.environment, 'dev');
+            assert.deepEqual(parsedArguments.remainingArguments, []);
+        });
 
-        assert.lengthOf(listStub.getCalls(), 0);
-        assert.lengthOf(deployStub.getCalls(), 0);
-    });
+        it('Parser should parse string options correctly', async () => {
+            await TestHelpers.asyncAssertThrows(() => {
+                return cliParser.parse(['svc', 'deploy', '-f', '-e']);
+            }, /Option --environment must have a value/);
 
-    it('Parser should parse string options correctly even with supplementary arguments', async () => {
-        await cliParser.parse(['svc', 'deploy', 'application1', '-f', '-e', 'dev', 'application2']);
-        const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
-        assert.isTrue(parsedArguments.f);
-        assert.isTrue(parsedArguments.force);
-        assert.equal(parsedArguments.e, 'dev');
-        assert.equal(parsedArguments.environment, 'dev');
-        assert.deepEqual(parsedArguments.remainingArguments, ['application1', 'application2']);
+            assert.lengthOf(listStub.getCalls(), 0);
+            assert.lengthOf(deployStub.getCalls(), 0);
+        });
+
+        it('Parser should parse string options correctly even with supplementary arguments', async () => {
+            await cliParser.parse(['svc', 'deploy', 'application1', '-f', '-e', 'dev', 'application2']);
+            const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
+            assert.isTrue(parsedArguments.f);
+            assert.isTrue(parsedArguments.force);
+            assert.equal(parsedArguments.e, 'dev');
+            assert.equal(parsedArguments.environment, 'dev');
+            assert.deepEqual(parsedArguments.remainingArguments, ['application1', 'application2']);
+        });
+
     });
 
 });

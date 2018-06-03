@@ -101,6 +101,10 @@ export class CliParser {
     }
 
     private checkCommand(command: CliCommand) {
+        if (!command.command.match(/^[a-z 0-9_-]+$/i)) {
+            throw new Error('Invalid command name, must match: ^[a-z0-9-]+$');
+        }
+
         _.forEach(command.options, (opt) => {
             if (opt.name === 'remainingArguments') {
                 throw new Error('Reserved word remainingArguments used as option name');
@@ -112,8 +116,5 @@ export class CliParser {
                 throw new Error('Invalid option shortname, must match: ^[a-z0-9-]+$');
             }
         });
-        if (!command.command.match(/^[a-z 0-9_-]+$/i)) {
-            throw new Error('Invalid option shortname, must match: ^[a-z0-9-]+$');
-        }
     }
 }
