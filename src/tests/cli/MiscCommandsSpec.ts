@@ -9,7 +9,7 @@ import {
     INVALID_APP_DIR,
     VALID_DEPLOYMENT_APP_DIR,
     VALID_DEPLOYMENT_APP_PARENT,
-    VALID_DEPLOYMENT_SVC_DIR
+    VALID_DEPLOYMENT_SVC_DIR,
 } from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
@@ -22,7 +22,7 @@ import {
 import {
     expectedAppBuildPushCommands,
     expectedAppDockerBuildCommands,
-    expectedSvcDockerBuildCommands
+    expectedSvcDockerBuildCommands,
 } from './CliSpecData';
 
 const assert = chai.assert;
