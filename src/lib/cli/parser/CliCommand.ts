@@ -10,15 +10,19 @@ export interface IParsedArguments {
 export class CliCommand {
     public command: string;
     public handler: CommandHandler;
-    public options: CliOption[];
+    public options: CliOption[] = [];
     public description: string;
     public commandArray: string[];
 
-    constructor(command: string, description: string, options: CliOption[], handler: CommandHandler) {
+    constructor(command: string, description: string, handler: CommandHandler) {
         this.command = command;
         this.handler = handler;
-        this.options = options;
         this.description = description;
         this.commandArray = command.split(' ');
+    }
+
+    public addOption(option: CliOption): CliCommand {
+        this.options.push(option);
+        return this;
     }
 }
