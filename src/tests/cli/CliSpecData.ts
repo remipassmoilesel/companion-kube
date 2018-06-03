@@ -1,8 +1,10 @@
+import {TEST_DATA_DIR} from '../setupSpec';
+
 export const expectedDockerBuildCommands = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
         'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to/'
@@ -15,7 +17,7 @@ export const expectedBuildPushCommands = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
         'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to/'
@@ -32,7 +34,7 @@ export const expectedDeployCommandsForManifestWithoutEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
         'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to'
@@ -42,7 +44,7 @@ export const expectedDeployCommandsForManifestWithoutEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
         'kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube/'
@@ -57,7 +59,7 @@ export const expectedDeployCommandsForManifestWithoutEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
 ];
 
@@ -65,7 +67,7 @@ export const expectedDeployCommandsForManifestWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
         'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to'
@@ -75,7 +77,7 @@ export const expectedDeployCommandsForManifestWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
         'kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube/src'
@@ -90,7 +92,7 @@ export const expectedDeployCommandsForManifestWithEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment'},
+        {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
 ];
 
@@ -98,7 +100,7 @@ export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+        {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
     [
         'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/'
@@ -108,7 +110,7 @@ export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+        {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
     ['kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube'
     + '/src/tests/test-data/valid-chart',
@@ -122,7 +124,7 @@ export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+        {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
 ];
 
@@ -130,7 +132,7 @@ export const expectedDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+        {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
     [
         'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/'
@@ -140,7 +142,7 @@ export const expectedDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+        {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
     ['kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube'
     + '/src/tests/test-data/valid-chart',
@@ -154,6 +156,6 @@ export const expectedDeployCommandsForHelmChartWithEnvFlag = [
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-chart'},
+        {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
 ];
