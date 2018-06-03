@@ -272,3 +272,29 @@ export const expectedAppDeployCommandsForAnsibleWithEnvFlag = [
     ],
 ];
 
+export const expectedSvcDeployCommandsForAnsibleWithEnvFlag = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_SVC_ROOT + '/valid-ansible'},
+    ],
+    [
+        'docker build ' + VALID_SVC_ROOT + '/valid-ansible/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+    [
+        './pre-deploy.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_SVC_ROOT + '/valid-ansible'},
+    ],
+    [
+        'ansible-playbook -i ' + VALID_SVC_ROOT + '/valid-ansible/path/to/dir/inventory-prod.cfg '
+        + PROJECT_ROOT + '/scripts/kubespray/cluster.yml',
+        {displayOutput: true},
+    ],
+    [
+        './post-deploy.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_SVC_ROOT + '/valid-ansible'},
+    ],
+];

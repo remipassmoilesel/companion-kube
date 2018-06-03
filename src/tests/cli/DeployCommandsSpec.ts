@@ -6,9 +6,9 @@ import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
 import {
-    VALID_ANSIBLE_APP_DIR,
+    VALID_ANSIBLE_APP_DIR, VALID_ANSIBLE_SVC_DIR,
     VALID_APP_ROOT,
-    VALID_CHART_APP_DIR,
+    VALID_CHART_APP_DIR, VALID_CHART_SVC_DIR,
     VALID_DEPLOYMENT_APP_DIR,
     VALID_DEPLOYMENT_SVC_DIR, VALID_SVC_ROOT,
 } from '../setupSpec';
@@ -28,7 +28,7 @@ import {
     expectedAppDeployCommandsForHelmChartWithoutEnvFlag,
     expectedSvcDeployCommandsForHelmChartWithEnvFlag,
     expectedAppDeployCommandsForAnsibleWithoutEnvFlag,
-    expectedAppDeployCommandsForAnsibleWithEnvFlag,
+    expectedAppDeployCommandsForAnsibleWithEnvFlag, expectedSvcDeployCommandsForAnsibleWithEnvFlag,
 } from './DeployCommandsSpecData';
 
 const assert = chai.assert;
@@ -211,7 +211,7 @@ describe(' > DeployCommandsSpec', function () {
         describe('Deploy services', () => {
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
+                processCwdStub.returns(VALID_CHART_SVC_DIR);
                 await cli.parseArguments(buildCommand('svc deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -230,7 +230,7 @@ describe(' > DeployCommandsSpec', function () {
 
             it(' > Deploy without svc prefix should fail', async () => {
                 processCwdStub.returns(VALID_SVC_ROOT);
-                await cli.parseArguments(buildCommand('deploy valid-deployment-svc -e prod'));
+                await cli.parseArguments(buildCommand('deploy valid-chart-svc -e prod'));
                 assertCliError(/Application not found:.+/i, onErrorStub);
             });
 
@@ -238,13 +238,13 @@ describe(' > DeployCommandsSpec', function () {
 
     });
 
-    describe.only('Deploy Ansible playbooks', () => {
+    describe('Deploy Ansible playbooks', () => {
 
         beforeEach(() => {
             fsExistsSyncStub.returns(true);
         });
 
-        describe.only('Application without environment flag', () => {
+        describe('Application without environment flag', () => {
 
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_ANSIBLE_APP_DIR);
@@ -291,26 +291,26 @@ describe(' > DeployCommandsSpec', function () {
         describe('Deploy services', () => {
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
+                processCwdStub.returns(VALID_ANSIBLE_SVC_DIR);
                 await cli.parseArguments(buildCommand('svc deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedSvcDeployCommandsForHelmChartWithEnvFlag);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForAnsibleWithEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
                 processCwdStub.returns(VALID_SVC_ROOT);
-                await cli.parseArguments(buildCommand('svc deploy valid-deployment-svc -e prod'));
+                await cli.parseArguments(buildCommand('svc deploy valid-ansible-svc -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedSvcDeployCommandsForHelmChartWithEnvFlag);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForAnsibleWithEnvFlag);
             });
 
             it(' > Deploy without svc prefix should fail', async () => {
                 processCwdStub.returns(VALID_SVC_ROOT);
-                await cli.parseArguments(buildCommand('deploy valid-deployment-svc -e prod'));
+                await cli.parseArguments(buildCommand('deploy valid-ansible-svc -e prod'));
                 assertCliError(/Application not found:.+/i, onErrorStub);
             });
 
