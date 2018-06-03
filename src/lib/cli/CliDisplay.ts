@@ -10,13 +10,15 @@ import {IAppError, IAugmentedError} from '../utils/IAppError';
 import {ILogLevel, LogLevels} from '../log/LogLevels';
 import {CliCommand} from './parser/CliCommand';
 import {CliOption} from './parser/CliOption';
+import {getMainConfig} from '../main-config/config';
 
 const logger = new Logger();
+const config = getMainConfig();
 
 export class CliDisplay {
 
     public showCliHeader() {
-        logger.info('Companion-Kube !');
+        logger.info(' 💪 Companion-Kube !');
         logger.info();
     }
 
@@ -122,13 +124,13 @@ export class CliDisplay {
 
     public showGlobalHelp(commands: CliCommand[]) {
         logger.info('Help 🆘 🆘 🆘 !\n');
-        logger.info('Companion Kube allow to deploy Kubernetes applications easily !\n');
+        logger.info(`Companion Kube allow to deploy Kubernetes applications easily ! Version: ${config.version}`);
         logger.info('Available commands: \n');
         _.forEach(commands, (comm: CliCommand) => {
             logger.info(`\t $ ck ${comm.command.padEnd(22)}:   ${comm.description}`);
         });
-        logger.info()
-        logger.info('Try \'ck help command\' for more informations !\n');
+        logger.info();
+        logger.info('Try \'ck help command\' for more information !\n');
     }
 
     public showCommandHelp(command: CliCommand) {
@@ -139,7 +141,6 @@ export class CliDisplay {
         _.forEach(command.options, (option: CliOption) => {
             logger.info(`\t --${option.name}   -${option.shortname.padEnd(20)}: ${option.description}`);
         });
-
     }
 
     public showScripts(appConfig: IKubeApplication) {
