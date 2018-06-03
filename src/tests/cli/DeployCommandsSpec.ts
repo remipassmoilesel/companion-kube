@@ -6,6 +6,7 @@ import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
 import {
+    VALID_ANSIBLE_APP_DIR,
     VALID_APP_ROOT,
     VALID_CHART_APP_DIR,
     VALID_DEPLOYMENT_APP_DIR,
@@ -26,7 +27,9 @@ import {
     expectedSvcDeployCommandsForManifestWithEnvFlag,
     expectedAppDeployCommandsForHelmChartWithoutEnvFlag,
     expectedSvcDeployCommandsForHelmChartWithEnvFlag,
-} from './CliSpecData';
+    expectedAppDeployCommandsForAnsibleWithoutEnvFlag,
+    expectedAppDeployCommandsForAnsibleWithEnvFlag,
+} from './DeployCommandsSpecData';
 
 const assert = chai.assert;
 
@@ -64,6 +67,10 @@ describe(' > DeployCommandsSpec', function () {
         cli.setupParser();
     });
 
+    beforeEach(() => {
+        showWarningOnAppsStub.returns(Promise.resolve());
+    });
+
     afterEach(() => {
         processCwdStub.reset();
         onErrorStub.reset();
@@ -82,10 +89,6 @@ describe(' > DeployCommandsSpec', function () {
     describe('Deploy Kubernetes manifests', () => {
 
         describe('Application without environment flag', () => {
-
-            beforeEach(() => {
-                showWarningOnAppsStub.returns(Promise.resolve());
-            });
 
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
@@ -109,10 +112,6 @@ describe(' > DeployCommandsSpec', function () {
 
         describe('Application with environment flag', () => {
 
-            beforeEach(() => {
-                showWarningOnAppsStub.returns(Promise.resolve());
-            });
-
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
                 await cli.parseArguments(buildCommand('deploy -e prod'));
@@ -134,10 +133,6 @@ describe(' > DeployCommandsSpec', function () {
         });
 
         describe('Deploy services', () => {
-
-            beforeEach(() => {
-                showWarningOnAppsStub.returns(Promise.resolve());
-            });
 
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
@@ -171,10 +166,6 @@ describe(' > DeployCommandsSpec', function () {
 
         describe('Application without environment flag', () => {
 
-            beforeEach(() => {
-                showWarningOnAppsStub.returns(Promise.resolve());
-            });
-
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_CHART_APP_DIR);
                 await cli.parseArguments(buildCommand('deploy'));
@@ -196,10 +187,6 @@ describe(' > DeployCommandsSpec', function () {
         });
 
         describe('Application with environment flag', () => {
-
-            beforeEach(() => {
-                showWarningOnAppsStub.returns(Promise.resolve());
-            });
 
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_CHART_APP_DIR);
@@ -223,9 +210,85 @@ describe(' > DeployCommandsSpec', function () {
 
         describe('Deploy services', () => {
 
-            beforeEach(() => {
-                showWarningOnAppsStub.returns(Promise.resolve());
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
+                await cli.parseArguments(buildCommand('svc deploy -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForHelmChartWithEnvFlag);
             });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_SVC_ROOT);
+                await cli.parseArguments(buildCommand('svc deploy valid-deployment-svc -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForHelmChartWithEnvFlag);
+            });
+
+            it(' > Deploy without svc prefix should fail', async () => {
+                processCwdStub.returns(VALID_SVC_ROOT);
+                await cli.parseArguments(buildCommand('deploy valid-deployment-svc -e prod'));
+                assertCliError(/Application not found:.+/i, onErrorStub);
+            });
+
+        });
+
+    });
+
+    describe.only('Deploy Ansible playbooks', () => {
+
+        beforeEach(() => {
+            fsExistsSyncStub.returns(true);
+        });
+
+        describe.only('Application without environment flag', () => {
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_ANSIBLE_APP_DIR);
+                await cli.parseArguments(buildCommand('deploy'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForAnsibleWithoutEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_APP_ROOT);
+                await cli.parseArguments(buildCommand('deploy valid-ansible-app'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForAnsibleWithoutEnvFlag);
+            });
+
+        });
+
+        describe('Application with environment flag', () => {
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_ANSIBLE_APP_DIR);
+                await cli.parseArguments(buildCommand('deploy -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForAnsibleWithEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_APP_ROOT);
+                await cli.parseArguments(buildCommand('deploy valid-ansible-app -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForAnsibleWithEnvFlag);
+            });
+
+        });
+
+        describe('Deploy services', () => {
 
             it(' > Deploy in current dir should work', async () => {
                 processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);

@@ -2,7 +2,7 @@
 module.exports = {
   "name": "valid-ansible-app",
   "displayCommandsOutput": true,
-  "applicationStructure": "chart",
+  "applicationStructure": "ansible",
   "defaultEnvironment": "dev",
   "scripts": {
     "buildDev": "./build --fancy application",

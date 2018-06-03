@@ -10,7 +10,8 @@ sourceMapSupport.install();
 
 Logger.setLogLevel(LogLevels.error);
 
-export const SRC_DIR = path.join(__dirname, '../../src/');
+export const PROJECT_ROOT = path.join(__dirname, '../..');
+export const SRC_DIR = path.join(PROJECT_ROOT, 'src');
 export const TEST_DATA_DIR = path.join(SRC_DIR, 'tests/test-data');
 
 export const INVALID_APP_DIR = path.join(TEST_DATA_DIR, 'invalid');
@@ -30,6 +31,8 @@ export const VALID_CHART_SVC_DIR = path.join(VALID_SVC_ROOT, 'valid-chart');
 export const VALID_ANSIBLE_SVC_DIR = path.join(VALID_SVC_ROOT, 'valid-ansible');
 
 
+assert.ok(fs.existsSync(PROJECT_ROOT));
+assert.ok(fs.existsSync(SRC_DIR));
 assert.ok(fs.existsSync(TEST_DATA_DIR));
 assert.ok(fs.existsSync(INVALID_APP_DIR));
 

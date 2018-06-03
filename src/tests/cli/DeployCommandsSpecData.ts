@@ -1,4 +1,4 @@
-import {VALID_APP_ROOT, VALID_SVC_ROOT} from '../setupSpec';
+import {PROJECT_ROOT, VALID_APP_ROOT, VALID_SVC_ROOT} from '../setupSpec';
 
 export const expectedAppDockerBuildCommands = [
     [
@@ -218,3 +218,57 @@ export const expectedSvcDeployCommandsForHelmChartWithEnvFlag = [
         {cwd: VALID_SVC_ROOT + '/valid-deployment'},
     ],
 ];
+
+export const expectedAppDeployCommandsForAnsibleWithoutEnvFlag = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+    ],
+    [
+        'docker build ' + VALID_APP_ROOT + '/valid-ansible/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+    [
+        './pre-deploy.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+    ],
+    [
+        'ansible-playbook -i ' + VALID_APP_ROOT + '/valid-ansible/path/to/dir/inventory-dev.cfg '
+        + PROJECT_ROOT + '/scripts/kubespray/cluster.yml',
+        {displayOutput: true},
+    ],
+    [
+        './post-deploy.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+    ],
+];
+
+export const expectedAppDeployCommandsForAnsibleWithEnvFlag = [
+    [
+        './pre-build.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+    ],
+    [
+        'docker build ' + VALID_APP_ROOT + '/valid-ansible/path/to/docker/build -t deployment-with-docker-file:0.1',
+        {displayOutput: true},
+    ],
+    [
+        './pre-deploy.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+    ],
+    [
+        'ansible-playbook -i ' + VALID_APP_ROOT + '/valid-ansible/path/to/dir/inventory-prod.cfg '
+        + PROJECT_ROOT + '/scripts/kubespray/cluster.yml',
+        {displayOutput: true},
+    ],
+    ['./post-deploy.sh',
+        {displayOutput: true},
+        {cwd: '' + VALID_APP_ROOT + '/valid-ansible'},
+    ],
+];
+

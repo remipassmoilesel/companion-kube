@@ -22,7 +22,7 @@ import {
     expectedAppBuildPushCommands,
     expectedAppDockerBuildCommands,
     expectedSvcDockerBuildCommands,
-} from './CliSpecData';
+} from './DeployCommandsSpecData';
 
 const assert = chai.assert;
 

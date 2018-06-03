@@ -49,7 +49,7 @@ export const showStubCallArguments = (stubs: SinonStub[]) => {
 export const assertNoCliErrors = (onErrorStub: SinonStub) => {
     const calls = onErrorStub.getCalls();
     const errors: Error[] = _.map(calls, (call) => call.args[0]);
-    assert.lengthOf(onErrorStub.getCalls(), 0, `Cli errors occurred: ${_.map(errors, (err) => err.message)}`);
+    assert.lengthOf(onErrorStub.getCalls(), 0, `Cli errors occurred: \n ${errors}`);
 };
 
 export const getCallArgumentsWithoutPrereqChecks = (stub: SinonStub): any[] => {
