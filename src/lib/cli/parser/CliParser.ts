@@ -20,8 +20,7 @@ export class CliParser {
 
     public addAllCommands(command: CliCommand[]) {
         _.forEach(command, (comm) => {
-            this.checkCommand(comm);
-            this.commands.push(comm);
+            this.addCommand(comm);
         });
     }
 
@@ -36,10 +35,15 @@ export class CliParser {
     }
 
     private findCorrespondingCommand(args: string[]): CliCommand {
+        if (!args.length || args.length === 1 && !args[0]) {
+            throw new Error(`You must specify a command, try 'help' !`);
+        }
+
         const found: CliCommand[] = _.filter(this.commands, (comm: CliCommand) => {
             const slicedArgs = args.slice(0, comm.commandArray.length);
             return _.isEqual(comm.commandArray, slicedArgs);
         });
+
         if (!found.length) {
             throw new Error(`Invalid command: ${args.join(' ')}`);
         }

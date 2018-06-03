@@ -60,9 +60,18 @@ describe(' > CliSpec', function () {
         }
     });
 
-    it(' > Invalid commands should throw', async () => {
-        await cli.setupAndParse(buildCommand(''));
-        assertCliError(/You must specify a command. Try: ck help/i);
+    describe('Invalid input', () => {
+
+        it(' > Empty command should throw', async () => {
+            await cli.setupAndParse(buildCommand(''));
+            assertCliError(/You must specify a command.+/i);
+        });
+
+        it(' > Non existing command should throw', async () => {
+            await cli.setupAndParse(buildCommand('non existing command'));
+            assertCliError(/Invalid command:.+/i);
+        });
+
     });
 
     describe('Init', () => {
