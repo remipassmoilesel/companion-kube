@@ -13,7 +13,7 @@ export class TestHelpers {
                 if (e.message.match(errorMessage)) {
                     return Promise.resolve();
                 }
-                throw new Error(`Error message does not match: ${errorMessage.toString()}`);
+                throw new Error(`Error message '${e.message}' does not match '${errorMessage.toString()}'`);
             });
     }
 

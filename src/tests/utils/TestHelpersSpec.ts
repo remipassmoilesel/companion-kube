@@ -14,9 +14,7 @@ describe(' > TestHelperSpec', async function () {
 
             throw new Error('TestHelpers.asyncAssertThrows did not throw !');
         } catch (e) {
-            if (!e.message.match(/Function expected to throw an error+/)) {
-                throw new Error(`Message does not match expected pattern: ${e.message}`);
-            }
+            assert.equal(e.message, 'Function expected to throw an error');
         }
     });
 
@@ -28,9 +26,7 @@ describe(' > TestHelperSpec', async function () {
 
             throw new Error('Function expected to throw');
         } catch (e) {
-            if (!e.message.match(/Error message does not match:.+/)) {
-                throw new Error(`Message does not match expected pattern: ${e.message}`);
-            }
+            assert.equal(e.message, "Error message 'Wrong message' does not match '/Invalid command:.+/'");
         }
     });
 
