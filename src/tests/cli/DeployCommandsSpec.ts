@@ -24,9 +24,8 @@ import {
 import {
     expectedAppDeployCommandsForManifestWithEnvFlag,
     expectedAppDeployCommandsForManifestWithoutEnvFlag,
-    expectedDeployCommandsForHelmChartWithEnvFlag,
-    expectedDeployCommandsForHelmChartWithoutEnvFlag,
-    expectedSvcDeployCommandsForManifestWithEnvFlag,
+    expectedAppDeployCommandsForHelmChartWithEnvFlag,
+    expectedSvcDeployCommandsForManifestWithEnvFlag, expectedAppDeployCommandsForHelmChartWithoutEnvFlag,
 } from './CliSpecData';
 
 const assert = chai.assert;
@@ -182,7 +181,7 @@ describe(' > DeployCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithoutEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForHelmChartWithoutEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -191,7 +190,7 @@ describe(' > DeployCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithoutEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForHelmChartWithoutEnvFlag);
             });
 
         });
@@ -208,7 +207,7 @@ describe(' > DeployCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForHelmChartWithEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -217,7 +216,7 @@ describe(' > DeployCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForHelmChartWithEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForHelmChartWithEnvFlag);
             });
 
         });

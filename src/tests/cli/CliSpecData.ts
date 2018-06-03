@@ -135,29 +135,25 @@ export const expectedSvcDeployCommandsForManifestWithEnvFlag = [
     ],
 ];
 
-
-export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
+export const expectedAppDeployCommandsForHelmChartWithoutEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: VALID_APP_ROOT + '/valid-chart'},
-    ],
+        {cwd: VALID_APP_ROOT + '/valid-chart'}],
     [
-        'docker build ' + VALID_APP_ROOT + '/'
-        + 'valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
+        'docker build ' + VALID_APP_ROOT + '/valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: VALID_APP_ROOT + '/valid-chart'},
-    ],
+        {cwd: '' + VALID_APP_ROOT + '/valid-chart'}],
     [
-        'kubectl create --namespace dev -f ' + VALID_APP_ROOT + '/valid-chart',
+        'helm dependency build ' + VALID_APP_ROOT + '/valid-chart',
         {displayOutput: true},
     ],
     [
-        'kubectl create --namespace dev -f ' + VALID_APP_ROOT + '/valid-chart/second/dir',
+        'helm install  --namespace dev  ' + VALID_APP_ROOT + '/valid-chart -n gitlab-dev',
         {displayOutput: true},
     ],
     [
@@ -167,28 +163,25 @@ export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
     ],
 ];
 
-export const expectedDeployCommandsForHelmChartWithEnvFlag = [
+export const expectedAppDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: VALID_APP_ROOT + '/valid-chart'},
-    ],
+        {cwd: VALID_APP_ROOT + '/valid-chart'}],
     [
-        'docker build ' + VALID_APP_ROOT + '/'
-        + 'valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
+        'docker build ' + VALID_APP_ROOT + '/valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: VALID_APP_ROOT + '/valid-chart'},
-    ],
+        {cwd: '' + VALID_APP_ROOT + '/valid-chart'}],
     [
-        'kubectl create --namespace prod -f ' + VALID_APP_ROOT + '/valid-chart',
+        'helm dependency build ' + VALID_APP_ROOT + '/valid-chart',
         {displayOutput: true},
     ],
     [
-        'kubectl create --namespace prod -f ' + VALID_APP_ROOT + '/valid-chart/second/dir',
+        'helm install  --namespace prod  ' + VALID_APP_ROOT + '/valid-chart -n gitlab-dev',
         {displayOutput: true},
     ],
     [
