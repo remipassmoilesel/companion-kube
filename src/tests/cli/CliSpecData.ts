@@ -47,13 +47,11 @@ export const expectedDeployCommandsForManifestWithoutEnvFlag = [
         {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
-        'kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube/'
-        + 'src/tests/test-data/valid-deployment',
+        'kubectl create --namespace dev -f ' + TEST_DATA_DIR + '/valid-deployment',
         {displayOutput: true},
     ],
     [
-        'kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube/src/tests/'
-        + 'test-data/valid-deployment/second/dir',
+        'kubectl create --namespace dev -f ' + TEST_DATA_DIR + '/valid-deployment/second/dir',
         {displayOutput: true},
     ],
     [
@@ -80,13 +78,11 @@ export const expectedDeployCommandsForManifestWithEnvFlag = [
         {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
-        'kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube/src'
-        + '/tests/test-data/valid-deployment',
+        'kubectl create --namespace prod -f ' + TEST_DATA_DIR + '/valid-deployment',
         {displayOutput: true},
     ],
     [
-        'kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube/src/tests/'
-        + 'test-data/valid-deployment/second/dir',
+        'kubectl create --namespace prod -f ' + TEST_DATA_DIR + '/valid-deployment/second/dir',
         {displayOutput: true},
     ],
     [
@@ -112,13 +108,12 @@ export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
         {displayOutput: true},
         {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
-    ['kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube'
-    + '/src/tests/test-data/valid-chart',
+    [
+        'kubectl create --namespace dev -f ' + TEST_DATA_DIR + '/valid-chart',
         {displayOutput: true},
     ],
     [
-        'kubectl create --namespace dev -f /home/remipassmoilesel/projects/companion-kube/src'
-        + '/tests/test-data/valid-chart/second/dir',
+        'kubectl create --namespace dev -f ' + TEST_DATA_DIR + '/valid-chart/second/dir',
         {displayOutput: true},
     ],
     [
@@ -144,13 +139,12 @@ export const expectedDeployCommandsForHelmChartWithEnvFlag = [
         {displayOutput: true},
         {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
-    ['kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube'
-    + '/src/tests/test-data/valid-chart',
+    [
+        'kubectl create --namespace prod -f ' + TEST_DATA_DIR + '/valid-chart',
         {displayOutput: true},
     ],
     [
-        'kubectl create --namespace prod -f /home/remipassmoilesel/projects/companion-kube/src'
-        + '/tests/test-data/valid-chart/second/dir',
+        'kubectl create --namespace prod -f ' + TEST_DATA_DIR + '/valid-chart/second/dir',
         {displayOutput: true},
     ],
     [
