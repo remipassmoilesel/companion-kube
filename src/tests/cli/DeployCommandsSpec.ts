@@ -221,7 +221,7 @@ describe(' > DeployCommandsSpec', function () {
 
             it(' > Deploy from parent dir should work', async () => {
                 processCwdStub.returns(VALID_SVC_ROOT);
-                await cli.parseArguments(buildCommand('svc deploy valid-deployment-svc -e prod'));
+                await cli.parseArguments(buildCommand('svc deploy valid-chart-svc -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);

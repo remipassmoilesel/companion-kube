@@ -2,7 +2,7 @@
 module.exports = {
   "name": "valid-chart-svc",
   "displayCommandsOutput": true,
-  "applicationStructure": "deployment",
+  "applicationStructure": "chart",
   "defaultEnvironment": "dev",
   "scripts": {
     "buildDev": "./build --fancy application",

@@ -195,29 +195,32 @@ export const expectedSvcDeployCommandsForHelmChartWithEnvFlag = [
     [
         './pre-build.sh',
         {displayOutput: true},
-        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+        {cwd: '' + VALID_SVC_ROOT + '/valid-chart'},
     ],
     [
-        'docker build ' + VALID_SVC_ROOT + '/valid-deployment/path/to/docker/build -t deployment-with-docker-file:0.1',
+        'docker build ' + VALID_SVC_ROOT + '/valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
     [
         './pre-deploy.sh',
         {displayOutput: true},
-        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+        {cwd: '' + VALID_SVC_ROOT + '/valid-chart'},
     ],
     [
-        'kubectl create --namespace prod -f ' + VALID_SVC_ROOT + '/valid-deployment',
-        {displayOutput: true}],
+        'helm dependency build ' + VALID_SVC_ROOT + '/valid-chart',
+        {displayOutput: true},
+    ],
     [
-        'kubectl create --namespace prod -f ' + VALID_SVC_ROOT + '/valid-deployment/second/dir',
-        {displayOutput: true}],
+        'helm install  --namespace prod  ' + VALID_SVC_ROOT + '/valid-chart -n gitlab-dev',
+        {displayOutput: true},
+    ],
     [
         './post-deploy.sh',
         {displayOutput: true},
-        {cwd: VALID_SVC_ROOT + '/valid-deployment'},
+        {cwd: '' + VALID_SVC_ROOT + '/valid-chart'},
     ],
 ];
+
 
 export const expectedAppDeployCommandsForAnsibleWithoutEnvFlag = [
     [
