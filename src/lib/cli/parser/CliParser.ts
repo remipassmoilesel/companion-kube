@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import {CliCommand} from './CliCommand';
+import {CliCommand, IParsedArguments} from './CliCommand';
 import {ICliOptionValue} from './CliOption';
 
 export class CliParser {
@@ -51,36 +51,40 @@ export class CliParser {
                          args: string[]): { parsedOptions: ICliOptionValue[], argsWithoutOptions: string[] } {
         const clonedArgs = _.clone(args);
         const parsedOptions: ICliOptionValue[] = [];
-        _.forEach(clonedArgs, (arg: string, index: number) => {
-            const match: RegExpMatchArray | null = arg.match(/^-?-([a-z0-9-]+)/);
-            if (match) {
-                const option = _.find(command.options, (opt) => opt.shortname === match[1] || opt.name === match[1]);
-                if (!option) {
-                    throw new Error(`Invalid option: ${option}`);
-                }
-                if (option.type === 'boolean') {
-                    parsedOptions.push({
-                        name: option.name,
-                        shortname: option.shortname,
-                        value: true,
-                    });
-                    clonedArgs.splice(index, 1);
-                }
-                else {
-                    parsedOptions.push({
-                        name: option.name,
-                        shortname: option.shortname,
-                        value: clonedArgs[index + 1],
-                    });
+        const otherArgs: string[] = [];
 
-                    clonedArgs.splice(index, 2);
-                }
+        for (let index = 0; index < clonedArgs.length; index++) {
+            const arg = clonedArgs[index];
+            const match: RegExpMatchArray | null = arg.match(/^-?-([a-z0-9-]+)/);
+            if (!match) {
+                otherArgs.push(arg);
+                continue;
             }
-        });
-        return {parsedOptions, argsWithoutOptions: clonedArgs};
+            const option = _.find(command.options, (opt) => opt.shortname === match[1] || opt.name === match[1]);
+            if (!option) {
+                throw new Error(`Invalid option: ${option}`);
+            }
+            if (option.type === 'boolean') {
+                parsedOptions.push({
+                    name: option.name,
+                    shortname: option.shortname,
+                    value: true,
+                });
+            }
+            else {
+                parsedOptions.push({
+                    name: option.name,
+                    shortname: option.shortname,
+                    value: clonedArgs[index + 1],
+                });
+
+                clonedArgs.splice(index + 1, 1);
+            }
+        }
+        return {parsedOptions, argsWithoutOptions: otherArgs};
     }
 
-    private buildParsedArgs(command: CliCommand, parsedOptions: ICliOptionValue[], rest: string[]): any {
+    private buildParsedArgs(command: CliCommand, parsedOptions: ICliOptionValue[], rest: string[]): IParsedArguments {
         const parsedArgs: any = {};
         _.forEach(parsedOptions, (opt: ICliOptionValue) => {
             parsedArgs[opt.name] = opt.value;

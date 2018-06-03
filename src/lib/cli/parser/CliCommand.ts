@@ -3,7 +3,7 @@ import {CliOption} from './CliOption';
 export type CommandHandler = (command: CliCommand, parsedArgs: IParsedArguments) => Promise<void>;
 
 export interface IParsedArguments {
-    remainingArguments: string;
+    remainingArguments: string[];
     [x: string]: any;
 }
 

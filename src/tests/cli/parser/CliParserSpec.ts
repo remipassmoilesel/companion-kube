@@ -68,13 +68,33 @@ describe.only(' > CliParserSpec', async function () {
         assert.deepEqual(calledCommand.command, deployCommand.command);
     });
 
-    it('Parser should parse options correctly', async () => {
+    it('Parser should parse boolean options correctly', async () => {
         await cliParser.parse(['svc', 'deploy', '-f']);
         const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
         assert.isTrue(parsedArguments.f);
         assert.isTrue(parsedArguments.force);
         assert.isUndefined(parsedArguments.e);
         assert.isUndefined(parsedArguments.environment);
+    });
+
+    it('Parser should parse string options correctly', async () => {
+        await cliParser.parse(['svc', 'deploy', '-f', '-e', 'dev']);
+        const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
+        assert.isTrue(parsedArguments.f);
+        assert.isTrue(parsedArguments.force);
+        assert.equal(parsedArguments.e, 'dev');
+        assert.equal(parsedArguments.environment, 'dev');
+        assert.deepEqual(parsedArguments.remainingArguments, []);
+    });
+
+    it('Parser should parse string options correctly even with supplementary arguments', async () => {
+        await cliParser.parse(['svc', 'deploy', 'application1', '-f', '-e', 'dev', 'application2']);
+        const parsedArguments: IParsedArguments = deployStub.getCall(0).args[1];
+        assert.isTrue(parsedArguments.f);
+        assert.isTrue(parsedArguments.force);
+        assert.equal(parsedArguments.e, 'dev');
+        assert.equal(parsedArguments.environment, 'dev');
+        assert.deepEqual(parsedArguments.remainingArguments, ['application1', 'application2']);
     });
 
 });
