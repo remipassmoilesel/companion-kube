@@ -30,13 +30,13 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         const scriptName = scriptArgs[0];
 
         const scriptRunner = new ScriptRunner(this.commandExec);
-
         const script = _.find(appConfig.scripts, (scriptCom, scriptNam) => scriptNam === scriptName);
         if (!script) {
             throw new Error(` '${scriptName}' not found !`);
         }
 
-        await scriptRunner.run(script, scriptArgs.slice(1));
+        const completeScriptCommand = `${script} ${scriptArgs.slice(1).join(' ')}`;
+        await scriptRunner.run(completeScriptCommand);
     }
 
     public async listApplications() {

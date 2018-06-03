@@ -16,11 +16,11 @@ export class AbstractCliHandlersGroup {
     protected api: Api;
     protected display: CliDisplay;
 
-    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor) {
+    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor, cliDisplay: CliDisplay) {
         this.mainConfig = mainConfig;
         this.api = api;
         this.commandExec = commandExec;
-        this.display = new CliDisplay();
+        this.display = cliDisplay;
     }
 
     protected checkPrerequisites() {

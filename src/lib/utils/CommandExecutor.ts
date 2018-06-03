@@ -8,14 +8,13 @@ export interface ICommandExecutorOptions {
 export class CommandExecutor {
 
     public execCommand(command: string,
-                       commandArgs: string[],
                        executorOptions: ICommandExecutorOptions,
                        spawnOptions?: any): Promise<any> {
 
         return new Promise((resolve, reject) => {
 
             const allOptions = _.merge({shell: true}, spawnOptions);
-            const scriptCmd = spawn(command, commandArgs, allOptions);
+            const scriptCmd = spawn(command, [], allOptions);
             let allStdout = '';
             let allStderr = '';
 

@@ -57,6 +57,6 @@ export class DockerBuilder {
     }
 
     protected execCommand(command: string): Promise<any> {
-        return this.commandExec.execCommand(command, [], {displayOutput: true});
+        return this.commandExec.execCommand(command, {displayOutput: true});
     }
 }

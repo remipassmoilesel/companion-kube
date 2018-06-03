@@ -20,7 +20,7 @@ export class PrerequisiteChecker {
         const missing: IPrerequisite[] = [];
         _.forEach(this.mainConfig.prerequisites, (prereq) => {
             try {
-                return this.commandExec.execCommand(`which ${prereq.command}`, [], {displayOutput: false});
+                return this.commandExec.execCommand(`which ${prereq.command}`, {displayOutput: false});
             } catch (e) {
                 missing.push(prereq);
             }

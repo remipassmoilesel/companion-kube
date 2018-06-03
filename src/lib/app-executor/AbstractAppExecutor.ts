@@ -24,7 +24,7 @@ export abstract class AbstractAppExecutor {
 
     protected execCommand(command: string, displayOutput?: boolean, options?: any): Promise<any> {
         this.logger.debug(`Executing command: ${command}`);
-        return this.commandExecutor.execCommand(command, [], {displayOutput}, options);
+        return this.commandExecutor.execCommand(command, {displayOutput}, options);
     }
 
 }

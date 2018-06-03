@@ -9,9 +9,9 @@ export class ScriptRunner {
         this.commandExec = commandExec;
     }
 
-    public run(script: string, scriptArgs: string[]): Promise<any> {
+    public run(script: string): Promise<any> {
         this.logger.warning(`Running script: ${script}`);
-        return this.commandExec.execCommand(script, scriptArgs, {displayOutput: true});
+        return this.commandExec.execCommand(script,{displayOutput: true});
     }
 
 }

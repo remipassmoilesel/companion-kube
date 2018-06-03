@@ -7,6 +7,7 @@ import {AppType} from './app-config/appConfigTypes';
 import {CliParser} from './cli/parser/CliParser';
 import {CliOption} from './cli/parser/CliOption';
 import {CliCommand, IParsedArguments} from './cli/parser/CliCommand';
+import {CliDisplay} from './cli/CliDisplay';
 
 export type IErrorHandler = (e: Error) => any;
 
@@ -19,10 +20,11 @@ export class Cli {
     private parser: CliParser;
     private commands: CliCommand[];
 
-    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor, onError: IErrorHandler) {
+    constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor,
+                cliDisplay: CliDisplay, onError: IErrorHandler) {
         this.mainConfig = mainConfig;
         this.api = api;
-        this.handlers = new CliHandlers(mainConfig, api, commandExec);
+        this.handlers = new CliHandlers(mainConfig, api, commandExec, cliDisplay);
         this.onError = onError;
         this.parser = new CliParser();
         this.commands = [];
