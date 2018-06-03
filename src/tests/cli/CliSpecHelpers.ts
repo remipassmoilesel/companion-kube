@@ -57,34 +57,3 @@ export const getCallArgumentsWithoutPrereqChecks = (stub: SinonStub): any[] => {
     // console.log(allArgs);
     return allArgs.slice(mainConfig.prerequisites.length);
 };
-
-export const expectedBuildCommands = [
-    [
-        './pre-build.sh',
-        {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid'},
-    ],
-    [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid/path/to/'
-        + 'docker/build -t deployment-with-docker-file:0.1',
-        {displayOutput: true},
-    ],
-];
-
-export const expectedBuildPushCommands = [
-    [
-        './pre-build.sh',
-        {displayOutput: true},
-        {cwd: '/home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid'},
-    ],
-    [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid/path/to/'
-        + 'docker/build -t deployment-with-docker-file:0.1',
-        {displayOutput: true},
-    ],
-    [
-        'docker push deployment-with-docker-file:0.1',
-        {displayOutput: true},
-    ],
-];
-

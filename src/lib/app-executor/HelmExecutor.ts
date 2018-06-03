@@ -64,8 +64,8 @@ export class HelmExecutor extends AbstractAppExecutor {
     }
 
     private async buildDependencies(app: IKubeApplication) {
-        const dependencyBuild = `helm dependency build`;
-        await this.execCommand(dependencyBuild, app.displayCommandsOutput, {cwd: app.rootPath});
+        const dependencyBuild = `helm dependency build ${app.rootPath}`;
+        await this.execCommand(dependencyBuild, app.displayCommandsOutput);
     }
 
 }

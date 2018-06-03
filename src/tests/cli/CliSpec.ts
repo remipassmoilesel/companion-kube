@@ -10,10 +10,11 @@ import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
     assertNoCliErrors,
-    buildCommand, expectedBuildCommands, expectedBuildPushCommands,
+    buildCommand,
     getCallArgumentsWithoutPrereqChecks,
     getTestConfig,
 } from './CliSpecHelpers';
+import {expectedBuildCommands, expectedBuildPushCommands, expectedDeployCommands} from './CliSpecData';
 
 const assert = chai.assert;
 
@@ -109,7 +110,7 @@ describe(' > CliSpec', function () {
 
     });
 
-    describe('Docker', () => {
+    describe('Docker commands', () => {
 
         beforeEach(() => {
             showWarningOnAppsStub.returns(Promise.resolve());
@@ -149,6 +150,36 @@ describe(' > CliSpec', function () {
 
             assertNoCliErrors(onErrorStub);
             assert.deepEqual(callArgs, expectedBuildPushCommands);
+        });
+
+    });
+
+    describe.only('Deployment commands', () => {
+
+        describe.only('Without environment flag', () => {
+
+            beforeEach(() => {
+                showWarningOnAppsStub.returns(Promise.resolve());
+            });
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_CONF_DIR);
+                await cli.parseArguments(buildCommand('deploy'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommands);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_CONF_DIR_PARENT);
+                await cli.parseArguments(buildCommand('deploy application-name'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommands);
+            });
+
         });
 
     });

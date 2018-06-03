@@ -22,9 +22,9 @@ export abstract class AbstractAppExecutor {
 
     public abstract destroy(app: IKubeApplication, envName?: string): Promise<any>;
 
-    protected execCommand(command: string, displayOutput?: boolean, options?: any): Promise<any> {
+    protected execCommand(command: string, displayOutput?: boolean): Promise<any> {
         this.logger.debug(`Executing command: ${command}`);
-        return this.commandExecutor.execCommand(command, {displayOutput}, options);
+        return this.commandExecutor.execCommand(command, {displayOutput});
     }
 
 }
