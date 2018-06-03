@@ -49,6 +49,9 @@
     "typescript": "^2.9.1"
   },
   "nyc": {
+    "exclude": [
+      "src/tests"
+    ],
     "reporter": [
       "lcov",
       "text",
