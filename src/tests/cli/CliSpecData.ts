@@ -7,7 +7,7 @@ export const expectedDockerBuildCommands = [
         {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to/'
+        'docker build ' + TEST_DATA_DIR + '/valid-deployment/path/to/'
         + 'docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
@@ -20,7 +20,7 @@ export const expectedBuildPushCommands = [
         {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to/'
+        'docker build ' + TEST_DATA_DIR + '/valid-deployment/path/to/'
         + 'docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
@@ -37,7 +37,7 @@ export const expectedDeployCommandsForManifestWithoutEnvFlag = [
         {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to'
+        'docker build ' + TEST_DATA_DIR + '/valid-deployment/path/to'
         + '/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
@@ -70,7 +70,7 @@ export const expectedDeployCommandsForManifestWithEnvFlag = [
         {cwd: TEST_DATA_DIR + '/valid-deployment'},
     ],
     [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/valid-deployment/path/to'
+        'docker build ' + TEST_DATA_DIR + '/valid-deployment/path/to'
         + '/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
@@ -103,7 +103,7 @@ export const expectedDeployCommandsForHelmChartWithoutEnvFlag = [
         {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
     [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/'
+        'docker build ' + TEST_DATA_DIR + '/'
         + 'valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
@@ -135,7 +135,7 @@ export const expectedDeployCommandsForHelmChartWithEnvFlag = [
         {cwd: TEST_DATA_DIR + '/valid-chart'},
     ],
     [
-        'docker build /home/remipassmoilesel/projects/companion-kube/src/tests/test-data/'
+        'docker build ' + TEST_DATA_DIR + '/'
         + 'valid-chart/path/to/docker/build -t deployment-with-docker-file:0.1',
         {displayOutput: true},
     ],
