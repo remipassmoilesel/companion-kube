@@ -5,7 +5,7 @@ import {SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
-import {INVALID_CONF_DIR, VALID_DEPLOYMENT_DIR, VALID_DEPLOYMENT_DIR_PARENT} from '../setupSpec';
+import {INVALID_APP_DIR, VALID_DEPLOYMENT_APP_DIR, VALID_DEPLOYMENT_APP_PARENT} from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
@@ -110,13 +110,13 @@ describe(' > MiscCommandsSpec', function () {
     describe('List', () => {
 
         it(' > List should not throw if all configurations are valid', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
+            processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
             await cli.parseArguments(buildCommand('list'));
             assertNoCliErrors(onErrorStub);
         });
 
         it(' > List should throw if configurations are invalid', async () => {
-            processCwdStub.returns(INVALID_CONF_DIR);
+            processCwdStub.returns(INVALID_APP_DIR);
             await cli.parseArguments(buildCommand('list'));
             assertCliError(/Invalid configurations found/i, onErrorStub);
         });
@@ -130,7 +130,7 @@ describe(' > MiscCommandsSpec', function () {
         });
 
         it(' > Build images in current dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
+            processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
             await cli.parseArguments(buildCommand('build'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -139,7 +139,7 @@ describe(' > MiscCommandsSpec', function () {
         });
 
         it(' > Build images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+            processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
             await cli.parseArguments(buildCommand('build valid-deployment-app'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -148,7 +148,7 @@ describe(' > MiscCommandsSpec', function () {
         });
 
         it(' > Build and push images in current dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
+            processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
             await cli.parseArguments(buildCommand('build-push'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -157,7 +157,7 @@ describe(' > MiscCommandsSpec', function () {
         });
 
         it(' > Build and push images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+            processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
             await cli.parseArguments(buildCommand('build-push valid-deployment-app'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 

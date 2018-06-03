@@ -1,6 +1,6 @@
 
 module.exports = {
-  "name": "valid-deployment-app",
+  "name": "valid-chart-svc",
   "displayCommandsOutput": true,
   "applicationStructure": "deployment",
   "defaultEnvironment": "dev",

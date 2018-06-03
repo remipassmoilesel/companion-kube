@@ -6,10 +6,10 @@ import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
 import {
-    VALID_CHART_DIR,
-    VALID_CHART_DIR_PARENT,
-    VALID_DEPLOYMENT_DIR,
-    VALID_DEPLOYMENT_DIR_PARENT,
+    VALID_CHART_APP_DIR,
+    VALID_CHART_APP_PARENT,
+    VALID_DEPLOYMENT_APP_DIR,
+    VALID_DEPLOYMENT_APP_PARENT,
 } from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
@@ -100,7 +100,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_DIR);
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
                 await cli.parseArguments(buildCommand('deploy'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -109,7 +109,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
                 await cli.parseArguments(buildCommand('deploy valid-deployment-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -126,7 +126,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_DIR);
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
                 await cli.parseArguments(buildCommand('deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -135,7 +135,33 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
+                await cli.parseArguments(buildCommand('deploy valid-deployment-app -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+            });
+
+        });
+
+        describe.skip('Services', () => {
+
+            beforeEach(() => {
+                showWarningOnAppsStub.returns(Promise.resolve());
+            });
+
+            it(' > Deploy in current dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
+                await cli.parseArguments(buildCommand('deploy -e prod'));
+                const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
+
+                assertNoCliErrors(onErrorStub);
+                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+            });
+
+            it(' > Deploy from parent dir should work', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
                 await cli.parseArguments(buildCommand('deploy valid-deployment-app -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -156,7 +182,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_CHART_DIR);
+                processCwdStub.returns(VALID_CHART_APP_DIR);
                 await cli.parseArguments(buildCommand('deploy'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -165,7 +191,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_CHART_DIR_PARENT);
+                processCwdStub.returns(VALID_CHART_APP_PARENT);
                 await cli.parseArguments(buildCommand('deploy valid-chart-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -182,7 +208,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_CHART_DIR);
+                processCwdStub.returns(VALID_CHART_APP_DIR);
                 await cli.parseArguments(buildCommand('deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -191,7 +217,7 @@ describe(' > MiscCommandsSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_CHART_DIR_PARENT);
+                processCwdStub.returns(VALID_CHART_APP_PARENT);
                 await cli.parseArguments(buildCommand('deploy valid-chart-app -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
