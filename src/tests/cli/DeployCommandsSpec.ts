@@ -10,6 +10,8 @@ import {
     VALID_CHART_APP_PARENT,
     VALID_DEPLOYMENT_APP_DIR,
     VALID_DEPLOYMENT_APP_PARENT,
+    VALID_DEPLOYMENT_SVC_DIR,
+    VALID_DEPLOYMENT_SVC_PARENT,
 } from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
@@ -20,15 +22,16 @@ import {
     getTestConfig,
 } from './CliSpecHelpers';
 import {
+    expectedAppDeployCommandsForManifestWithEnvFlag,
+    expectedAppDeployCommandsForManifestWithoutEnvFlag,
     expectedDeployCommandsForHelmChartWithEnvFlag,
     expectedDeployCommandsForHelmChartWithoutEnvFlag,
-    expectedDeployCommandsForManifestWithEnvFlag,
-    expectedDeployCommandsForManifestWithoutEnvFlag,
+    expectedSvcDeployCommandsForManifestWithEnvFlag,
 } from './CliSpecData';
 
 const assert = chai.assert;
 
-describe(' > MiscCommandsSpec', function () {
+describe(' > DeployCommandsSpec', function () {
     this.timeout(2000);
 
     const mainConfig = getTestConfig();
@@ -77,20 +80,6 @@ describe(' > MiscCommandsSpec', function () {
         fsExistsSyncStub.restore();
     });
 
-    describe('Invalid input', () => {
-
-        it(' > Empty command should throw', async () => {
-            await cli.parseArguments(buildCommand(''));
-            assertCliError(/You must specify a command.+/i, onErrorStub);
-        });
-
-        it(' > Non existing command should throw', async () => {
-            await cli.parseArguments(buildCommand('non existing command'));
-            assertCliError(/Invalid command:.+/i, onErrorStub);
-        });
-
-    });
-
     describe('Deployment commands with Kubernetes manifests', () => {
 
         describe('Without environment flag', () => {
@@ -105,7 +94,7 @@ describe(' > MiscCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithoutEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForManifestWithoutEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -114,7 +103,7 @@ describe(' > MiscCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithoutEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForManifestWithoutEnvFlag);
             });
 
         });
@@ -131,7 +120,7 @@ describe(' > MiscCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForManifestWithEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
@@ -140,33 +129,39 @@ describe(' > MiscCommandsSpec', function () {
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+                assert.deepEqual(callArgs, expectedAppDeployCommandsForManifestWithEnvFlag);
             });
 
         });
 
-        describe.skip('Services', () => {
+        describe('Services', () => {
 
             beforeEach(() => {
                 showWarningOnAppsStub.returns(Promise.resolve());
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_APP_DIR);
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_DIR);
                 await cli.parseArguments(buildCommand('deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForManifestWithEnvFlag);
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_DEPLOYMENT_APP_PARENT);
-                await cli.parseArguments(buildCommand('deploy valid-deployment-app -e prod'));
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_PARENT);
+                await cli.parseArguments(buildCommand('svc deploy valid-deployment-svc -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
-                assert.deepEqual(callArgs, expectedDeployCommandsForManifestWithEnvFlag);
+                assert.deepEqual(callArgs, expectedSvcDeployCommandsForManifestWithEnvFlag);
+            });
+
+            it(' > Deploy without svc prefix should fail', async () => {
+                processCwdStub.returns(VALID_DEPLOYMENT_SVC_PARENT);
+                await cli.parseArguments(buildCommand('deploy valid-deployment-svc -e prod'));
+                assertCliError(/Application not found:.+/i, onErrorStub);
             });
 
         });
