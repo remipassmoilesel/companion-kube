@@ -13,15 +13,15 @@ export class CliParser {
         }
     }
 
-    public addCommand(command: CliCommand) {
-        this.checkCommand(command);
-        this.commands.push(command);
-    }
-
     public addAllCommands(command: CliCommand[]) {
         _.forEach(command, (comm) => {
             this.addCommand(comm);
         });
+    }
+
+    public addCommand(command: CliCommand) {
+        this.checkCommand(command);
+        this.commands.push(command);
     }
 
     public async parse(args: string[]): Promise<void> {
@@ -117,14 +117,24 @@ export class CliParser {
             throw new Error(`Command already exists: ${command.command}`);
         }
 
-        _.forEach(command.options, (opt) => {
-            if (opt.name === 'remainingArguments') {
+        _.forEach(command.options, (option) => {
+
+            const optionNumber: number = _.filter(command.options,
+                (opt) => option.shortname === opt.shortname || option.name === opt.name).length;
+
+            if (optionNumber !== 1) {
+                throw new Error(`Option is duplicated: --${option.name} --${option.shortname}`);
+            }
+
+            if (option.name === 'remainingArguments') {
                 throw new Error('Reserved word remainingArguments used as option name');
             }
-            if (!opt.name.match(/^[a-z0-9-]+$/i)) {
+
+            if (!option.name.match(/^[a-z0-9-]+$/i)) {
                 throw new Error('Invalid option name, must match: ^[a-z0-9-]+$');
             }
-            if (!opt.shortname.match(/^[a-z0-9-]+$/i)) {
+
+            if (!option.shortname.match(/^[a-z0-9-]+$/i)) {
                 throw new Error('Invalid option shortname, must match: ^[a-z0-9-]+$');
             }
         });

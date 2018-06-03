@@ -61,15 +61,30 @@ describe(' > CliParserSpec', async function () {
         it('Parser should throw if option short name is invalid', async () => {
             assert.throws(() => {
                 const badOption = new CliOption('name', '$short', 'boolean', '');
-                cliParser.addAllCommands([new CliCommand('list', '', [badOption], listStub)]);
+                cliParser.addAllCommands([new CliCommand('list2', '', [badOption], listStub)]);
             }, /Invalid option shortname, must match: .+/i);
         });
 
         it('Parser should throw if option name is invalid', async () => {
             assert.throws(() => {
                 const badOption = new CliOption('$name', 'short', 'boolean', '');
-                cliParser.addAllCommands([new CliCommand('list', '', [badOption], listStub)]);
+                cliParser.addAllCommands([new CliCommand('list3', '', [badOption], listStub)]);
             }, /Invalid option name, must match: .+/i);
+        });
+
+        it('Parser should throw if command already exists', async () => {
+            assert.throws(() => {
+                const badOption = new CliOption('name', 'short', 'boolean', '');
+                cliParser.addAllCommands([new CliCommand('list4', '', [badOption], listStub)]);
+                cliParser.addAllCommands([new CliCommand('list4', '', [badOption], listStub)]);
+            }, /Command already exists:.+/i);
+        });
+
+        it('Parser should throw if option already exists', async () => {
+            assert.throws(() => {
+                const badOption = new CliOption('name', 'short', 'boolean', '');
+                cliParser.addAllCommands([new CliCommand('list4', '', [badOption, badOption], listStub)]);
+            }, /Option is duplicated:.+/i);
         });
 
     });
