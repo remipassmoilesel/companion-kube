@@ -1,12 +1,12 @@
 import {AppType, IKubeApplication} from '../../lib/app-config/appConfigTypes';
 
-export const testValidCkConfig: IKubeApplication = {
+export const testValidDeploymentConfig: IKubeApplication = {
     id: 0,
     configPath: '/test/config/path/',
     rootPath: '/test/root/path/',
     type: AppType.APPLICATION,
 
-    name: 'application-name',
+    name: 'valid-deployment-app',
     displayCommandsOutput: true,
     applicationStructure: 'deployment',
     defaultEnvironment: 'dev',

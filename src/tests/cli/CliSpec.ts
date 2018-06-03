@@ -5,7 +5,7 @@ import {SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {Api} from '../../lib/Api';
 import {Cli} from '../../lib/Cli';
-import {INVALID_CONF_DIR, VALID_CONF_DIR, VALID_CONF_DIR_PARENT} from '../setupSpec';
+import {INVALID_CONF_DIR, VALID_DEPLOYMENT_DIR, VALID_DEPLOYMENT_DIR_PARENT} from '../setupSpec';
 import {CliDisplay} from '../../lib/cli/CliDisplay';
 import {
     assertCliError,
@@ -15,7 +15,7 @@ import {
     getTestConfig,
 } from './CliSpecHelpers';
 import {
-    expectedBuildCommands,
+    expectedDockerBuildCommands,
     expectedBuildPushCommands,
     expectedDeployCommandsWithEnvFlag,
     expectedDeployCommandsWithoutEnvFlag
@@ -102,7 +102,7 @@ describe(' > CliSpec', function () {
     describe('List', () => {
 
         it(' > List should not throw if all configurations are valid', async () => {
-            processCwdStub.returns(VALID_CONF_DIR);
+            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
             await cli.parseArguments(buildCommand('list'));
             assertNoCliErrors(onErrorStub);
         });
@@ -122,25 +122,25 @@ describe(' > CliSpec', function () {
         });
 
         it(' > Build images in current dir should work', async () => {
-            processCwdStub.returns(VALID_CONF_DIR);
+            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
             await cli.parseArguments(buildCommand('build'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
             assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedBuildCommands);
+            assert.deepEqual(callArgs, expectedDockerBuildCommands);
         });
 
         it(' > Build images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_CONF_DIR_PARENT);
-            await cli.parseArguments(buildCommand('build application-name'));
+            processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+            await cli.parseArguments(buildCommand('build valid-deployment-app'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
             assertNoCliErrors(onErrorStub);
-            assert.deepEqual(callArgs, expectedBuildCommands);
+            assert.deepEqual(callArgs, expectedDockerBuildCommands);
         });
 
         it(' > Build and push images in current dir should work', async () => {
-            processCwdStub.returns(VALID_CONF_DIR);
+            processCwdStub.returns(VALID_DEPLOYMENT_DIR);
             await cli.parseArguments(buildCommand('build-push'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -149,8 +149,8 @@ describe(' > CliSpec', function () {
         });
 
         it(' > Build and push images from parent dir should work', async () => {
-            processCwdStub.returns(VALID_CONF_DIR_PARENT);
-            await cli.parseArguments(buildCommand('build-push application-name'));
+            processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+            await cli.parseArguments(buildCommand('build-push valid-deployment-app'));
             const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
             assertNoCliErrors(onErrorStub);
@@ -168,7 +168,7 @@ describe(' > CliSpec', function () {
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_CONF_DIR);
+                processCwdStub.returns(VALID_DEPLOYMENT_DIR);
                 await cli.parseArguments(buildCommand('deploy'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -177,8 +177,8 @@ describe(' > CliSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_CONF_DIR_PARENT);
-                await cli.parseArguments(buildCommand('deploy application-name'));
+                processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+                await cli.parseArguments(buildCommand('deploy valid-deployment-app'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);
@@ -194,7 +194,7 @@ describe(' > CliSpec', function () {
             });
 
             it(' > Deploy in current dir should work', async () => {
-                processCwdStub.returns(VALID_CONF_DIR);
+                processCwdStub.returns(VALID_DEPLOYMENT_DIR);
                 await cli.parseArguments(buildCommand('deploy -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
@@ -203,8 +203,8 @@ describe(' > CliSpec', function () {
             });
 
             it(' > Deploy from parent dir should work', async () => {
-                processCwdStub.returns(VALID_CONF_DIR_PARENT);
-                await cli.parseArguments(buildCommand('deploy application-name -e prod'));
+                processCwdStub.returns(VALID_DEPLOYMENT_DIR_PARENT);
+                await cli.parseArguments(buildCommand('deploy valid-deployment-app -e prod'));
                 const callArgs = getCallArgumentsWithoutPrereqChecks(commandExecStub);
 
                 assertNoCliErrors(onErrorStub);

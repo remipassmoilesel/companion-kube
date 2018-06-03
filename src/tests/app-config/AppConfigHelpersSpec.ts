@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as _ from 'lodash';
-import {exampleCkConfig} from '../../lib/app-config/appConfigExample';
 import {AppConfigHelpers} from '../../lib/app-config/AppConfigHelpers';
 import {AppType} from '../../lib/app-config/appConfigTypes';
+import {testValidDeploymentConfig} from '../test-data/testValidDeploymentConfig';
 
 const assert = chai.assert;
 
@@ -10,22 +10,22 @@ describe(' > AppConfigHelpersSpec', function () {
     this.timeout(2000);
 
     it(' > Get light config should work', async () => {
-        assert.isDefined(exampleCkConfig.id);
-        assert.isDefined(exampleCkConfig.rootPath);
-        assert.isDefined(exampleCkConfig.configPath);
-        assert.isDefined(exampleCkConfig.type);
+        assert.isDefined(testValidDeploymentConfig.id);
+        assert.isDefined(testValidDeploymentConfig.rootPath);
+        assert.isDefined(testValidDeploymentConfig.configPath);
+        assert.isDefined(testValidDeploymentConfig.type);
 
-        const config = AppConfigHelpers.getLightAppConfig(exampleCkConfig);
+        const config = AppConfigHelpers.getLightAppConfig(testValidDeploymentConfig);
         assert.isUndefined(config.id);
         assert.isUndefined(config.rootPath);
         assert.isUndefined(config.configPath);
         assert.isUndefined(config.type);
 
-        assert.isTrue(config !== exampleCkConfig);
+        assert.isTrue(config !== testValidDeploymentConfig);
     });
 
     it(' > isType should work', () => {
-        const appExampleClone = _.cloneDeep(exampleCkConfig);
+        const appExampleClone = _.cloneDeep(testValidDeploymentConfig);
 
         appExampleClone.type = AppType.CLUSTER;
         assert.isTrue(AppConfigHelpers.isType(appExampleClone, AppType.CLUSTER));

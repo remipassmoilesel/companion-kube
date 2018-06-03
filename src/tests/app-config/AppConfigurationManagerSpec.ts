@@ -2,8 +2,8 @@ import * as chai from 'chai';
 import * as _ from 'lodash';
 import {getMainConfig} from '../../lib/main-config/config';
 import {AppConfigurationManager} from '../../lib/app-config/AppConfigurationManager';
-import {exampleCkConfig} from '../../lib/app-config/appConfigExample';
 import {AppConfigHelpers} from '../../lib/app-config/AppConfigHelpers';
+import {testValidDeploymentConfig} from '../test-data/testValidDeploymentConfig';
 
 const assert = chai.assert;
 
@@ -11,7 +11,7 @@ describe(' > AppConfigurationManagerSpec', function () {
     this.timeout(2000);
 
     const configMan = new AppConfigurationManager(getMainConfig());
-    const validConfig = JSON.parse(JSON.stringify(AppConfigHelpers.getLightAppConfig(exampleCkConfig)));
+    const validConfig = JSON.parse(JSON.stringify(AppConfigHelpers.getLightAppConfig(testValidDeploymentConfig)));
 
     it(' > Validate example config should succeed', async () => {
         const {isValid, errors} = await configMan.validateConfig(validConfig);

@@ -1,6 +1,6 @@
 
 module.exports = {
-  "name": "application-name",
+  "name": "valid-chart-app",
   "displayCommandsOutput": true,
   "applicationStructure": "deployment",
   "defaultEnvironment": "dev",

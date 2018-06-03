@@ -4,7 +4,7 @@ import {SinonSpyCall, SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
 import {getMainConfig} from '../../lib/main-config/config';
 import {DockerBuilder} from '../../lib/helpers/DockerBuilder';
-import {testValidCkConfig} from '../test-data/testValidCkConfig';
+import {testValidDeploymentConfig} from '../test-data/testValidDeploymentConfig';
 
 const assert = chai.assert;
 
@@ -22,7 +22,7 @@ describe(' > DockerBuilderSpec', function () {
     });
 
     it(' > Build images should work', async () => {
-        await dockerBuilder.build(testValidCkConfig);
+        await dockerBuilder.build(testValidDeploymentConfig);
 
         const execCalls: SinonSpyCall[] = execStub.getCalls();
         assert.lengthOf(execCalls, 2);
@@ -33,7 +33,7 @@ describe(' > DockerBuilderSpec', function () {
     });
 
     it(' > Push images should work', async () => {
-        await dockerBuilder.push(testValidCkConfig);
+        await dockerBuilder.push(testValidDeploymentConfig);
 
         const execCalls: SinonSpyCall[] = execStub.getCalls();
         assert.lengthOf(execCalls, 2);
