@@ -47,6 +47,7 @@ export class CliParser {
         if (!found.length) {
             throw new Error(`Invalid command: ${args.join(' ')}`);
         }
+
         if (found.length > 1) {
             throw new Error(`Several commands matching: ${args.join(' ')}`);
         }
@@ -109,6 +110,11 @@ export class CliParser {
     private checkCommand(command: CliCommand) {
         if (!command.command.match(/^[a-z 0-9_-]+$/i)) {
             throw new Error('Invalid command name, must match: ^[a-z0-9-]+$');
+        }
+
+        const existing = _.find(this.commands, (comm) => comm.command === command.command);
+        if (existing){
+            throw new Error(`Command already exists: ${command.command}`);
         }
 
         _.forEach(command.options, (opt) => {

@@ -29,7 +29,8 @@ import {CommandExecutor} from './lib/utils/CommandExecutor';
         const api = new Api(mainConfig, commandExec);
         const cli = new Cli(mainConfig, api, commandExec, onError);
 
-        await cli.setupAndParse(process.argv);
+        cli.setupParser();
+        await cli.parseArguments(process.argv);
     } catch (e) {
         onError(e);
     }

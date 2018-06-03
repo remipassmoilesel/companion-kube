@@ -1,7 +1,6 @@
 import * as chai from 'chai';
 import * as fs from 'fs';
-import * as path from 'path';
-import * as os from 'os';
+import * as _ from 'lodash';
 import * as sinon from 'sinon';
 import {SinonStub} from 'sinon';
 import {CommandExecutor} from '../../lib/utils/CommandExecutor';
@@ -21,11 +20,15 @@ describe(' > CliSpec', function () {
     const processCwdStub: SinonStub = sinon.stub(process, 'cwd');
     const onErrorStub: SinonStub = sinon.stub();
 
+    const fsWriteFileSyncStub = sinon.stub(fs, 'writeFileSync');
+    const fsExistsSyncStub = sinon.stub(fs, 'existsSync');
+
     const mainConfig = getMainConfig();
     mainConfig.configSearchIgnore = []; // do not ignore test data
 
     const api = new Api(mainConfig, commandExec);
     const cli = new Cli(mainConfig, api, commandExec, onErrorStub);
+    cli.setupParser();
 
     const argvPart: string[] = [
         '/usr/local/bin/node',
@@ -43,32 +46,39 @@ describe(' > CliSpec', function () {
         assert.match(error.message, regexp);
     };
 
+    const showCliErrors = () => {
+        _.forEach(onErrorStub.getCalls(), (call) => {
+            console.log(call.args);
+        });
+    };
+
     const assertNoCliErrors = () => {
         assert.lengthOf(onErrorStub.getCalls(), 0, 'Cli errors occurred');
     };
-
-    const tmpDir = os.tmpdir();
-    const tempCkConfig = path.join(tmpDir, 'ck-config.js');
 
     afterEach(() => {
         processCwdStub.reset();
         onErrorStub.reset();
         execStub.reset();
+        fsWriteFileSyncStub.reset();
+        fsExistsSyncStub.reset();
+    });
 
-        if (fs.existsSync(tempCkConfig)) {
-            fs.unlinkSync(tempCkConfig);
-        }
+    after(() => {
+        processCwdStub.restore();
+        fsWriteFileSyncStub.restore();
+        fsExistsSyncStub.restore();
     });
 
     describe('Invalid input', () => {
 
         it(' > Empty command should throw', async () => {
-            await cli.setupAndParse(buildCommand(''));
+            await cli.parseArguments(buildCommand(''));
             assertCliError(/You must specify a command.+/i);
         });
 
         it(' > Non existing command should throw', async () => {
-            await cli.setupAndParse(buildCommand('non existing command'));
+            await cli.parseArguments(buildCommand('non existing command'));
             assertCliError(/Invalid command:.+/i);
         });
 
@@ -77,23 +87,23 @@ describe(' > CliSpec', function () {
     describe('Init', () => {
 
         it(' > Init should work', async () => {
-            processCwdStub.returns(tmpDir);
-            await cli.setupAndParse(buildCommand('init'));
+            processCwdStub.returns('/tmp');
+            fsExistsSyncStub.returns(false);
+            await cli.parseArguments(buildCommand('init'));
             assertNoCliErrors();
         });
 
         it(' > Init should throw if file already exists', async () => {
-            processCwdStub.returns(tmpDir);
-            await cli.setupAndParse(buildCommand('init'));
-            await cli.setupAndParse(buildCommand('init'));
+            processCwdStub.returns('/tmp');
+            fsExistsSyncStub.returns(true);
+            await cli.parseArguments(buildCommand('init'));
             assertCliError(/File 'ck-config.js' already exist !/i);
         });
 
         it(' > Init should not throw if file already exists and if forced', async () => {
-            processCwdStub.returns(tmpDir);
-            await cli.setupAndParse(buildCommand('init'));
-            assertNoCliErrors();
-            await cli.setupAndParse(buildCommand('init -f'));
+            processCwdStub.returns('/tmp');
+            fsExistsSyncStub.returns(true);
+            await cli.parseArguments(buildCommand('init -f'));
             assertNoCliErrors();
         });
 
@@ -101,16 +111,15 @@ describe(' > CliSpec', function () {
 
     describe('List', () => {
 
-        it(' > List not throw if all configurations are valid', async () => {
+        it(' > List should not throw if all configurations are valid', async () => {
             processCwdStub.returns(VALID_CONF_DIR);
-            await cli.setupAndParse(buildCommand('list'));
+            await cli.parseArguments(buildCommand('list'));
             assertNoCliErrors();
         });
 
-        // FIXME
-        it.skip(' > List should throw if configurations are invalid', async () => {
+        it(' > List should throw if configurations are invalid', async () => {
             processCwdStub.returns(INVALID_CONF_DIR);
-            await cli.setupAndParse(buildCommand('list'));
+            await cli.parseArguments(buildCommand('list'));
             assertCliError(/Invalid configurations found/i);
         });
 

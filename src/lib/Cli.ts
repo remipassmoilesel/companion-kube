@@ -28,16 +28,15 @@ export class Cli {
         this.commands = [];
     }
 
-    public async setupAndParse(argv: string[]): Promise<void> {
+    public async parseArguments(argv: string[]): Promise<void> {
         try {
-            this.setupParser();
             await this.parser.parse(argv.slice(2));
         } catch (e) {
             this.onError(e);
         }
     }
 
-    private setupParser() {
+    public setupParser() {
 
         const envOption = new CliOption('environment', 'e', 'string', 'Environment name to use');
 
