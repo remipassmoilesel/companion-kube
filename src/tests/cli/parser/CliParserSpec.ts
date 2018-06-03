@@ -7,7 +7,7 @@ import {TestHelpers} from '../../utils/TestHelpers';
 
 const assert = chai.assert;
 
-describe.only(' > CliParserSpec', async function () {
+describe(' > CliParserSpec', async function () {
     this.timeout(2000);
 
     const listStub = sinon.stub();
@@ -85,6 +85,15 @@ describe.only(' > CliParserSpec', async function () {
         assert.equal(parsedArguments.e, 'dev');
         assert.equal(parsedArguments.environment, 'dev');
         assert.deepEqual(parsedArguments.remainingArguments, []);
+    });
+
+    it('Parser should parse string options correctly', async () => {
+        await TestHelpers.asyncAssertThrows(() => {
+            return cliParser.parse(['svc', 'deploy', '-f', '-e']);
+        }, /Option --environment must have a value/);
+
+        assert.lengthOf(listStub.getCalls(), 0);
+        assert.lengthOf(deployStub.getCalls(), 0);
     });
 
     it('Parser should parse string options correctly even with supplementary arguments', async () => {

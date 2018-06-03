@@ -72,6 +72,11 @@ export class CliParser {
                 });
             }
             else {
+                const optionValue = clonedArgs[index + 1];
+                if (!optionValue){
+                    throw new Error(`Option --${option.name} must have a value`);
+                }
+
                 parsedOptions.push({
                     name: option.name,
                     shortname: option.shortname,
