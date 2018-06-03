@@ -8,6 +8,8 @@ import {ICliOperation} from './CliOperations';
 import {IInvalidApplication, IRecursiveLoadingResult} from '../app-config/configTypes';
 import {IAppError, IAugmentedError} from '../utils/IAppError';
 import {ILogLevel, LogLevels} from '../log/LogLevels';
+import {CliCommand} from './parser/CliCommand';
+import {CliOption} from './parser/CliOption';
 
 const logger = new Logger();
 
@@ -118,6 +120,28 @@ export class CliDisplay {
         }
     }
 
+    public showGlobalHelp(commands: CliCommand[]) {
+        logger.info('Help 🆘 🆘 🆘 !\n');
+        logger.info('Companion Kube allow to deploy Kubernetes applications easily !\n');
+        logger.info('Available commands: \n');
+        _.forEach(commands, (comm: CliCommand) => {
+            logger.info(`\t $ ck ${comm.command.padEnd(22)}:   ${comm.description}`);
+        });
+        logger.info()
+        logger.info('Try \'ck help command\' for more informations !\n');
+    }
+
+    public showCommandHelp(command: CliCommand) {
+        logger.info('Help 🆘 🆘 🆘 !\n');
+        logger.info(`Command: ${command.command}`);
+        logger.info(`Description: ${command.description} \n`);
+        logger.info(`Options:`);
+        _.forEach(command.options, (option: CliOption) => {
+            logger.info(`\t --${option.name}   -${option.shortname.padEnd(20)}: ${option.description}`);
+        });
+
+    }
+
     public showScripts(appConfig: IKubeApplication) {
         logger.info();
         logger.info(`Application: ${appConfig.name}`);
@@ -130,7 +154,7 @@ export class CliDisplay {
 
         const keys = Object.keys(appConfig.scripts);
         for (const scriptName of keys){
-            logger.info(`\t - ${scriptName.padEnd(20)}:   ${appConfig.scripts[scriptName]}`);
+            logger.info(`\t - ${scriptName.padEnd(22)}:   ${appConfig.scripts[scriptName]}`);
         }
     }
 

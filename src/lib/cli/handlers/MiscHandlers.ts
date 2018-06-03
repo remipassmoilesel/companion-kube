@@ -1,13 +1,11 @@
 import * as _ from 'lodash';
-import {
-    ICliApplicationsArguments,
-    ICliEnvOptions, ICliForceEnvOptions, ICliRunArguments,
-} from '../cliTypes';
+import {ICliApplicationsArguments, ICliForceEnvOptions, ICliRunArguments} from '../cliTypes';
 import {AppType, IKubeApplication} from '../../app-config/appConfigTypes';
 import {ScriptRunner} from '../../helpers/ScriptRunner';
 import {CliOperations} from '../CliOperations';
 import {AbstractCliHandlersGroup} from './AbstractCliHandlersGroup';
 import {IAugmentedError} from '../../utils/IAppError';
+import {CliCommand, IParsedArguments} from '../parser/CliCommand';
 
 export class MiscHandlers extends AbstractCliHandlersGroup {
 
@@ -23,7 +21,7 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
 
         const appConfig: IKubeApplication = await this.api.loadAppConfiguration(process.cwd());
 
-        if (!args.remainingArguments || !args.remainingArguments.length){
+        if (!args.remainingArguments || !args.remainingArguments.length) {
             this.display.showScripts(appConfig);
             throw new Error('You must specify a script to execute');
         }
@@ -90,8 +88,19 @@ export class MiscHandlers extends AbstractCliHandlersGroup {
         await this._pushApplications(apps);
     }
 
-    public throwErrorForMissingCommand() {
-        throw new Error('You must specify a command. Try: ck help');
-    }
+    public showHelp(args: IParsedArguments, commands: CliCommand[]) {
+        this.display.showCliHeader();
+        this.checkPrerequisites();
 
+        if (!args.remainingArguments.length){
+            this.display.showGlobalHelp(commands);
+        } else {
+            const searchedCommand = args.remainingArguments.join(' ');
+            const foundCommand = _.find(commands, (comm) => comm.command === searchedCommand);
+            if (!foundCommand){
+                throw new Error(`Command not found: ${searchedCommand}`);
+            }
+            this.display.showCommandHelp(foundCommand);
+        }
+    }
 }

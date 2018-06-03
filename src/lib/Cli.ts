@@ -17,6 +17,7 @@ export class Cli {
     private api: Api;
     private onError: IErrorHandler;
     private parser: CliParser;
+    private commands: CliCommand[];
 
     constructor(mainConfig: IMainConfig, api: Api, commandExec: CommandExecutor, onError: IErrorHandler) {
         this.mainConfig = mainConfig;
@@ -24,6 +25,7 @@ export class Cli {
         this.handlers = new CliHandlers(mainConfig, api, commandExec);
         this.onError = onError;
         this.parser = new CliParser();
+        this.commands = [];
     }
 
     public async setupAndParse(argv: string[]): Promise<void> {
@@ -39,38 +41,44 @@ export class Cli {
 
         const envOption = new CliOption('environment', 'e', 'string', 'Environment name to use');
 
-        this.parser.addCommand(
+        this.commands.push(
+            new CliCommand('help', 'Show help', [],
+                async (command: CliCommand, args: IParsedArguments) => {
+                    await this.handlers.miscHandlers.showHelp(args, this.commands);
+                }));
+
+        this.commands.push(
             new CliCommand('init', 'Create a full ck-config.js example',
                 [new CliOption('force', 'f', 'boolean', 'Force initialization even if file already exists')],
                 async (command: CliCommand, args: IParsedArguments) => {
                     await this.handlers.miscHandlers.initDirectory(args as ICliForceEnvOptions);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('list', 'List available applications', [],
                 async () => {
                     await this.handlers.miscHandlers.listApplications();
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('build', 'Build one or more images of applications', [],
                 async (command: CliCommand, args: IParsedArguments) => {
                     await this.handlers.miscHandlers.buildApplications(args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('build-push', 'Build and push one or more images of applications', [],
                 async (command: CliCommand, args: IParsedArguments) => {
                     await this.handlers.miscHandlers.buildAndPushApplications(args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('run', 'Run a script from ck-config.js', [],
                 async (command: CliCommand, args: IParsedArguments) => {
                     await this.handlers.miscHandlers.runScript(args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('svc deploy', 'Deploy one or more service applications',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
@@ -79,7 +87,7 @@ export class Cli {
                     await this.handlers.appHandlers.deployApplications(AppType.SERVICE, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('svc redeploy', 'Destroy then deploy one or more service applications',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
@@ -88,7 +96,7 @@ export class Cli {
                     await this.handlers.appHandlers.redeployApplications(AppType.SERVICE, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('svc destroy', 'Destroy one or more service applications',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
@@ -97,7 +105,7 @@ export class Cli {
                     await this.handlers.appHandlers.destroyApplications(AppType.SERVICE, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('deploy', 'Deploy one or more applications',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
@@ -106,7 +114,7 @@ export class Cli {
                     await this.handlers.appHandlers.deployApplications(AppType.NORMAL, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('redeploy', 'Destroy then deploy one or more applications',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
@@ -115,7 +123,7 @@ export class Cli {
                     await this.handlers.appHandlers.redeployApplications(AppType.NORMAL, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('destroy', 'Destroy one or more applications',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
@@ -124,19 +132,21 @@ export class Cli {
                     await this.handlers.appHandlers.destroyApplications(AppType.NORMAL, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('cluster deploy', 'Deploy a Kubernetes cluster',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
                     await this.handlers.appHandlers.deployApplications(AppType.CLUSTER, args);
                 }));
 
-        this.parser.addCommand(
+        this.commands.push(
             new CliCommand('cluster destroy', 'Destroy a Kubernetes cluster',
                 [envOption],
                 async (command: CliCommand, args: IParsedArguments) => {
                     await this.handlers.appHandlers.destroyApplications(AppType.CLUSTER, args);
                 }));
+
+        this.parser.addAllCommands(this.commands);
 
     }
 
