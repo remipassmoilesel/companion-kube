@@ -10,3 +10,4 @@ credentials
 _production
 coverage
 .nyc_output
+.vagrant
