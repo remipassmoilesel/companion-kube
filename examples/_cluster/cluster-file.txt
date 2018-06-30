@@ -1,0 +1,6 @@
+
+# This file can be used with tool: https://github.com/remipassmoilesel/linux-utils/blob/master/initialize-ssh-connections
+
+192.168.0.15  ##no-hostname##                   root    azerty    ~/.ssh/id_rsa.pub
+192.168.0.16  ##no-hostname##                   root    azerty    ~/.ssh/id_rsa.pub
+192.168.0.17  ##no-hostname##                   root    azerty    ~/.ssh/id_rsa.pub

@@ -11,3 +11,4 @@ _production
 coverage
 .nyc_output
 .vagrant
+*console.log
