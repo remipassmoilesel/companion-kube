@@ -68,7 +68,7 @@ kube_network_plugin: weave
 # weave's network password for encryption
 # if null then no network encryption
 # you can use --extra-vars to pass the password in command line
-weave_password: 8b6a4216f2c33dbc35981fedc10236ff46aa1e80b4908cd6a6e335daad672cdbcb01eea958fe4779b96d4cacbb46aa6cf028db9eea66a21de5a472686c4cf592a5d98c0cd4c0944c9d54bc7c7503ea3251c700e6122469f96d08126dfa5264aa6b2eacc8421c5156fe38fb15a0ed58af8aa7e
+weave_password: cb48b0373d8bcd696931306917a26ee609aa5a9a621d102836e7350cca97ab8fbcd6d9f2f12e3560270f57134e58fc65f8fd
 
 # Weave uses consensus mode by default
 # Enabling seed mode allow to dynamically add or remove hosts
