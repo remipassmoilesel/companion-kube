@@ -2,6 +2,9 @@
 
 # mardi 3 avril 2018, 21:57:33 (UTC+0200)
 
+set -x
+set -e
+
 MASTER_ADRESS=192.168.0.15
 REMOTE_CONFIG_PATH=/etc/kubernetes/admin.conf
 
