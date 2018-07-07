@@ -134,4 +134,5 @@ bin_dir: /usr/local/bin
 #etcd_memory_limit: "512M"
 
 # The read-only port for the Kubelet to serve on with no authentication/authorization. Uncomment to enable.
-#kube_read_only_port: 10255
+# Needed by Heapster
+kube_read_only_port: 10255

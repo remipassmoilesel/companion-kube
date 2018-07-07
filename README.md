@@ -40,8 +40,8 @@ Install Kubernetes:
     
 Deploy services:
 
-    $ ck svc deploy dashboard
     $ ck svc deploy heapster
+    $ ck svc deploy dashboard
     $ ck svc deploy tiller
 
 Access dashboard:
