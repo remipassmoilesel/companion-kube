@@ -38,6 +38,7 @@ $provisionner=<<-SHELL
 
     systemctl restart ssh
 
+    # set manually dns servers in order to prevent errors with dhcp
     rm /etc/resolv.conf
     echo "nameserver 80.67.169.12" >> /etc/resolv.conf
     echo "nameserver 80.67.169.40" >> /etc/resolv.conf
