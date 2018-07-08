@@ -3,8 +3,8 @@ module.exports = {
     defaultEnvironment: 'dev',
     ansible: {
         playbooks: {
-            deploy: '#/scripts/kubespray/cluster.yml',
-            destroy: '#/scripts/kubespray/reset.yml --extra-vars "reset_confirmation=yes"',
+            deploy: '#/lib/kubespray/cluster.yml',
+            destroy: '#/lib/kubespray/reset.yml --extra-vars "reset_confirmation=yes"',
         }
     },
 };

@@ -84,8 +84,8 @@ Complete example:
       "ansible": {
         "inventoryDirectory": "./path/to/dir/",
         "playbooks": {
-          "deploy": "#/scripts/kubespray/cluster.yml",
-          "destroy": "#/scripts/kubespray/reset.yml"
+          "deploy": "#/lib/kubespray/cluster.yml",  // '#' means path is relative to companion-kube directory
+          "destroy": "#/lib/kubespray/reset.yml"
         }
       },
       "hooks": {
